@@ -17,4 +17,11 @@ Route::middleware([
     Route::get('/register', function () {
         return view('auth/register');
     })->name('register');
+    Route::get('/cliente', function () {
+        return view('cliente/registro_cliente');
+    })->name('registrocliente');
+    Route::get('/mascota', function () {
+        return view('mascota/registo_mascota');
+    })->name('registromascota');
+
 });

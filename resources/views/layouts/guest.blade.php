@@ -17,8 +17,9 @@
         <!-- Styles -->
         @livewireStyles
     </head>
-    <body>
-        <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
+    <body class="font-sans antialiased">
+        <div style="background-image: url('{{ asset('img/PET.png') }}'); background-size: cover; background-position: center; height: 100vh;">
+
             {{ $slot }}
         </div>
 

@@ -1,0 +1,165 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-white dark:text-gray-200 leading-tight">
+            {{ __('Registro Mascota') }}
+        </h2>
+    </x-slot>
+    <div class="flex items-center justify-center pt-4">
+        <form class=" px-4 w-full space-y-5" id="petForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Nombre -->
+                <div>
+                    <label for="name" class="block text-x1 font-medium text-gray-700 mb-1">Nombre<span
+                            class="text-red-500">*</span></label>
+                    <input type="text" id="name" name="name" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200"
+                        placeholder="Ej: Max">
+                </div>
+                <!-- Dueño mascota -->
+                <div>
+                    <label for="species" class="block text-x1 font-medium text-gray-700 mb-1">Dueño Mascota <span
+                            class="text-red-500">*</span></label>
+                    <select id="species" name="species" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200">
+                        <option value="" selected disabled>ID</option>
+                        <option value="perro">Perro</option>
+                        <option value="gato">Gato</option>
+                        <option value="ave">Ave</option>
+                        <option value="roedor">Roedor</option>
+                        <option value="reptil">Reptil</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <!-- Raza -->
+                <div>
+                    <label for="breed" class="block text-x1 font-medium text-gray-700 mb-1">Raza <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" id="breed" name="breed" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200"
+                        placeholder="Ej: Labrador">
+                </div>
+                <!-- Especie -->
+                <div>
+                    <label for="species" class="block text-x1 font-medium text-gray-700 mb-1">Especie <span
+                            class="text-red-500">*</span></label>
+                    <select id="species" name="species" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200">
+                        <option value="" selected disabled>Seleccione una especie</option>
+                        <option value="perro">Perro</option>
+                        <option value="gato">Gato</option>
+                        <option value="ave">Ave</option>
+                        <option value="roedor">Roedor</option>
+                        <option value="reptil">Reptil</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Sección de información médica -->
+            <div class="space-y-5">
+                <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Información Médica</h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Peso -->
+                    <div>
+                        <label for="weight" class="block text-x1 font-medium text-gray-700 mb-1">Peso (kg) <span
+                                class="text-red-500">*</span></label>
+                        <input type="number" id="weight" name="weight" step="0.1" min="0" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200"
+                            placeholder="Ej: 5.2">
+                    </div>
+                    <!-- sexo -->
+                    <div>
+                        <label class="block text-x1 font-medium text-gray-700 mb-1">Sexo <span
+                                class="text-red-500">*</span></label>
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center ">
+                                <input type="radio" name="sex" value="macho" required
+                                    class="text-indigo-600 focus:ring-indigo-500 h-4 w-4">
+                                <span class="ml-2 text-gray-700">Macho</span>
+                            </label>
+                            <label class="inline-flex items-center ">
+                                <input type="radio" name="sex" value="hembra"
+                                    class="text-indigo-600 focus:ring-indigo-500 h-4 w-4 ">
+                                <span class="ml-2 text-gray-700">Hembra</span>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Vacunado -->
+                    <div>
+                        <label class="block text-x1 font-medium text-gray-700 mb-1">Vacunado <span
+                                class="text-red-500">*</span></label>
+                        <div class="flex items-center tick-animation ">
+                            <input type="checkbox" id="vaccinated" name="vaccinated"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
+                            <label for="vaccinated" class="ml-2 text-gray-700">Sí, está al día con sus vacunas</label>
+                        </div>
+                    </div>
+                    <!-- Esterilizado -->
+                    <div>
+                        <label class="block text-x1 font-medium text-gray-700 mb-1">Esterilizado</label>
+                        <div class="flex items-center tick-animation ">
+                            <input type="checkbox" id="sterilized" name="sterilized"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
+                            <label for="sterilized" class="ml-2 text-gray-700">Sí, está esterilizado</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Enfermedades o condiciones especiales -->
+            <div class="grid grid-cols-2 gap gap-2 ">
+                <div>
+                    <label for="diseases" class="block text-x1 font-medium text-gray-700 mb-1">Enfermedades o
+                        condiciones especiales</label>
+                    <textarea id="diseases" name="diseases" rows="3"
+                        class="w-full px-6 py-6 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200"
+                        placeholder="Menciona cualquier enfermedad o condición médica que tenga tu mascota"></textarea>
+                </div>
+                <!-- Descripción -->
+                <div>
+                    <label for="description" class="block text-x1 font-medium text-gray-700 mb-1">Descripción <span
+                            class="text-red-500">*</span></label>
+                    <textarea id="description" name="description" rows="3" required
+                        class="w-full px-6 py-6 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200"
+                        placeholder="Describe características físicas, personalidad, hábitos de tu mascota"></textarea>
+                </div>
+            </div>
+            <!-- Foto -->
+            <div class="grid grid-cols-2">
+                <div class="">
+                    <label for="photo" class="block text-x1 font-medium text-gray-700 mb-1">Foto de la mascota
+                        <span class="text-red-500">*</span></label>
+                    <div class="mt-1 flex space-x-4 items-center ">
+                        <div class="relative">
+                            <label for="photo" class="cursor-pointer">
+                                <div
+                                    class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg w-24 h-24 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition bg-stone-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                </div>
+                            </label>
+                            <input type="file" id="photo" name="photo" accept="image/*"
+                                class="absolute inset-0 w-full h-full opacity-0" required>
+                        </div>
+                        <div id="photoPreview" class="flex-1">
+                            <img id="previewImage" src="https://placehold.co/200x200/ffffff/cccccc?text=Subir+foto"
+                                alt="Previsualización de imagen de mascota donde aparecerá la foto subida por el usuario"
+                                class="w-24 h-24 rounded-lg object-cover border border-gray-200">
+                        </div>
+                    </div>
+
+                    <p class="mt-1 text-x1 text-black">Sube una foto clara de tu mascota (JPEG, PNG)</p>
+                </div>
+                <!-- Botón de envío -->
+                <div class=" flex items-center justify-center ">
+                    <button type="submit"
+                        class="w-50  h-20   text-white font-medium py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"style="background-color:#00405C">
+                        Registrar Mascota
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</x-app-layout>
