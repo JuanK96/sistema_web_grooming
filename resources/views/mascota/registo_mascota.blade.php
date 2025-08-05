@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl leading-tight">
             {{ __('Registro Mascota') }}
         </h2>
     </x-slot>
-    <div class="flex items-center justify-center pt-4">
+    <div class="flex items-center justify-center p-6">
         <form class=" px-4 w-full space-y-5" id="petForm">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Nombre -->
@@ -12,7 +12,7 @@
                     <label for="name" class="block text-x1 font-medium text-gray-700 mb-1">Nombre<span
                             class="text-red-500">*</span></label>
                     <input type="text" id="name" name="name" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Ej: Max">
                 </div>
                 <!-- Dueño mascota -->
@@ -20,7 +20,7 @@
                     <label for="species" class="block text-x1 font-medium text-gray-700 mb-1">Dueño Mascota <span
                             class="text-red-500">*</span></label>
                     <select id="species" name="species" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200">
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
                         <option value="" selected disabled>ID</option>
                         <option value="perro">Perro</option>
                         <option value="gato">Gato</option>
@@ -35,7 +35,7 @@
                     <label for="breed" class="block text-x1 font-medium text-gray-700 mb-1">Raza <span
                             class="text-red-500">*</span></label>
                     <input type="text" id="breed" name="breed" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Ej: Labrador">
                 </div>
                 <!-- Especie -->
@@ -43,14 +43,10 @@
                     <label for="species" class="block text-x1 font-medium text-gray-700 mb-1">Especie <span
                             class="text-red-500">*</span></label>
                     <select id="species" name="species" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200">
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
                         <option value="" selected disabled>Seleccione una especie</option>
                         <option value="perro">Perro</option>
                         <option value="gato">Gato</option>
-                        <option value="ave">Ave</option>
-                        <option value="roedor">Roedor</option>
-                        <option value="reptil">Reptil</option>
-                        <option value="otro">Otro</option>
                     </select>
                 </div>
             </div>
@@ -63,7 +59,7 @@
                         <label for="weight" class="block text-x1 font-medium text-gray-700 mb-1">Peso (kg) <span
                                 class="text-red-500">*</span></label>
                         <input type="number" id="weight" name="weight" step="0.1" min="0" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                             placeholder="Ej: 5.2">
                     </div>
                     <!-- sexo -->
@@ -105,12 +101,12 @@
                 </div>
             </div>
             <!-- Enfermedades o condiciones especiales -->
-            <div class="grid grid-cols-2 gap gap-2 ">
+            <div class="grid grid-cols-2 gap-2 ">
                 <div>
                     <label for="diseases" class="block text-x1 font-medium text-gray-700 mb-1">Enfermedades o
                         condiciones especiales</label>
                     <textarea id="diseases" name="diseases" rows="3"
-                        class="w-full px-6 py-6 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200"
+                        class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Menciona cualquier enfermedad o condición médica que tenga tu mascota"></textarea>
                 </div>
                 <!-- Descripción -->
@@ -118,7 +114,7 @@
                     <label for="description" class="block text-x1 font-medium text-gray-700 mb-1">Descripción <span
                             class="text-red-500">*</span></label>
                     <textarea id="description" name="description" rows="3" required
-                        class="w-full px-6 py-6 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-stone-200"
+                        class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Describe características físicas, personalidad, hábitos de tu mascota"></textarea>
                 </div>
             </div>
@@ -148,16 +144,14 @@
                                 class="w-24 h-24 rounded-lg object-cover border border-gray-200">
                         </div>
                     </div>
-
-                    <p class="mt-1 text-x1 text-black">Sube una foto clara de tu mascota (JPEG, PNG)</p>
+                    <p class="mt-1 text-x1 text-black">Sube una foto clara de la mascota (JPEG, PNG)</p>
                 </div>
                 <!-- Botón de envío -->
                 <div class=" flex items-center justify-center ">
                     <button type="submit"
-                        class="w-50  h-20   text-white font-medium py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"style="background-color:#00405C">
+                        class="w-50 h-10 text-white font-medium rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg" style="background-color:#00405C">
                         Registrar Mascota
                     </button>
-
                 </div>
             </div>
         </form>

@@ -1,17 +1,15 @@
-<nav x-data="{ open: false }" class=" dark:bg-gray-800  dark:border-gray-700  h-full "
+<nav x-data="{ open: false }" class=" dark:bg-gray-800  dark:border-gray-700 h-full"
     style="background-color:#009600">
     <!-- Primary Navigation Menu -->
-    <div class=" text-white flex flex-col gap-4 h-full w-full aligne-center ">
+    <div class=" text-white flex flex-col gap-4 h-full w-full aligne-center">
         <div class=" shrink-0 flex justify-center   ">
             <a href="{{ route('dashboard') }}">
                 <x-application-mark class="block h-auto w-44 " />
             </a>
         </div>
-
         <div class="flex flex-col  gap-5  px-5">
-
             <!-- Navigation Links -->
-            <div class="flex flex-row gap-5 items-end justify-start  ">
+            <div class="flex flex-row gap-5 items-end justify-start">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12%" fill="rgba(255,255,255,1)">
                     <path
                         d="M19 21H5C4.44772 21 4 20.5523 4 20V11L1 11L11.3273 1.6115C11.7087 1.26475 12.2913 1.26475 12.6727 1.6115L23 11L20 11V20C20 20.5523 19.5523 21 19 21ZM13 19H18V9.15745L12 3.7029L6 9.15745V19H11V13H13V19Z">
@@ -21,7 +19,6 @@
                     class="hover:text-gray-700">
                     {{ __('Dashboard') }}
                 </a>
-
             </div>
             <div class="flex flex-row gap-5 items-end justify-start">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12%" fill="rgba(255,255,255,1)">
@@ -34,7 +31,6 @@
                     {{ __('Registrar Cliente') }}
                 </a>
             </div>
-
             <div class="flex flex-row gap-5 items-end justify-start">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12%" fill="rgba(255,255,255,1)">
                     <path
@@ -82,8 +78,6 @@
                 </a>
             </div>
         </div>
-
-
         <!-- Hamburger -->
         <div class="-me-2 flex items-center sm:hidden">
             <button @click="open = ! open"

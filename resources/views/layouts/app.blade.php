@@ -12,7 +12,6 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -22,28 +21,21 @@
 
 <body class="font-sans antialiased ">
     <x-banner />
-
     <div
-        style="background-image: url('{{ asset('img/PET.png') }}'); background-size: cover; background-position: center; height: 100vh;">
-
-        <div class="grid grid-cols-6 grid-rows-8  h-screen  ">
-            <div class="row-span-8  ">
+        style="background-image: url('{{ asset('img/PET.png') }}'); background-size: cover; background-position: center;">
+        <div class="grid grid-cols-6 grid-rows-8 min-h-screen ">
+            <div class="row-span-8">
                 @livewire('navigation-menu')
             </div>
-            <div class="col-span-5 flex flex-row justify-between items-center px-5 "style="background-color:#00405C">
-
+            <div class="col-span-5 flex flex-row h-20 justify-between items-center px-5"style="background-color:#00405C">
                 @if (isset($header))
-                    <header class="dark:bg-gray-800  ">
-                        <div class="">
-
+                    <header>
+                        <div class="text-white">
                             {{ $header }}
                         </div>
                     </header>
                 @endif
                 <div class="hidden sm:flex sm:items-center sm:ms-6">
-                    <!-- Teams Dropdown -->
-
-
                     <!-- Settings Dropdown -->
                     <div class="ms-3 relative">
                         <x-dropdown align="right" width="48">
@@ -94,17 +86,14 @@
                         </x-dropdown>
                     </div>
                 </div>
-
             </div>
             <div class="col-span-5 row-span-7 ">
-
                 <main>
                     {{ $slot }}
                 </main>
             </div>
         </div>
         @stack('modals')
-
         @livewireScripts
 </body>
 
