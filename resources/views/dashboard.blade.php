@@ -1,21 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white dark:text-gray-200 ">
+        <h2 class="font-semibold text-xl leading-tight">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
     </head>
-
         <div class=" p-6 flex-grow">
-
             <div class = " rounded-full  w-full inline-block text-center p-6 mb-6" style="background-color: #009600">
                 <h1 class="text-white font-bold text-3xl ">BIENVENIDO ADMINISTRADOR</h1>
-                <p class= "text-white italic">Gracias por tu liderazgo y compromiso </p>
-
+                <p class= "text-white italic">Gracias por tu trabajo y compromiso </p>
             </div>
-
             <div class="flex overflow-x-auto gap-4 pb-4 justify-center">
-                <div class="border rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer ">
+                <div class="border border-gray-400 rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer ">
                     <a class="w-auto" href="{{ route('registrocliente') }}">
                         <div class="h-32 w-auto rounded-t-lg flex items-center justify-center"style="background-color:#00405c"">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
@@ -28,7 +24,7 @@
                         <p class="mt-4 font-semibold text-center">Registrar Cliente</p>
                     </a>
                 </div>
-                <div class="border rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
+                <div class="border border-gray-400 rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
                     <a class="w-auto" href="{{ route('registromascota') }}">
                         <div class=" h-32 w-auto rounded-t-lg flex items-center justify-center " style="background-color: #009600">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
@@ -50,13 +46,11 @@
                                     d="M9 1V3H15V1H17V3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H7V1H9ZM20 11H4V19H20V11ZM8 14V16H6V14H8ZM18 14V16H10V14H18ZM7 5H4V9H20V5H17V7H15V5H9V7H7V5Z">
                                 </path>
                             </svg>
-
                         </div>
                         <p class="mt-4 font-semibold text-center">Gestion De Citas</p>
                     </a>
                 </div>
-            
-                <div class="border rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
+                <div class="border border-gray-400 rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
                     <a class="w-auto" href="">
                         <div class=" h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #009600"">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
@@ -70,7 +64,7 @@
                         <p class="mt-4 font-semibold text-center">Historial de Citas</p>
                     </a>
                 </div>
-                <div class="border rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
+                <div class="border border-gray-400 rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
                     <a class="w-auto" href="">
                         <div class=" h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #00405c">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -88,6 +82,4 @@
                 </div>
             </div>
         </div>
-        
-
 </x-app-layout>

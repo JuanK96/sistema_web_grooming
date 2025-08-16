@@ -14,6 +14,9 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::get('/register', function () {
+        return view('auth/register');
+    })->name('register');
     Route::get('/cliente', function () {
         return view('cliente/registro_cliente');
     })->name('registrocliente');
