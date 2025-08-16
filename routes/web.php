@@ -20,5 +20,8 @@ Route::middleware([
     Route::get('/mascota', function () {
         return view('mascota/registo_mascota');
     })->name('registromascota');
+    Route::get('/cita', function () {
+        return view('cita/gestion_cita');
+    })->name('gestioncita');
 
 });

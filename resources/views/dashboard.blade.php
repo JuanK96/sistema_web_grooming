@@ -42,7 +42,7 @@
                     </a>
                 </div>
                 <div class="border rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
-                    <a class="w-auto" href="">
+                    <a class="w-auto" href="{{ route('gestioncita') }}">
                         <div class=" h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #00405c">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
                                 fill="rgba(255,255,255,1)">
