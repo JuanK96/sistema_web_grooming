@@ -23,20 +23,7 @@
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
                         <option value="" selected disabled>ID</option>
                         <option value="perro">Perro</option>
-                        <option value="gato">Gato</option>
-                        <option value="ave">Ave</option>
-                        <option value="roedor">Roedor</option>
-                        <option value="reptil">Reptil</option>
-                        <option value="otro">Otro</option>
                     </select>
-                </div>
-                <!-- Raza -->
-                <div>
-                    <label for="breed" class="block text-x1 font-medium text-gray-700 mb-1">Raza <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" id="breed" name="breed" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
-                        placeholder="Ej: Labrador">
                 </div>
                 <!-- Especie -->
                 <div>
@@ -49,11 +36,19 @@
                         <option value="gato">Gato</option>
                     </select>
                 </div>
+                <!-- Raza -->
+                <div>
+                    <label for="breed" class="block text-x1 font-medium text-gray-700 mb-1">Raza <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" id="breed" name="breed" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
+                        placeholder="Ej: Labrador">
+                </div>
             </div>
             <!-- Sección de información médica -->
             <div class="space-y-5">
                 <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Información Médica</h3>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-5 space-x-4">
                     <!-- Peso -->
                     <div>
                         <label for="weight" class="block text-x1 font-medium text-gray-700 mb-1">Peso (kg) <span
@@ -62,31 +57,28 @@
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                             placeholder="Ej: 5.2">
                     </div>
+                    <!-- edad -->
+                    <div>
+                        <label for="fechaNacimiento" class="block text-x1 font-medium text-gray-700 mb-1">Fecha de nacimiento<span
+                                class="text-red-500">*</span></label>
+                        <input type="date" id="fechaNacimiento" name="fechaNacimiento" step="0.1" min="0" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
+                    </div>
                     <!-- sexo -->
                     <div>
                         <label class="block text-x1 font-medium text-gray-700 mb-1">Sexo <span
                                 class="text-red-500">*</span></label>
-                        <div class="flex space-x-4">
-                            <label class="inline-flex items-center ">
+                        <div class="flex space-x-4 justify-center">
+                            <label class="inline-flex items-center">
                                 <input type="radio" name="sex" value="macho" required
                                     class="text-indigo-600 focus:ring-indigo-500 h-4 w-4">
                                 <span class="ml-2 text-gray-700">Macho</span>
                             </label>
-                            <label class="inline-flex items-center ">
+                            <label class="inline-flex items-center">
                                 <input type="radio" name="sex" value="hembra"
-                                    class="text-indigo-600 focus:ring-indigo-500 h-4 w-4 ">
+                                    class="text-indigo-600 focus:ring-indigo-500 h-4 w-4">
                                 <span class="ml-2 text-gray-700">Hembra</span>
                             </label>
-                        </div>
-                    </div>
-                    <!-- Vacunado -->
-                    <div>
-                        <label class="block text-x1 font-medium text-gray-700 mb-1">Vacunado <span
-                                class="text-red-500">*</span></label>
-                        <div class="flex items-center tick-animation ">
-                            <input type="checkbox" id="vaccinated" name="vaccinated"
-                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
-                            <label for="vaccinated" class="ml-2 text-gray-700">Sí, está al día con sus vacunas</label>
                         </div>
                     </div>
                     <!-- Esterilizado -->
@@ -96,6 +88,15 @@
                             <input type="checkbox" id="sterilized" name="sterilized"
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
                             <label for="sterilized" class="ml-2 text-gray-700">Sí, está esterilizado</label>
+                        </div>
+                    </div>
+                    <!-- Vacunado -->
+                    <div>
+                        <label class="block text-x1 font-medium text-gray-700 mb-1">Vacunado</label>
+                        <div class="flex items-center tick-animation ">
+                            <input type="checkbox" id="vaccinated" name="vaccinated"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
+                            <label for="vaccinated" class="ml-2 text-gray-700">Sí, está al día con sus vacunas</label>
                         </div>
                     </div>
                 </div>
