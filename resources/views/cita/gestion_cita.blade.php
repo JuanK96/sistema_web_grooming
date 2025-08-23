@@ -11,10 +11,58 @@
                 placeholder="Buscar...">
             <button class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
         </div>
-        <a class="w-50 h-15 text-white content-center text-center font-bold rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
+        <button id="openModal" type="submit" class="w-50 h-15 text-white content-center text-center font-bold rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
             style="background-color:#00405C" href="{{ route('registrocliente') }}">
             Agendar Cita
-        </a>
+        </button>
+        <div id="modal"
+            class="fixed inset-0  backdrop-blur-sm backdrop-opacity-100
+            bg-opacity-0 hidden justify-center items-center">
+            <div class="flex justify-center items-center h-full w-full">
+                <div class="bg-white rounded-lg p-8 w-1/2 fade-in modal-contet z-50">
+                    <div class="mb-4">
+                        <h2 class="text-xl font-bold">Gestion Cita</h2>
+                    </div>
+                    <div>
+                        <label for="ownerId" class="block text-sm font-medium text-gray-700">ID del Dueño</label>
+                        <input type="text" id="ownerId" name="ownerId"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
+                            placeholder="Ej: VC123456" required>
+                    </div>
+                    <div>
+                        <label for="petName" class="block text-sm font-medium text-gray-700">Nombre de la
+                            Mascota</label>
+                        <input type="text" id="petName" name="petName"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
+                            placeholder="Ej: Firulais" required>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="relative mb-3">
+                            <label for="appointmentDate" class="block text-sm font-medium text-gray-700">Fecha</label>
+                            <input type="date" id="appointmentDate" name="appointmentDate"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 text-gray-400 datepicker"
+                                placeholder="Seleccione fecha" required>
+                        </div>
+                        <div>
+                            <label for="appointmentTime" class="block text-sm font-medium text-gray-700">Hora</label>
+                            <input type="text" id="appointmentTime" name="appointmentTime"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 "
+                                placeholder="Seleccione hora" required>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" id="closeModal"
+                            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition duration-200">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200">
+                            Guardar Cita
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="px-10">
         <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
@@ -60,5 +108,26 @@
                 <!-- Más filas se pueden agregar aquí -->
             </tbody>
         </table>
-    </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const openModalBtn = document.getElementById('openModal');
+                const closeModalBtn = document.getElementById('closeModal');
+                const modal = document.getElementById('modal');
+
+                openModalBtn.addEventListener('click', () => {
+                    modal.classList.remove('hidden');
+                });
+
+                closeModalBtn.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                });
+
+                // Opcional: cerrar al hacer clic fuera del contenido del modal
+                window.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+            });
+        </script>
 </x-app-layout>
