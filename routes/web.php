@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClienteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,17 +15,33 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::get('/register', function () {
+    //usuarios
+    Route::get('/registrar-usuario', function () {
         return view('auth/register');
     })->name('register');
-    Route::get('/cliente', function () {
+    Route::get('/usuarios', function () {
+        return view('usuarios/gestion_usuarios');
+    })->name('gestionusuario');
+    //clientes
+    Route::get('/clientes', function () {
+        return view('cliente/gestion_cliente');
+    })->name('gestioncliente');
+    Route::get('/registro-cliente', function () {
         return view('cliente/registro_cliente');
     })->name('registrocliente');
-    Route::get('/mascota', function () {
-        return view('mascota/registo_mascota');
+    Route::post('/registro-cliente' , [ClienteController::class , 'store'])->name('cliente.store');
+    //mascotas
+    Route::get('/mascotas', function () {
+        return view('mascota/gestion_mascota');
+    })->name('gestionmascota');
+    Route::get('/registro-mascotas', function () {
+        return view('mascota/registro_mascota');
     })->name('registromascota');
-    Route::get('/cita', function () {
+    //citas
+    Route::get('/citas', function () {
         return view('cita/gestion_cita');
     })->name('gestioncita');
-
+    Route::get('/historial-citas', function () {
+        return view('cita/gestion_historial_cita');
+    })->name('historialcita');
 });
