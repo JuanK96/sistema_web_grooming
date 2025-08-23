@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-5 row-span-7 ">
+            <div class="col-span-5 row-span-7">
                 <main>
                     {{ $slot }}
                 </main>

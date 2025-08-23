@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl leading-tight">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
@@ -10,9 +10,10 @@
                 <h1 class="text-white font-bold text-3xl ">BIENVENIDO ADMINISTRADOR</h1>
                 <p class= "text-white italic">Gracias por tu trabajo y compromiso </p>
             </div>
+            {{-- gestion de clientes --}}
             <div class="flex overflow-x-auto gap-4 pb-4 justify-center">
-                <div class="border border-gray-400 rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer ">
-                    <a class="w-auto" href="{{ route('registrocliente') }}">
+                <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer ">
+                    <a class="w-auto" href="{{ route('gestioncliente') }}">
                         <div class="h-32 w-auto rounded-t-lg flex items-center justify-center"style="background-color:#00405c"">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
                                 fill="rgba(255,255,255,1)">
@@ -21,11 +22,12 @@
                                 </path>
                             </svg>
                         </div>
-                        <p class="mt-4 font-semibold text-center">Registrar Cliente</p>
+                        <p class="mt-4 font-semibold text-center">Gestion de Clientes</p>
                     </a>
                 </div>
-                <div class="border border-gray-400 rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
-                    <a class="w-auto" href="{{ route('registromascota') }}">
+                {{-- gestion de mascotas --}}
+                <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
+                    <a class="w-auto" href="{{ route('gestionmascota') }}">
                         <div class=" h-32 w-auto rounded-t-lg flex items-center justify-center " style="background-color: #009600">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
                                 fill="rgba(255,255,255,1)">
@@ -34,10 +36,11 @@
                                 </path>
                             </svg>
                         </div>
-                        <p class="mt-4 font-semibold text-center">Registrar Mascota</p>
+                        <p class="mt-4 font-semibold text-center">Gestion de Mascotas</p>
                     </a>
                 </div>
-                <div class="border rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
+                {{-- gestion de citas --}}
+                <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
                     <a class="w-auto" href="{{ route('gestioncita') }}">
                         <div class=" h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #00405c">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
@@ -50,8 +53,9 @@
                         <p class="mt-4 font-semibold text-center">Gestion De Citas</p>
                     </a>
                 </div>
-                <div class="border border-gray-400 rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
-                    <a class="w-auto" href="">
+                {{-- historial de citas --}}
+                <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
+                    <a class="w-auto" href="{{ route('historialcita') }}">
                         <div class=" h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #009600"">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
                                 fill="rgba(255,255,255,1)">
@@ -64,8 +68,9 @@
                         <p class="mt-4 font-semibold text-center">Historial de Citas</p>
                     </a>
                 </div>
-                <div class="border border-gray-400 rounded-lg p-3 w-62 bg-white hover:shadow-lg cursor-pointer">
-                    <a class="w-auto" href="">
+                {{-- gestion de usuarios --}}
+                <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
+                    <a class="w-auto" href="{{ route('gestionusuario') }}">
                         <div class=" h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #00405c">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                 width="50%" " fill="rgba(255,255,255,1)"><path d=" M2 22C2 17.5817 5.58172 14 10

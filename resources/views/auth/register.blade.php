@@ -1,70 +1,58 @@
 <x-app-layout>
     <x-validation-errors class="mb-4" />
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Registro') }}
         </h2>
     </x-slot>
-    <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-        <form method="POST" action="{{ route('register') }}">
+    <div class="flex items-center justify-center px-20 py-6">
+        <form method="POST" action="{{ route('register') }}" class="w-full">
             @csrf
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            <div>
-                <x-label for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required
-                    autofocus autocomplete="name" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
-                    required autocomplete="username" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                    autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                    name="password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                <div class="mt-4">
-                    <x-label for="terms">
-                        <div class="flex items-center">
-                            <x-checkbox name="terms" id="terms" required />
-
-                            <div class="ms-2">
-                                {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                    'terms_of_service' =>
-                                        '<a target="_blank" href="' .
-                                        route('terms.show') .
-                                        '" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">' .
-                                        __('Terms of Service') .
-                                        '</a>',
-                                    'privacy_policy' =>
-                                        '<a target="_blank" href="' .
-                                        route('policy.show') .
-                                        '" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">' .
-                                        __('Privacy Policy') .
-                                        '</a>',
-                                ]) !!}
-                            </div>
-                        </div>
-                    </x-label>
+                <div class="space-y-2">
+                    <label for="name" class="block text-x1 font-medium text-gray-700">Nombre</label>
+                    <input id="name"
+                    class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
+                    type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
                 </div>
-            @endif
 
-            <div class="flex items-center justify-end mt-4">
-                <x-button class="ms-4">
-                    {{ __('Register') }}
-                </x-button>
+                <div class="space-y-2">
+                    <label for="role" class="block text-x1 font-medium text-gray-700">Rol</label>
+                    <select id="role" name="role"
+                        class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
+                        required>
+                        <option value="">Seleccione...</option>
+                        <option value="Cedula de Ciudadania">Cedula de Ciudadania</option>
+                        <option value="Cedula de Extranjería">Cedula de Extranjería</option>
+                        <option value="Pasaporte">Pasaporte</option>
+                    </select>
+                </div>
+                
+                <div class="space-y-2">
+                    <label for="email" class="block text-x1 font-medium text-gray-700">Correo Electronico</label>
+                    <input id="email" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200" type="email" name="email" :value="old('email')"
+                    required autocomplete="username" />
+                </div>
+                
+                <div class="space-y-2">
+                    <label for="password" class="block text-x1 font-medium text-gray-700">Contraseña</label>
+                    <input id="password" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200" type="password" name="password" required
+                    autocomplete="new-password" />
+                </div>
+                
+                <div class="space-y-2">
+                    <label for="name" class="block text-x1 font-medium text-gray-700">Confirmar Contraseña</label>
+                    <x-input id="password_confirmation" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200" type="password"
+                    name="password_confirmation" required autocomplete="new-password" />
+                </div>
             </div>
-        </form>
-    </div>
-</x-app-layout>
+                <div class="flex items-center justify-end mt-4">
+                    <x-button class="ms-4">
+                        {{ __('Register') }}
+                    </x-button>
+                </div>
+            </form>
+        </div>
+    </x-app-layout>
+    

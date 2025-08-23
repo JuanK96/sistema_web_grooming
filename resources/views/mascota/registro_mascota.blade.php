@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl leading-tight">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Registro Mascota') }}
         </h2>
     </x-slot>
@@ -59,10 +59,10 @@
                     </div>
                     <!-- edad -->
                     <div>
-                        <label for="fechaNacimiento" class="block text-x1 font-medium text-gray-700 mb-1">Fecha de nacimiento<span
-                                class="text-red-500">*</span></label>
-                        <input type="date" id="fechaNacimiento" name="fechaNacimiento" step="0.1" min="0" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
+                        <label for="fechaNacimiento" class="block text-x1 font-medium text-gray-700 mb-1">Fecha de
+                            nacimiento<span class="text-red-500">*</span></label>
+                        <input type="date" id="fechaNacimiento" name="fechaNacimiento" step="0.1" min="0"
+                            required class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
                     </div>
                     <!-- sexo -->
                     <div>
@@ -148,9 +148,14 @@
                     <p class="mt-1 text-x1 text-black">Sube una foto clara de la mascota (JPEG, PNG)</p>
                 </div>
                 <!-- Botón de envío -->
-                <div class=" flex items-center justify-center ">
+                <div class="flex items-center justify-end gap-4 pt-1">
+                    <button type="reset"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        Limpiar
+                    </button>
                     <button type="submit"
-                        class="w-50 h-10 text-white font-medium rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg" style="background-color:#00405C">
+                        class="px-4 py-2 text-white font-medium rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
+                        style="background-color:#00405C">
                         Registrar Mascota
                     </button>
                 </div>

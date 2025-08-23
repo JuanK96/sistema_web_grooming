@@ -1,11 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl leading-tight">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Registro Cliente') }}
         </h2>
     </x-slot>
-    <div class="flex items-center justify-center p-8">
-        <form id="registroForm" class="space-y-6 w-full">
+    <div class="flex items-center justify-center px-20 py-6">
+        <form method="POST" action="{{ route('cliente.store') }}" id="registroForm" class="space-y-6 w-full">
+            @csrf
             <!-- Documento -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
@@ -16,8 +17,8 @@
                         class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
                         required>
                         <option value="">Seleccione...</option>
-                        <option value="DNI">Cedula de Ciudadania</option>
-                        <option value="Carnet de Extranjería">Cedula de Extranjería</option>
+                        <option value="Cedula de Ciudadania">Cedula de Ciudadania</option>
+                        <option value="Cedula de Extranjería">Cedula de Extranjería</option>
                         <option value="Pasaporte">Pasaporte</option>
                     </select>
                     <p id="tipoDocumentoError" class="error-message hidden">Por favor seleccione un tipo de documento
@@ -27,7 +28,8 @@
                     <label for="numeroDocumento" class="block text-x1 font-medium text-gray-700">
                         Número de documento <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" id="numeroDocumento" name="numeroDocumento"
+                    <input type="text" id="numeroDocumento" name="numeroDocumento" pattern="[0-9]*"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="20"
                         class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
                         required>
                     <p id="numeroDocumentoError" class="error-message hidden">Por favor ingrese el número de documento
@@ -39,7 +41,8 @@
                 <label for="nombreCompleto" class="block text-x1 font-medium text-gray-700">
                     Nombre completo <span class="text-red-500">*</span>
                 </label>
-                <input type="text" id="nombreCompleto" name="nombreCompleto"
+                <input type="text" id="nombreCompleto" name="nombreCompleto" pattern="[aA-zZ\s]*"
+                    oninput="this.value = this.value.replace(/[^aA-zZ\s]/g, '');"
                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-stone-200"
                     required>
                 <p id="nombreCompletoError" class="error-message hidden">Por favor ingrese su nombre completo</p>
@@ -86,7 +89,8 @@
                     <label for="telefono" class="block text-x1 font-medium text-gray-700">
                         Teléfono <span class="text-red-500">*</span>
                     </label>
-                    <input type="tel" id="telefono" name="telefono"
+                    <input type="tel" id="telefono" name="telefono" pattern="[0-9]*"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
                         class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
                         required>
                     <p id="telefonoError" class="error-message hidden">Por favor ingrese un número de teléfono</p>
@@ -96,19 +100,36 @@
                     <label for="telefonoAlterno" class="block text-x1 font-medium text-gray-700">
                         Teléfono alterno
                     </label>
-                    <input type="tel" id="telefonoAlterno" name="telefonoAlterno"
+                    <input type="tel" id="telefonoAlterno" name="telefonoAlterno" pattern="[0-9]*"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
                         class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-4 pt-1">
-                <button type="reset"
-                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                    Limpiar
-                </button>
-                <button type="submit"
-                    class="px-4 py-2 text-white rounded-md  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" style="background-color:#00405C">
-                    Enviar
-                </button>
+            <div class="grid grid-cols-3">
+                <div>
+                    @if ($errors->any())
+                        <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                            role="alert">
+                            <strong class="font-bold">¡Error!</strong>
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                </div>
+                <div class="flex items-center justify-end gap-4 pt-1 col-span-2">
+                    <button type="reset"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        Limpiar
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 text-white rounded-md  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        style="background-color:#00405C">
+                        Registrar Cliente
+                    </button>
+                </div>
             </div>
         </form>
     </div>
