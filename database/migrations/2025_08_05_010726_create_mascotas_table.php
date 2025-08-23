@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('especie');
             $table->string('raza');
             $table->string('peso');
+            $table->date('fecha_nacimiento');
             $table->string('sexo');
-            $table->boolean('esterilizado');
-            $table->boolean('vacunado');
+            $table->boolean('esterilizado')->default(false);
+            $table->boolean('vacunado')->default(false);
             $table->string('descripcion');
             $table->string('ruta_foto');
             $table->timestamps();

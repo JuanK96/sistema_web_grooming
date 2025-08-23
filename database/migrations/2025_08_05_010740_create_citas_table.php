@@ -16,10 +16,9 @@ return new class extends Migration
             $table->foreignId('id_cliente')->constrained('clientes');
             $table->foreignId('id_mascota')->constrained('mascotas');
             $table->foreignId('id_user')->constrained('users')->nulleable();
-            $table->string('fecha');
-            $table->string('hora');
+            $table->date('fecha');
+            $table->time('hora');
             $table->string('estado');
-            $table->string('fecha_proxima');
             $table->timestamps();
         });
     }

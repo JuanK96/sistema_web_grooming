@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('tipo_documento');
             $table->string('documento')->unique();
             $table->string('name');
-            $table->string('fecha_nacimiento');
+            $table->date('fecha_nacimiento');
             $table->string('tel');
-            $table->string('tel_dos');
+            $table->string('tel_dos')->nullable();
             $table->string('direccion');
             $table->string('email');
             $table->timestamps();
