@@ -55,8 +55,8 @@
                             </div>
                         </div>
                         <div class="flex justify-end space-x-3 pt-4">
-                            <button type="button" id="closeModal"
-                                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition duration-200">
+                            <button type="reset" id="closeModal"
+                                class="px-4 py-2 bg-red-200 hover:bg-red-300 text-gray-800 rounded-lg transition duration-200">
                                 Cancelar
                             </button>
                             <button type="submit"

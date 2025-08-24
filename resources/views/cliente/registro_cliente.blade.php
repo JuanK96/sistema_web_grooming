@@ -41,8 +41,8 @@
                 <label for="nombreCompleto" class="block text-x1 font-medium text-gray-700">
                     Nombre completo <span class="text-red-500">*</span>
                 </label>
-                <input type="text" id="nombreCompleto" name="nombreCompleto" pattern="[aA-zZ\s]*"
-                    oninput="this.value = this.value.replace(/[^aA-zZ\s]/g, '');"
+                <input type="text" id="nombreCompleto" name="nombreCompleto" pattern="[A-ZÁÉÍÓÚÑÜ\s]+"
+                    oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s]/g, '').toUpperCase();"
                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-stone-200"
                     required>
                 <p id="nombreCompletoError" class="error-message hidden">Por favor ingrese su nombre completo</p>
