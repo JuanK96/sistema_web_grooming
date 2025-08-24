@@ -5,11 +5,24 @@
         </h2>
     </x-slot>
     <div class="flex flex-row py-10 px-20 justify-between items-center">
-        <div class="">
+        <div>
             <label class="text-black font-bold " for="buscar">BUSCADOR:</label>
             <input type="text" id="buscar" class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2"
                 placeholder="Buscar...">
             <button class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
+        </div>
+        <div>
+            @if ($errors->any())
+                <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">¡Error!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
         <button id="openModal" type="submit"
             class="w-50 h-15 text-white content-center text-center font-bold rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
@@ -22,7 +35,8 @@
             bg-opacity-0 hidden justify-center items-center">
         <div class="flex justify-center items-center h-full w-full">
             <div class="bg-white rounded-lg p-8 w-1/2 fade-in modal-contet z-50 border border-gray-300">
-                <form method="POST" action="{{ route('register') }}" class="w-full">
+                <form method="POST" action="{{ route('user.create') }}" class="w-full"
+                    onsubmit="return validatePasswords()">
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
@@ -30,7 +44,8 @@
                             <input id="name"
                                 class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
                                 type="text" name="name" :value="old('name')" required autofocus
-                                autocomplete="name" />
+                                autocomplete="name" pattern="[A-ZÁÉÍÓÚÑÜ\s]+"
+                                oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s]/g, '').toUpperCase();" />
                         </div>
                         <div class="space-y-2">
                             <label for="role" class="block text-x1 font-medium text-gray-700">Rol</label>
@@ -38,9 +53,9 @@
                                 class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
                                 required>
                                 <option value="">Seleccione...</option>
-                                <option value="Cedula de Ciudadania">Cedula de Ciudadania</option>
-                                <option value="Cedula de Extranjería">Cedula de Extranjería</option>
-                                <option value="Pasaporte">Pasaporte</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Supervisor</option>
+                                <option value="3">Groomer</option>
                             </select>
                         </div>
                         <div class="space-y-2">
@@ -59,21 +74,33 @@
                         <div class="space-y-2">
                             <label for="name" class="block text-x1 font-medium text-gray-700">Confirmar
                                 Contraseña</label>
-                            <x-input id="password_confirmation"
+                            <input id="password_confirmation"
                                 class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
                                 type="password" name="password_confirmation" required autocomplete="new-password" />
                         </div>
                     </div>
                     <div class="flex items-center justify-end mt-4 gap-2">
-                        <button type="button" id="closeModal"
-                                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition duration-200">
-                                Cancelar
+                        <button type="reset" id="closeModal"
+                            class="px-4 py-2 bg-red-200 hover:bg-red-300 text-gray-800 rounded-lg transition duration-200">
+                            Cancelar
                         </button>
-                        <button class="px-4 py-2 bg-indigo-200 hover:bg-indigo-300 text-gray-800 rounded-lg transition duration-200">
+                        <button
+                            class="px-4 py-2 bg-indigo-200 hover:bg-indigo-300 text-gray-800 rounded-lg transition duration-200">
                             Registrar
                         </button>
                     </div>
                 </form>
+                <script>
+                    function validatePasswords() {
+                        const password = document.getElementById('password').value;
+                        const passwordConfirmation = document.getElementById('password_confirmation').value;
+                        if (password !== passwordConfirmation) {
+                            alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
+                            return false; // Evita el envío del formulario
+                        }
+                        return true; // Permite el envío del formulario
+                    }
+                </script>
             </div>
         </div>
     </div>

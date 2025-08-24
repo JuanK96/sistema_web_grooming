@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,12 +17,10 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     //usuarios
-    Route::get('/registrar-usuario', function () {
-        return view('auth/register');
-    })->name('register');
     Route::get('/usuarios', function () {
         return view('usuarios/gestion_usuarios');
     })->name('gestionusuario');
+    Route::post('/usuarios' , [UsuarioController::class , 'create'])->name('user.create');
     //clientes
     Route::get('/clientes', function () {
         return view('cliente/gestion_cliente');
