@@ -16,7 +16,7 @@
                     <select id="tipoDocumento" name="tipoDocumento"
                         class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
                         required>
-                        <option value="">Seleccione...</option>
+                        <option value="" selected disabled>Seleccione...</option>
                         <option value="Cedula de Ciudadania">Cedula de Ciudadania</option>
                         <option value="Cedula de Extranjería">Cedula de Extranjería</option>
                         <option value="Pasaporte">Pasaporte</option>
