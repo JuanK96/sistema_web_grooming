@@ -11,38 +11,39 @@
                 <div>
                     <label for="name" class="block text-x1 font-medium text-gray-700 mb-1">Nombre<span
                             class="text-red-500">*</span></label>
-                    <input type="text" id="name" name="name" required
+                    <input type="text" id="name" name="name" required pattern="[A-ZÁÉÍÓÚÑÜ\s]+"
+                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s]/g, '').toUpperCase();"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
-                        placeholder="Ej: Max">
+                        placeholder="Ej: MAX">
                 </div>
                 <!-- Dueño mascota -->
                 <div>
-                    <label for="species" class="block text-x1 font-medium text-gray-700 mb-1">Dueño Mascota <span
+                    <label for="dueño" class="block text-x1 font-medium text-gray-700 mb-1">Dueño Mascota <span
                             class="text-red-500">*</span></label>
-                    <select id="species" name="species" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
-                        <option value="" selected disabled>ID</option>
-                        <option value="perro">Perro</option>
-                    </select>
+                    <input type="text" id="dueño" name="dueño" required pattern="[0-9]*"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="20"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
+                        placeholder="Documento..">
                 </div>
                 <!-- Especie -->
                 <div>
-                    <label for="species" class="block text-x1 font-medium text-gray-700 mb-1">Especie <span
+                    <label for="especies" class="block text-x1 font-medium text-gray-700 mb-1">Especie <span
                             class="text-red-500">*</span></label>
-                    <select id="species" name="species" required
+                    <select id="especies" name="especies" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
-                        <option value="" selected disabled>Seleccione una especie</option>
-                        <option value="perro">Perro</option>
-                        <option value="gato">Gato</option>
+                        <option value="" selected disabled>Seleccione una especie...</option>
+                        <option value="PERRO">PERRO</option>
+                        <option value="GATO">GATO</option>
                     </select>
                 </div>
                 <!-- Raza -->
                 <div>
-                    <label for="breed" class="block text-x1 font-medium text-gray-700 mb-1">Raza <span
+                    <label for="raza" class="block text-x1 font-medium text-gray-700 mb-1">Raza <span
                             class="text-red-500">*</span></label>
-                    <input type="text" id="breed" name="breed" required
+                    <input type="text" id="raza" name="raza" required pattern="[A-ZÁÉÍÓÚÑÜ\s]+"
+                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s]/g, '').toUpperCase();"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
-                        placeholder="Ej: Labrador">
+                        placeholder="Ej: LABRADOR">
                 </div>
             </div>
             <!-- Sección de información médica -->
@@ -70,12 +71,12 @@
                                 class="text-red-500">*</span></label>
                         <div class="flex space-x-4 justify-center">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="sex" value="macho" required
+                                <input type="radio" name="sex" value="MACHO" required
                                     class="text-indigo-600 focus:ring-indigo-500 h-4 w-4">
                                 <span class="ml-2 text-gray-700">Macho</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="sex" value="hembra"
+                                <input type="radio" name="sex" value="HEMBRA"
                                     class="text-indigo-600 focus:ring-indigo-500 h-4 w-4">
                                 <span class="ml-2 text-gray-700">Hembra</span>
                             </label>
@@ -106,7 +107,7 @@
                 <div>
                     <label for="diseases" class="block text-x1 font-medium text-gray-700 mb-1">Enfermedades o
                         condiciones especiales</label>
-                    <textarea id="diseases" name="diseases" rows="3"
+                    <textarea id="diseases" name="diseases" rows="3" maxlength="255"
                         class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Menciona cualquier enfermedad o condición médica que tenga tu mascota"></textarea>
                 </div>
@@ -114,7 +115,7 @@
                 <div>
                     <label for="description" class="block text-x1 font-medium text-gray-700 mb-1">Descripción <span
                             class="text-red-500">*</span></label>
-                    <textarea id="description" name="description" rows="3" required
+                    <textarea id="description" name="description" rows="3" required maxlength="255"
                         class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Describe características físicas, personalidad, hábitos de tu mascota"></textarea>
                 </div>
