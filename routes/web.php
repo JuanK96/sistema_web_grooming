@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\CitaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -40,6 +41,8 @@ Route::middleware([
     Route::get('/citas', function () {
         return view('cita/gestion_cita');
     })->name('gestioncita');
+    Route::get('/agendar-cita', [CitaController::class, 'obtenerMascotas']);
+    Route::post('/citas' , [CitaController::class , 'agendar'])->name('cita.agendar');
     Route::get('/historial-citas', function () {
         return view('cita/gestion_historial_cita');
     })->name('historialcita');

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('id_user')->constrained('users')->nulleable();
             $table->date('fecha');
             $table->time('hora');
-            $table->string('estado');
+            $table->string('estado')->default('PENDIENTE');
             $table->timestamps();
         });
     }

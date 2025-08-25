@@ -21,37 +21,38 @@
             bg-opacity-0 hidden justify-center items-center">
             <div class="flex justify-center items-center h-full w-full">
                 <div class="bg-white rounded-lg p-8 w-1/2 fade-in modal-contet z-50 border border-gray-300">
-                    <form action="">
-                        <div class="mb-4">
-                            <h2 class="text-xl font-bold">Gestion Cita</h2>
-                        </div>
+                    <div class="mb-4">
+                        <h2 class="text-xl font-bold">Agendar Cita</h2>
+                    </div>
+                    <form method="POST" action="{{ route('cita.agendar') }}">
+                        @csrf
                         <div>
-                            <label for="ownerId" class="block text-sm font-medium text-gray-700">ID del Dueño</label>
-                            <input type="text" id="ownerId" name="ownerId"
+                            <label for="dueño" class="block text-sm font-medium text-gray-700">Documento del
+                                Dueño</label>
+                            <input type="text" id="dueño" name="dueño" pattern="[0-9]*"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
-                                placeholder="Ej: VC123456" required>
+                                placeholder="Ej: 12345678" required oninput="listarMascotas(), this.value = this.value.replace(/[^0-9]/g, '');">
                         </div>
                         <div>
-                            <label for="petName" class="block text-sm font-medium text-gray-700">Nombre de la
+                            <label for="mascota" class="block text-sm font-medium text-gray-700">Nombre de la
                                 Mascota</label>
-                            <input type="text" id="petName" name="petName"
+                            <select type="text" id="mascota" name="mascota"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
-                                placeholder="Ej: Firulais" required>
+                                required disabled>
+                            </select>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="relative mb-3">
-                                <label for="appointmentDate"
-                                    class="block text-sm font-medium text-gray-700">Fecha</label>
-                                <input type="date" id="appointmentDate" name="appointmentDate"
+                                <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha</label>
+                                <input type="date" id="fecha" name="fecha"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 text-gray-400 datepicker"
-                                    placeholder="Seleccione fecha" required>
+                                    required>
                             </div>
                             <div>
-                                <label for="appointmentTime"
-                                    class="block text-sm font-medium text-gray-700">Hora</label>
-                                <input type="text" id="appointmentTime" name="appointmentTime"
+                                <label for="hora" class="block text-sm font-medium text-gray-700">Hora</label>
+                                <input type="time" id="hora" name="hora"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 "
-                                    placeholder="Seleccione hora" required>
+                                    required>
                             </div>
                         </div>
                         <div class="flex justify-end space-x-3 pt-4">
@@ -119,21 +120,73 @@
             const openModalBtn = document.getElementById('openModal');
             const closeModalBtn = document.getElementById('closeModal');
             const modal = document.getElementById('modal');
-
+            const mascotaSelect = document.getElementById('mascota');
             openModalBtn.addEventListener('click', () => {
                 modal.classList.remove('hidden');
+                mascotaSelect.innerHTML = '<option value="" selected disabled>Seleccione...</option>';
             });
-
             closeModalBtn.addEventListener('click', () => {
                 modal.classList.add('hidden');
             });
-
-            // Opcional: cerrar al hacer clic fuera del contenido del modal
-            window.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    modal.classList.add('hidden');
-                }
-            });
         });
+    </script>
+    <script>
+        function listarMascotas() {
+            const documento = document.getElementById('dueño').value.trim();
+            const mascotaSelect = document.getElementById('mascota');
+            // Estado de carga
+            mascotaSelect.innerHTML = '<option value="" selected disabled>Cargando mascotas...</option>';
+            // mascotaSelect.disabled = true;
+            if (documento.length >= 6) {
+                fetch(`/agendar-cita?dueño=${encodeURIComponent(documento)}`)
+                    .then(response => {
+                        console.log('Respuesta HTTP:', response.status, response.statusText);
+                        if (!response.ok) {
+                            throw new Error('Error en la respuesta del servidor: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Limpiar completamente el select
+                        mascotaSelect.innerHTML = '';
+                        if (data.length === 0) {
+                            const noMascotasOption = document.createElement('option');
+                            noMascotasOption.value = "";
+                            noMascotasOption.textContent = "No se encontraron mascotas";
+                            noMascotasOption.disabled = true;
+                            noMascotasOption.selected = true;
+                            mascotaSelect.appendChild(noMascotasOption);
+                            mascotaSelect.disabled = true;
+                        } else {
+                            const defaultOption = document.createElement('option');
+                            defaultOption.value = "";
+                            defaultOption.textContent = "Seleccione una mascota";
+                            defaultOption.disabled = true;
+                            defaultOption.selected = true;
+                            mascotaSelect.appendChild(defaultOption);
+                            // Agregar mascotas
+                            data.forEach(mascota => {
+                                const option = document.createElement('option');
+                                option.value = mascota.id;
+                                option.textContent = mascota.name;
+                                mascotaSelect.appendChild(option);
+                            });
+                            mascotaSelect.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error en fetch:', error);
+                        mascotaSelect.innerHTML = '';
+                        const errorOption = document.createElement('option');
+                        errorOption.value = "";
+                        errorOption.textContent = "Error al cargar mascotas";
+                        errorOption.disabled = true;
+                        errorOption.selected = true;
+                        mascotaSelect.appendChild(errorOption);
+                    });
+            } else {
+                mascotaSelect.innerHTML = '<option value="" selected disabled>Ingrese al menos 6 caracteres</option>';
+            }
+        }
     </script>
 </x-app-layout>
