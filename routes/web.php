@@ -3,7 +3,10 @@
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\CitaController;
+use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckSuper;
 use Illuminate\Support\Facades\Route;
+use Livewire\Mechanisms\HandleComponents\Checksum;
 
 Route::get('/', function () {
     return view('auth/login');
@@ -20,8 +23,8 @@ Route::middleware([
     //usuarios
     Route::get('/usuarios', function () {
         return view('usuarios/gestion_usuarios');
-    })->name('gestionusuario');
-    Route::post('/usuarios' , [UsuarioController::class , 'create'])->name('user.create');
+    })->name('gestionusuario')->middleware(CheckAdmin::class);
+    Route::post('/usuarios', [UsuarioController::class, 'create'])->name('user.create');
     //clientes
     Route::get('/clientes', function () {
         return view('cliente/gestion_cliente');
@@ -29,7 +32,7 @@ Route::middleware([
     Route::get('/registro-cliente', function () {
         return view('cliente/registro_cliente');
     })->name('registrocliente');
-    Route::post('/registro-cliente' , [ClienteController::class , 'store'])->name('cliente.store');
+    Route::post('/registro-cliente', [ClienteController::class, 'store'])->name('cliente.store');
     //mascotas
     Route::get('/mascotas', function () {
         return view('mascota/gestion_mascota');
@@ -42,8 +45,9 @@ Route::middleware([
         return view('cita/gestion_cita');
     })->name('gestioncita');
     Route::get('/agendar-cita', [CitaController::class, 'obtenerMascotas']);
-    Route::post('/citas' , [CitaController::class , 'agendar'])->name('cita.agendar');
+    Route::post('/citas', [CitaController::class, 'agendar'])->name('cita.agendar');
+    //historial citas
     Route::get('/historial-citas', function () {
         return view('cita/gestion_historial_cita');
-    })->name('historialcita');
+    })->name('historialcita')->middleware(CheckSuper::class);
 });

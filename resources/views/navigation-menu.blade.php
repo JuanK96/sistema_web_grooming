@@ -52,6 +52,7 @@
                     {{ __('Gestionar Citas') }}
                 </a>
             </div>
+            @if (Auth::user()->id_role != 3)
             <div class="flex flex-row gap-5 items-end justify-start">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12%" fill="rgba(255,255,255,1)">
                     <path
@@ -63,6 +64,8 @@
                     {{ __('Historial de Citas') }}
                 </a>
             </div>
+            @endif
+            @if (Auth::user()->id_role == 1)
             <div class="flex flex-row gap-5 items-end justify-start">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                     width="12%" " fill="rgba(255,255,255,1)"><path d=" M2 22C2 17.5817 5.58172 14 10 14C14.4183 14 18
@@ -76,6 +79,7 @@
                     {{ __('Gestionar Usuarios') }}
                 </a>
             </div>
+            @endif
         </div>
         <!-- Hamburger -->
         <div class="-me-2 flex items-center sm:hidden">
