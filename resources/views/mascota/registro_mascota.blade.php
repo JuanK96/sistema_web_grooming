@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
     <div class="flex items-center justify-center p-6">
-        <form class=" px-4 w-full space-y-5" id="petForm">
+        <form method="POST" action="{{route('mascota.store')}}" class=" px-4 w-full space-y-5" id="petForm">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Nombre -->
                 <div>
@@ -86,7 +86,7 @@
                     <div>
                         <label class="block text-x1 font-medium text-gray-700 mb-1">Esterilizado</label>
                         <div class="flex items-center tick-animation ">
-                            <input type="checkbox" id="sterilized" name="sterilized"
+                            <input type="checkbox" id="sterilized" name="sterilized" value="true"
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
                             <label for="sterilized" class="ml-2 text-gray-700">Sí, está esterilizado</label>
                         </div>
@@ -95,7 +95,7 @@
                     <div>
                         <label class="block text-x1 font-medium text-gray-700 mb-1">Vacunado</label>
                         <div class="flex items-center tick-animation ">
-                            <input type="checkbox" id="vaccinated" name="vaccinated"
+                            <input type="checkbox" id="vaccinated" name="vaccinated" value="true"
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
                             <label for="vaccinated" class="ml-2 text-gray-700">Sí, está al día con sus vacunas</label>
                         </div>
@@ -138,7 +138,7 @@
                                 </div>
                             </label>
                             <input type="file" id="photo" name="photo" accept="image/*"
-                                class="absolute inset-0 w-full h-full opacity-0" required>
+                                class="absolute inset-0 w-full h-full opacity-0">
                         </div>
                         <div id="photoPreview" class="flex-1">
                             <img id="previewImage" src="https://placehold.co/200x200/ffffff/cccccc?text=Subir+foto"

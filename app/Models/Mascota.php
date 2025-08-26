@@ -12,13 +12,15 @@ class Mascota extends Model
         'id_cliente',
         'name',
         'especie',
-        'id_razarole',
+        'raza',
         'peso',
         'fecha_nacimiento',
         'sexo',
         'esterilizado',
         'vacunado',
+        'enfermedades',
         'descripcion',
         'ruta_foto',
     ];
+
 }
