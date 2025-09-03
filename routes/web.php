@@ -3,10 +3,11 @@
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\CitaController;
+use App\Http\Controllers\MascotaController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckSuper;
 use Illuminate\Support\Facades\Route;
-use Livewire\Mechanisms\HandleComponents\Checksum;
+
 
 Route::get('/', function () {
     return view('auth/login');

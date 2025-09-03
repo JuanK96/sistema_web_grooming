@@ -6,6 +6,7 @@
     </x-slot>
     <div class="flex items-center justify-center p-6">
         <form method="POST" action="{{route('mascota.store')}}" class=" px-4 w-full space-y-5" id="petForm">
+            @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Nombre -->
                 <div>
@@ -54,7 +55,7 @@
                     <div>
                         <label for="weight" class="block text-x1 font-medium text-gray-700 mb-1">Peso (kg) <span
                                 class="text-red-500">*</span></label>
-                        <input type="number" id="weight" name="weight" step="0.1" min="0" required
+                        <input type="number" id="weight" name="weight" required 
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                             placeholder="Ej: 5.2">
                     </div>
@@ -86,7 +87,7 @@
                     <div>
                         <label class="block text-x1 font-medium text-gray-700 mb-1">Esterilizado</label>
                         <div class="flex items-center tick-animation ">
-                            <input type="checkbox" id="sterilized" name="sterilized" value="true"
+                            <input type="checkbox" id="sterilized" name="sterilized" value="1"
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
                             <label for="sterilized" class="ml-2 text-gray-700">Sí, está esterilizado</label>
                         </div>
@@ -95,7 +96,7 @@
                     <div>
                         <label class="block text-x1 font-medium text-gray-700 mb-1">Vacunado</label>
                         <div class="flex items-center tick-animation ">
-                            <input type="checkbox" id="vaccinated" name="vaccinated" value="true"
+                            <input type="checkbox" id="vaccinated" name="vaccinated" value="1"
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
                             <label for="vaccinated" class="ml-2 text-gray-700">Sí, está al día con sus vacunas</label>
                         </div>
@@ -106,10 +107,11 @@
             <div class="grid grid-cols-2 gap-2 ">
                 <div>
                     <label for="diseases" class="block text-x1 font-medium text-gray-700 mb-1">Enfermedades o
-                        condiciones especiales</label>
+                        condiciones especiales <span
+                            class="text-red-500">*</span></label>
                     <textarea id="diseases" name="diseases" rows="3" maxlength="255"
                         class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
-                        placeholder="Menciona cualquier enfermedad o condición médica que tenga tu mascota"></textarea>
+                        placeholder="Menciona cualquier enfermedad o condición médica que tenga la mascota"></textarea>
                 </div>
                 <!-- Descripción -->
                 <div>
@@ -117,11 +119,11 @@
                             class="text-red-500">*</span></label>
                     <textarea id="description" name="description" rows="3" required maxlength="255"
                         class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
-                        placeholder="Describe características físicas, personalidad, hábitos de tu mascota"></textarea>
+                        placeholder="Describe características de la mascota"></textarea>
                 </div>
             </div>
             <!-- Foto -->
-            <div class="grid grid-cols-2">
+            <div class="grid grid-cols-3">
                 <div class="">
                     <label for="photo" class="block text-x1 font-medium text-gray-700 mb-1">Foto de la mascota
                         <span class="text-red-500">*</span></label>
@@ -147,6 +149,19 @@
                         </div>
                     </div>
                     <p class="mt-1 text-x1 text-black">Sube una foto clara de la mascota (JPEG, PNG)</p>
+                </div>
+                <div>
+                    @if ($errors->any())
+                        <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                            role="alert">
+                            <strong class="font-bold">¡Error!</strong>
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </div>
                 <!-- Botón de envío -->
                 <div class="flex items-center justify-end gap-4 pt-1">
