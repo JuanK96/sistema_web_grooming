@@ -25,20 +25,20 @@ class CitaController extends Controller
     
 }
     public function agendar(Request $request){
-
+        // dd($request->all());
         $request->validate(
             [
                 'dueño'=>'required|string|max:255',
                 'mascota'=>'required|string|max:255',
-                'fecha'=>'required|date',
-                'hora'=>'required|time',
+                'fecha'=>'required',
+                'hora'=>'required',
             ]
         );
 
         Cita::create([
-            'id_cliente'=>Cliente::where('documento' , $request->dueño)->first('id'),
+            'id_cliente'=>Cliente::where('documento' , $request->dueño)->value('id'),
             'id_mascota'=>$request->mascota,
-            'fecha'=>$request->feha,
+            'fecha'=>$request->fecha,
             'hora'=>$request->hora,
         ]);
         return redirect()->route('gestioncita');

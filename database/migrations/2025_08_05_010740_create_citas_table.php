@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_cliente')->constrained('clientes');
             $table->foreignId('id_mascota')->constrained('mascotas');
-            $table->foreignId('id_user')->constrained('users')->nulleable();
+            $table->string('id_user')->default('SIN ASIGNAR');
             $table->date('fecha');
             $table->time('hora');
             $table->string('estado')->default('PENDIENTE');
+            $table->string('descripcion')->nullable();
             $table->timestamps();
         });
     }
