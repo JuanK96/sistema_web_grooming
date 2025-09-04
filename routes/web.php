@@ -22,30 +22,22 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     //usuarios
-    Route::get('/usuarios', function () {
-        return view('usuarios/gestion_usuarios');
-    })->name('gestionusuario')->middleware(CheckAdmin::class);
+    Route::get('/usuarios', [UsuarioController::class, 'index'])->name('gestionusuario')->middleware(CheckAdmin::class);
     Route::post('/usuarios', [UsuarioController::class, 'create'])->name('user.create');
     //clientes
-    Route::get('/clientes', function () {
-        return view('cliente/gestion_cliente');
-    })->name('gestioncliente');
+    Route::get('/clientes', [ClienteController::class, 'index'])->name('gestioncliente');
     Route::get('/registro-cliente', function () {
         return view('cliente/registro_cliente');
     })->name('registrocliente');
     Route::post('/registro-cliente', [ClienteController::class, 'store'])->name('cliente.store');
     //mascotas
-    Route::get('/mascotas', function () {
-        return view('mascota/gestion_mascota');
-    })->name('gestionmascota');
+    Route::get('/mascotas', [MascotaController::class, 'index'])->name('gestionmascota');
     Route::get('/registro-mascotas', function () {
         return view('mascota/registro_mascota');
     })->name('registromascota');
     Route::post('/registro-mascotas', [MascotaController::class, 'store'])->name('mascota.store');
     //citas
-    Route::get('/citas', function () {
-        return view('cita/gestion_cita');
-    })->name('gestioncita');
+    Route::get('/citas', [CitaController::class, 'index'])->name('gestioncita');
     Route::get('/agendar-cita', [CitaController::class, 'obtenerMascotas']);
     Route::post('/citas', [CitaController::class, 'agendar'])->name('cita.agendar');
     //historial citas

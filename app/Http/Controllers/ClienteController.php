@@ -46,4 +46,9 @@ class ClienteController extends Controller
         // Redirigir con un mensaje de éxito
         return redirect()->route('gestioncliente');
     }
+
+    public function index(){
+        $clientes = Cliente::orderBy('created_at', 'desc')->take(5)->get();
+        return view('cliente/gestion_cliente', compact('clientes'));
+    }
 }
