@@ -42,6 +42,9 @@ class CitaController extends Controller
             'hora'=>$request->hora,
         ]);
         return redirect()->route('gestioncita');
-
+    }
+    public function index(){
+         $citas = Cita::with('cliente', 'mascota', 'usuario')->orderBy('created_at', 'desc')->take(5)->get();
+        return view('cita/gestion_cita', compact('citas'));
     }
 }
