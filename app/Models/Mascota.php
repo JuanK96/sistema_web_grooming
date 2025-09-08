@@ -22,5 +22,8 @@ class Mascota extends Model
         'descripcion',
         'ruta_foto',
     ];
-
+    public function dueño()
+    {
+        return $this->belongsTo(Cliente::class, 'id_cliente');
+    }
 }

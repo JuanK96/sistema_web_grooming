@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Mascota;
+use Carbon\Carbon;
 
 class MascotaController extends Controller
 {
@@ -50,5 +51,30 @@ class MascotaController extends Controller
 
         ]);
         return redirect()->route('gestionmascota');
+    }
+    public function index()
+    {
+        $mascotas = Mascota::with('dueño')->orderBy('created_at', 'desc')->take(5)->get();
+        foreach ($mascotas as $mascota) {
+            $fechaNacimiento = Carbon::parse($mascota->fecha_nacimiento);
+            $ahora = Carbon::now();
+            $diasTotales = $fechaNacimiento->diffInDays($ahora);
+            if ($diasTotales < 7) {
+                // Menos de una semana: mostrar días
+                $mascota->edad = "{$diasTotales} días";
+            } elseif ($diasTotales < 365) {
+                // Menos de un año: mostrar semanas redondeadas
+                $semanas = round($diasTotales / 7);
+                $mascota->edad = "{$semanas} semanas";
+            } else {
+                // Un año o más: mostrar años enteros y semanas restantes
+                $añosEnteros = floor($diasTotales / 365.25);
+                $diasRestantes = $diasTotales - ($añosEnteros * 365.25);
+                $semanas = round($diasRestantes / 7);
+                $mascota->edad = "{$añosEnteros} años y {$semanas} semanas";
+            }
+            // $mascota->edad = Carbon::parse($mascota->fecha_nacimiento)->age;
+        }
+        return view('mascota/gestion_mascota', compact('mascotas'));
     }
 }

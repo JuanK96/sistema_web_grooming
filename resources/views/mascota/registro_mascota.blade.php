@@ -107,8 +107,7 @@
             <div class="grid grid-cols-2 gap-2 ">
                 <div>
                     <label for="diseases" class="block text-x1 font-medium text-gray-700 mb-1">Enfermedades o
-                        condiciones especiales <span
-                            class="text-red-500">*</span></label>
+                        condiciones especiales</label>
                     <textarea id="diseases" name="diseases" rows="3" maxlength="255"
                         class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Menciona cualquier enfermedad o condición médica que tenga la mascota"></textarea>
@@ -116,7 +115,7 @@
                 <!-- Descripción -->
                 <div>
                     <label for="description" class="block text-x1 font-medium text-gray-700 mb-1">Descripción <span
-                            class="text-red-500">*</span></label>
+                                class="text-red-500">*</span></label>
                     <textarea id="description" name="description" rows="3" required maxlength="255"
                         class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Describe características de la mascota"></textarea>
@@ -125,8 +124,7 @@
             <!-- Foto -->
             <div class="grid grid-cols-3">
                 <div class="">
-                    <label for="photo" class="block text-x1 font-medium text-gray-700 mb-1">Foto de la mascota
-                        <span class="text-red-500">*</span></label>
+                    <label for="photo" class="block text-x1 font-medium text-gray-700 mb-1">Foto de la mascota</label>
                     <div class="mt-1 flex space-x-4 items-center ">
                         <div class="relative">
                             <label for="photo" class="cursor-pointer">
