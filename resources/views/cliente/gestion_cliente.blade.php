@@ -4,8 +4,9 @@
             {{ __('Gestion de Clientes') }}
         </h2>
     </x-slot>
+
     <div class="flex flex-row py-10 px-20 justify-between items-center">
-        <div class="">
+        <div>
             <label class="text-black font-bold " for="buscar">BUSCADOR:</label>
             <input type="text" id="buscar" class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2"
                 placeholder="Buscar...">
@@ -16,6 +17,7 @@
             Registrar Cliente
         </a>
     </div>
+
     <div class="px-10">
         <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
             <thead class="text-white" style="background-color: #009600">
@@ -33,15 +35,26 @@
             <tbody>
                 @foreach ($clientes as $cliente)
                     <tr class="bg-gray-100 border-b">
-                        <td class="py-4 px-4 text-center">{{$cliente->id}}</td>
-                        <td class="py-4 px-4 text-center">{{$cliente->documento}}</td>
-                        <td class="py-4 px-4 text-center">{{$cliente->name}}</td>
-                        <td class="py-4 px-4 text-center">{{$cliente->direccion}}</td>
-                        <td class="py-4 px-4 text-center">{{$cliente->email}}</td>
-                        <td class="py-4 px-4 text-center">{{$cliente->tel}}</td>
-                        <td class="py-4 px-4 text-center">{{$cliente->tel_dos}}</td>
+                        <td class="py-4 px-4 text-center">{{ $cliente->id }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cliente->documento }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cliente->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cliente->direccion }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cliente->email }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cliente->tel }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cliente->tel_dos }}</td>
                         <td class="py-4 px-4 text-center">
-                            <button class="bg-yellow-500 text-white p-2 h-8 w-8 rounded-lg">
+                            <!-- Botón editar -->
+                            <button
+                                onclick="openEditModal(
+                                {{ $cliente->id }},
+                                '{{ $cliente->documento }}',
+                                '{{ $cliente->name }}',
+                                '{{ $cliente->direccion }}',
+                                '{{ $cliente->email }}',
+                                '{{ $cliente->tel }}',
+                                '{{ $cliente->tel_dos }}'
+                            )"
+                                class="bg-yellow-500 text-white p-2 h-8 w-8 rounded-lg  focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="110%"
                                     fill="rgba(255,255,255,1)">
                                     <path
@@ -55,4 +68,92 @@
             </tbody>
         </table>
     </div>
+    <!-- Modal (oculto por defecto) -->
+    <div id="editModal"
+        class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
+        <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
+            <h2 class="text-xl font-semibold mb-4">Editar Cliente</h2>
+            <form id="editForm" method="POST" action="{{ route('clientes.update') }}">
+                @csrf
+                
+                    <input class="hidden" id="idcliente" type="text">
+                    
+                    <!-- Nombre -->
+                    <div class="space-y-2 mt-4">
+                        <label for="edit_name" class="block text-x1 font-medium text-gray-700">
+                            Nombre completo
+                        </label>
+                        <input type="text" name="nombreCompleto" id="edit_name"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-stone-200">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="edit_email" class="block text-x1 font-medium text-gray-700">
+                            Correo electrónico
+                        </label>
+                        <input type="email" name="correoElectronico" id="edit_email"
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
+                    </div>
+                <!-- Dirección -->
+                <div class="space-y-2 mt-4">
+                    <label for="edit_direccion" class="block text-x1 font-medium text-gray-700">
+                        Dirección
+                    </label>
+                    <input type="text" name="direccion" id="edit_direccion"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-stone-200">
+                </div>
+                <!-- Teléfonos -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <div class="space-y-2">
+                        <label for="edit_tel" class="block text-x1 font-medium text-gray-700">
+                            Teléfono
+                        </label>
+                        <input type="text" name="telefono" id="edit_tel" maxlength="15"
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="edit_tel_dos" class="block text-x1 font-medium text-gray-700">
+                            Teléfono alterno
+                        </label>
+                        <input type="text" name="telefonoAlterno" id="edit_tel_dos" maxlength="15"
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
+                    </div>
+                </div>
+                <!-- Botones -->
+                <div class="mt-6 flex justify-end gap-2">
+                    <button type="button" onclick="closeEditModal()"
+                        class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 text-white rounded-md  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        style="background-color:#00405C">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        function openEditModal(id, documento, name, direccion, email, tel, tel_dos) {
+            // Configurar acción del formulario
+           //document.getElementById('editForm').action = "/clientes/" + id;
+
+            // Rellenar campos
+            document.getElementById('idcliente').value = id;
+            document.getElementById('edit_name').value = name;
+            document.getElementById('edit_direccion').value = direccion;
+            document.getElementById('edit_email').value = email;
+            document.getElementById('edit_tel').value = tel;
+            document.getElementById('edit_tel_dos').value = tel_dos;
+
+            // Mostrar modal
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+    </script>
 </x-app-layout>

@@ -9,7 +9,6 @@ class ClienteController extends Controller
 {
     public function store(Request $request)
     {
-
         // Validación de los datos del formulario
         $request->validate(
             [
@@ -21,17 +20,9 @@ class ClienteController extends Controller
                 'direccion' => 'required|string|max:255',
                 'telefono' => 'required|string|regex:/^\+?[0-9]{10,15}$/',
                 'telefonoAlterno' => 'nullable|string|regex:/^\+?[0-9]{10,15}$/',
-            ],
-            [
-                'tipoDocumento.required' => 'Por favor seleccione un tipo de documento.',
-                'numeroDocumento.unique' => 'El cliente se encuentra registrado',
-                'nombreCompleto.required' => 'Por favor ingrese su nombre completo.',
-                'fechaNacimiento.required' => 'Por favor ingrese su fecha de nacimiento.',
-                'correoElectronico.required' => 'Por favor ingrese un correo electrónico válido.',
-                'direccion.required' => 'Por favor ingrese su dirección.',
-                'telefono.required' => 'Por favor ingrese un número de teléfono.',
             ]
         );
+
         // Crear un nuevo registro
         Cliente::create([
             'tipo_documento' => $request->tipoDocumento,
@@ -43,12 +34,47 @@ class ClienteController extends Controller
             'tel' => $request->telefono,
             'tel_dos' => $request->telefonoAlterno,
         ]);
-        // Redirigir con un mensaje de éxito
-        return redirect()->route('gestioncliente');
+
+        return redirect()->route('gestioncliente')->with('success', 'Cliente registrado correctamente');
     }
 
-    public function index(){
+    public function index()
+    {
         $clientes = Cliente::orderBy('created_at', 'desc')->take(5)->get();
         return view('cliente/gestion_cliente', compact('clientes'));
     }
+
+public function update(Request $request)
+{
+    // Validación (nota: aquí no se fuerza unique en documento/email, salvo que sea de otro cliente)
+    $request->validate(
+        [
+            'id' => 'required|exists:clientes,id', // validar que el id exista
+            'nombreCompleto' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'correoElectronico' => 'required|email',
+            'direccion' => 'required|string|max:255',
+            'telefono' => 'required|string|regex:/^\+?[0-9]{10,15}$/',
+            'telefonoAlterno' => 'nullable|string|regex:/^\+?[0-9]{10,15}$/',
+        ]
+    );
+    $cliente = Cliente::findOrFail($request->id);
+
+    $cliente->name = $request->nombreCompleto;
+    $cliente->email = $request->correoElectronico;
+    $cliente->direccion = $request->direccion;
+    $cliente->tel = $request->telefono;
+    $cliente->tel_dos = $request->telefonoAlterno;
+    $cliente->save();
+
+    
+    // Actualizar registro
+    // $cliente->update([
+    //     'name' => $request->nombreCompleto,
+    //     'email' => $request->correoElectronico,
+    //     'direccion' => $request->direccion,
+    //     'tel' => $request->telefono,
+    //     'tel_dos' => $request->telefonoAlterno,
+    // ]);
+    return redirect()->route('gestioncliente')->with('success', 'Cliente actualizado correctamente');
+}
 }

@@ -30,6 +30,8 @@ Route::middleware([
         return view('cliente/registro_cliente');
     })->name('registrocliente');
     Route::post('/registro-cliente', [ClienteController::class, 'store'])->name('cliente.store');
+    // editar cliente (modal)
+    Route::post('/clientes-update', [ClienteController::class, 'update'])->name('clientes.update');
     //mascotas
     Route::get('/mascotas', [MascotaController::class, 'index'])->name('gestionmascota');
     Route::get('/registro-mascotas', function () {
