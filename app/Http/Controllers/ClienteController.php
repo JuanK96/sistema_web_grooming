@@ -44,37 +44,30 @@ class ClienteController extends Controller
         return view('cliente/gestion_cliente', compact('clientes'));
     }
 
-public function update(Request $request)
-{
-    // Validación (nota: aquí no se fuerza unique en documento/email, salvo que sea de otro cliente)
-    $request->validate(
-        [
-            'id' => 'required|exists:clientes,id', // validar que el id exista
-            'nombreCompleto' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+    public function update(Request $request)
+    {
+        // Validar datos recibidos
+        $request->validate([
+            'idcliente' => 'required|exists:clientes,id',
+            'nombreCompleto' => 'required|string|max:255',
             'correoElectronico' => 'required|email',
-            'direccion' => 'required|string|max:255',
-            'telefono' => 'required|string|regex:/^\+?[0-9]{10,15}$/',
-            'telefonoAlterno' => 'nullable|string|regex:/^\+?[0-9]{10,15}$/',
-        ]
-    );
-    $cliente = Cliente::findOrFail($request->id);
+            'direccion' => 'nullable|string|max:255',
+            'telefono' => 'nullable|string|max:20',
+            'telefonoAlterno' => 'nullable|string|max:20',
+        ]);
 
-    $cliente->name = $request->nombreCompleto;
-    $cliente->email = $request->correoElectronico;
-    $cliente->direccion = $request->direccion;
-    $cliente->tel = $request->telefono;
-    $cliente->tel_dos = $request->telefonoAlterno;
-    $cliente->save();
+        // Buscar cliente por id
+        $cliente = Cliente::findOrFail($request->idcliente);
 
-    
-    // Actualizar registro
-    // $cliente->update([
-    //     'name' => $request->nombreCompleto,
-    //     'email' => $request->correoElectronico,
-    //     'direccion' => $request->direccion,
-    //     'tel' => $request->telefono,
-    //     'tel_dos' => $request->telefonoAlterno,
-    // ]);
-    return redirect()->route('gestioncliente')->with('success', 'Cliente actualizado correctamente');
-}
+        // Actualizar campos
+        $cliente->update([
+            'name' => $request->nombreCompleto,
+            'email' => $request->correoElectronico,
+            'direccion' => $request->direccion,
+            'tel' => $request->telefono,
+            'tel_dos' => $request->telefonoAlterno,
+        ]);
+
+        return redirect()->route('gestioncliente')->with('success', 'Cliente registrado correctamente');
+    }
 }

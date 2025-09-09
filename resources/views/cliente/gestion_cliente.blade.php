@@ -68,22 +68,21 @@
             </tbody>
         </table>
     </div>
-    <!-- Modal (oculto por defecto) -->
+    <!-- Modal -->
     <div id="editModal"
         class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
         <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
             <h2 class="text-xl font-semibold mb-4">Editar Cliente</h2>
-            <form id="editForm" method="POST" action="{{ route('clientes.update') }}">
+            <form id="editForm" method="POST" action="{{route('clientes.update')}}">
                 @csrf
-                
-                    <input class="hidden" id="idcliente" type="text">
-                    
+                    <input class="hidden" name="idcliente" id="idcliente" type="text">
                     <!-- Nombre -->
                     <div class="space-y-2 mt-4">
                         <label for="edit_name" class="block text-x1 font-medium text-gray-700">
                             Nombre completo
                         </label>
-                        <input type="text" name="nombreCompleto" id="edit_name"
+                        <input type="text" name="nombreCompleto" id="edit_name" pattern="[A-ZÁÉÍÓÚÑÜ\s]+"
+                            oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s]/g, '').toUpperCase();"
                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-stone-200">
                     </div>
                     <div class="space-y-2">
@@ -98,7 +97,8 @@
                     <label for="edit_direccion" class="block text-x1 font-medium text-gray-700">
                         Dirección
                     </label>
-                    <input type="text" name="direccion" id="edit_direccion"
+                    <input type="text" name="direccion" id="edit_direccion" pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]+"
+                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s0-9]/g, '').toUpperCase();"
                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-stone-200">
                 </div>
                 <!-- Teléfonos -->
@@ -107,14 +107,16 @@
                         <label for="edit_tel" class="block text-x1 font-medium text-gray-700">
                             Teléfono
                         </label>
-                        <input type="text" name="telefono" id="edit_tel" maxlength="15"
+                        <input type="text" name="telefono" id="edit_tel" maxlength="15" pattern="[0-9]*"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
                     </div>
                     <div class="space-y-2">
                         <label for="edit_tel_dos" class="block text-x1 font-medium text-gray-700">
                             Teléfono alterno
                         </label>
-                        <input type="text" name="telefonoAlterno" id="edit_tel_dos" maxlength="15"
+                        <input type="text" name="telefonoAlterno" id="edit_tel_dos" maxlength="15" pattern="[0-9]*"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
                     </div>
                 </div>
@@ -133,13 +135,8 @@
             </form>
         </div>
     </div>
-
-
     <script>
         function openEditModal(id, documento, name, direccion, email, tel, tel_dos) {
-            // Configurar acción del formulario
-           //document.getElementById('editForm').action = "/clientes/" + id;
-
             // Rellenar campos
             document.getElementById('idcliente').value = id;
             document.getElementById('edit_name').value = name;
@@ -147,11 +144,9 @@
             document.getElementById('edit_email').value = email;
             document.getElementById('edit_tel').value = tel;
             document.getElementById('edit_tel_dos').value = tel_dos;
-
             // Mostrar modal
             document.getElementById('editModal').classList.remove('hidden');
         }
-
         function closeEditModal() {
             document.getElementById('editModal').classList.add('hidden');
         }
