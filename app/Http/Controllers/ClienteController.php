@@ -7,6 +7,22 @@ use App\Models\Cliente;
 
 class ClienteController extends Controller
 {
+    public function index()
+    {
+        $clientes = Cliente::orderBy('created_at', 'desc')->take(5)->get();
+        return view('cliente/gestion_cliente', compact('clientes'));
+    }
+    public function search(Request $request)
+    {
+        $documento = $request->input('documento');
+        // Buscar clientes
+        $clientes = Cliente::where('documento', 'like', "%{$documento}%")->get();
+        if($clientes->isNotEmpty()){
+            return view('cliente/gestion_cliente', compact('clientes'));
+        }else{
+            return redirect()->route('gestioncliente');
+        }
+    }
     public function store(Request $request)
     {
         // Validación de los datos del formulario
@@ -20,9 +36,11 @@ class ClienteController extends Controller
                 'direccion' => 'required|string|max:255',
                 'telefono' => 'required|string|regex:/^\+?[0-9]{10,15}$/',
                 'telefonoAlterno' => 'nullable|string|regex:/^\+?[0-9]{10,15}$/',
+            ],
+            [
+                'numeroDocumento.unique' => 'El cliente se encuentra registrado',
             ]
         );
-
         // Crear un nuevo registro
         Cliente::create([
             'tipo_documento' => $request->tipoDocumento,
@@ -34,18 +52,11 @@ class ClienteController extends Controller
             'tel' => $request->telefono,
             'tel_dos' => $request->telefonoAlterno,
         ]);
-
         return redirect()->route('gestioncliente')->with('success', 'Cliente registrado correctamente');
     }
-
-    public function index()
-    {
-        $clientes = Cliente::orderBy('created_at', 'desc')->take(5)->get();
-        return view('cliente/gestion_cliente', compact('clientes'));
-    }
-
     public function update(Request $request)
     {
+        // dd($request->all());
         // Validar datos recibidos
         $request->validate([
             'idcliente' => 'required|exists:clientes,id',
@@ -55,10 +66,8 @@ class ClienteController extends Controller
             'telefono' => 'nullable|string|max:20',
             'telefonoAlterno' => 'nullable|string|max:20',
         ]);
-
         // Buscar cliente por id
         $cliente = Cliente::findOrFail($request->idcliente);
-
         // Actualizar campos
         $cliente->update([
             'name' => $request->nombreCompleto,
@@ -67,7 +76,6 @@ class ClienteController extends Controller
             'tel' => $request->telefono,
             'tel_dos' => $request->telefonoAlterno,
         ]);
-
         return redirect()->route('gestioncliente')->with('success', 'Cliente registrado correctamente');
     }
 }

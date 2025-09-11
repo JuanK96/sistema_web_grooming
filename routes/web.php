@@ -23,25 +23,25 @@ Route::middleware([
     })->name('dashboard');
     //usuarios
     Route::get('/usuarios', [UsuarioController::class, 'index'])->name('gestionusuario')->middleware(CheckAdmin::class);
-    Route::post('/usuarios', [UsuarioController::class, 'create'])->name('user.create');
+    Route::post('/usuarios/create', [UsuarioController::class, 'create'])->name('user.create');
     //clientes
     Route::get('/clientes', [ClienteController::class, 'index'])->name('gestioncliente');
-    Route::get('/registro-cliente', function () {
+    Route::get('/clientes/register', function () {
         return view('cliente/registro_cliente');
     })->name('registrocliente');
-    Route::post('/registro-cliente', [ClienteController::class, 'store'])->name('cliente.store');
-    // editar cliente (modal)
-    Route::post('/clientes-update', [ClienteController::class, 'update'])->name('clientes.update');
+    Route::post('/clientes/register', [ClienteController::class, 'store'])->name('cliente.store');
+    Route::get('/clientes/search', [ClienteController::class, 'search'])->name('cliente.search');
+    Route::post('/clientes/update', [ClienteController::class, 'update'])->name('cliente.update');
     //mascotas
     Route::get('/mascotas', [MascotaController::class, 'index'])->name('gestionmascota');
-    Route::get('/registro-mascotas', function () {
+    Route::get('/mascotas/register', function () {
         return view('mascota/registro_mascota');
     })->name('registromascota');
-    Route::post('/registro-mascotas', [MascotaController::class, 'store'])->name('mascota.store');
+    Route::post('/mascotas/register', [MascotaController::class, 'store'])->name('mascota.store');
     //citas
     Route::get('/citas', [CitaController::class, 'index'])->name('gestioncita');
-    Route::get('/agendar-cita', [CitaController::class, 'obtenerMascotas']);
-    Route::post('/citas', [CitaController::class, 'agendar'])->name('cita.agendar');
+    Route::get('/citas/obtener-mascotas', [CitaController::class, 'obtenerMascotas']);
+    Route::post('/citas/agendar', [CitaController::class, 'agendar'])->name('cita.agendar');
     //historial citas
     Route::get('/historial-citas', function () {
         return view('cita/gestion_historial_cita');
