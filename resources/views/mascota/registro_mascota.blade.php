@@ -5,7 +5,8 @@
         </h2>
     </x-slot>
     <div class="flex items-center justify-center p-6">
-        <form method="POST" action="{{route('mascota.store')}}" class=" px-4 w-full space-y-5" id="petForm">
+    <form method="POST" action="{{ route('mascota.store') }}" enctype="multipart/form-data" class="px-4 w-full space-y-5" id="petForm">
+
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Nombre -->
