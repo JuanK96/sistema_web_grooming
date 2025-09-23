@@ -9,7 +9,8 @@
             <form action="{{ route('cliente.search') }}" method="GET">
                 @csrf
                 <label class="text-black font-bold" for="buscar">BUSCADOR:</label>
-                <input type="text"  name="search" id="search" placeholder="Buscar"
+                <input type="text"  name="search" id="search" placeholder="Buscar" pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]+"
+                    oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s0-9]/g, '').toUpperCase();"
                     class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2">
                 <button type="submit" class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
             </form>

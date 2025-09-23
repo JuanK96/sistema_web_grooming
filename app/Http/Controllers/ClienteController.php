@@ -13,16 +13,20 @@ class ClienteController extends Controller
         return view('cliente/gestion_cliente', compact('clientes'));
     }
     public function search(Request $request)
-    {
+    {   
         $search = $request->input('search');
-        // Buscar clientes
-        $clientes = Cliente::where('documento', 'like', "%{$search}%")
-        ->orWhere('name','like' ,"%{$search}%")
-        ->get();
-        if($clientes->isNotEmpty()){
-            return view('cliente/gestion_cliente', compact('clientes'));
-        }else{
-            return redirect()->route('gestioncliente')->with('error','No se encontraron resultados');
+        if (empty($search)) {
+            return redirect()->route('gestioncliente')->with('error', 'Ingresa un término de búsqueda');
+        } else {
+            // Buscar clientes
+            $clientes = Cliente::where('documento', 'like', "%{$search}%")
+                ->orWhere('name', 'like', "%{$search}%")
+                ->get();
+            if ($clientes->isNotEmpty()) {
+                return view('cliente/gestion_cliente', compact('clientes'));
+            } else {
+                return redirect()->route('gestioncliente')->with('error', 'No se encontraron resultados');
+            }
         }
     }
     public function store(Request $request)
