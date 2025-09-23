@@ -72,6 +72,7 @@
             </div>
         </div>
     </div>
+    {{-- tabla --}}
     <div class="px-10">
         <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
             <thead class="text-white" style="background-color: #009600">
@@ -143,7 +144,7 @@
             mascotaSelect.innerHTML = '<option value="" selected disabled>Cargando mascotas...</option>';
             // mascotaSelect.disabled = true;
             if (documento.length >= 6) {
-                fetch(`/agendar-cita?dueño=${encodeURIComponent(documento)}`)
+                fetch(`/citas/obtener-mascotas?dueño=${encodeURIComponent(documento)}`)
                     .then(response => {
                         console.log('Respuesta HTTP:', response.status, response.statusText);
                         if (!response.ok) {

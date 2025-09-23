@@ -38,6 +38,8 @@ Route::middleware([
         return view('mascota/registro_mascota');
     })->name('registromascota');
     Route::post('/mascotas/register', [MascotaController::class, 'store'])->name('mascota.store');
+    Route::get('/mascotas/search', [MascotaController::class, 'search'])->name('mascota.search');
+
     //citas
     Route::get('/citas', [CitaController::class, 'index'])->name('gestioncita');
     Route::get('/citas/obtener-mascotas', [CitaController::class, 'obtenerMascotas']);
