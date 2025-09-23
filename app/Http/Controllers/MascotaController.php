@@ -92,13 +92,18 @@ class MascotaController extends Controller
                 'vaccinated' => 'boolean',
                 'diseases' => 'nullable|string|max:255',
                 'description' => 'required|string|max:255',
-                'photo' => 'nullable|string|max:255',
+                'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ],
             [
                 'name.required' => 'Por favor digite el nombre.',
                 'dueño.exists' => 'El dueño no se encuentra registrado',
             ]
         );
+        if ($request->hasFile('photo')) {
+    $rutaFoto = $request->file('photo')->store('mascotas', 'public');
+} else {
+    $rutaFoto = null;
+}
         // Crear un nuevo registro
         Mascota::create([
             'id_cliente' => Cliente::where('documento', $request->dueño)->value('id'),
@@ -112,7 +117,7 @@ class MascotaController extends Controller
             'vacunado' => $request->has('vaccinated'),
             'enfermedades' => $request->diseases,
             'descripcion' => $request->description,
-            'ruta_foto' => $request->photo,
+            'ruta_foto' => $rutaFoto,
         ]);
         return redirect()->route('gestionmascota');
     }
