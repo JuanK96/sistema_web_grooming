@@ -9,7 +9,7 @@
             <form action="{{ route('cliente.search') }}" method="GET">
                 @csrf
                 <label class="text-black font-bold" for="buscar">BUSCADOR:</label>
-                <input type="text"  name="search" id="search" placeholder="Buscar" pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]+"
+                <input type="text" name="search" id="search" placeholder="Buscar" pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]+"
                     oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s0-9]/g, '').toUpperCase();"
                     class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2">
                 <button type="submit" class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
@@ -113,16 +113,14 @@
                         <label for="edit_tel" class="block text-x1 font-medium text-gray-700">
                             Teléfono
                         </label>
-                        <input type="tel" name="telefono" id="edit_tel" maxlength="15" pattern="[0-9]*"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
+                        <input type="tel" name="telefono" id="edit_tel" maxlength="15" maxlength="15"
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
                     </div>
                     <div class="space-y-2">
                         <label for="edit_tel_dos" class="block text-x1 font-medium text-gray-700">
                             Teléfono alterno
                         </label>
-                        <input type="tel" name="telefonoAlterno" id="edit_tel_dos" maxlength="15" pattern="[0-9]*"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
+                        <input type="tel" name="telefonoAlterno" id="edit_tel_dos" maxlength="15" maxlength="15"
                             class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
                     </div>
                 </div>

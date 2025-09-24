@@ -40,13 +40,17 @@ class ClienteController extends Controller
                 'fechaNacimiento' => 'required|date|before:today',
                 'correoElectronico' => 'required|email',
                 'direccion' => 'required|string|max:255',
+                'extension' => 'required|string',
                 'telefono' => 'required|string|regex:/^\+?[0-9]{10,15}$/',
+                'extTelAlt' => 'nullable|string',
                 'telefonoAlterno' => 'nullable|string|regex:/^\+?[0-9]{10,15}$/',
             ],
             [
                 'numeroDocumento.unique' => 'El cliente se encuentra registrado',
             ]
         );
+        $telefonoCompleto = $request->extension . $request->telefono;
+        $telAltCompleto = $request->extTelAlt . $request->telefonoAlterno;
         // Crear un nuevo registro
         Cliente::create([
             'tipo_documento' => $request->tipoDocumento,
@@ -55,8 +59,8 @@ class ClienteController extends Controller
             'fecha_nacimiento' => $request->fechaNacimiento,
             'email' => $request->correoElectronico,
             'direccion' => $request->direccion,
-            'tel' => $request->telefono,
-            'tel_dos' => $request->telefonoAlterno,
+            'tel' => $telefonoCompleto,
+            'tel_dos' => $telAltCompleto,
         ]);
         return redirect()->route('gestioncliente')->with('success', 'Cliente registrado correctamente');
     }
@@ -68,9 +72,9 @@ class ClienteController extends Controller
             'idcliente' => 'required|exists:clientes,id',
             'nombreCompleto' => 'required|string|max:255',
             'correoElectronico' => 'required|email',
-            'direccion' => 'nullable|string|max:255',
-            'telefono' => 'nullable|string|max:20',
-            'telefonoAlterno' => 'nullable|string|max:20',
+            'direccion' => 'required|string|max:255',
+            'telefono' => 'required|string',
+            'telefonoAlterno' => 'nullable|string',
         ]);
         // Buscar cliente por id
         $cliente = Cliente::findOrFail($request->idcliente);

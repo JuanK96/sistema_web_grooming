@@ -28,8 +28,9 @@
                     <label for="numeroDocumento" class="block text-x1 font-medium text-gray-700">
                         Número de documento <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" id="numeroDocumento" name="numeroDocumento" pattern="[0-9]*"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="20"
+                    <input type="text" id="numeroDocumento" name="numeroDocumento" pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]*"
+                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s^0-9]/g, '').toUpperCase();"
+                        maxlength="20"
                         class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
                         required>
                     <p id="numeroDocumentoError" class="error-message hidden">Por favor ingrese el número de documento
@@ -83,27 +84,51 @@
                     required>
                 <p id="direccionError" class="error-message hidden">Por favor ingrese su dirección</p>
             </div>
-
             <!-- Teléfonos -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
                     <label for="telefono" class="block text-x1 font-medium text-gray-700">
                         Teléfono <span class="text-red-500">*</span>
                     </label>
-                    <input type="tel" id="telefono" name="telefono" pattern="[0-9]*"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
-                        class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
-                        required>
+                    <div class="flex">
+                        <!-- Selector de extensión -->
+                        <select id="extension" name="extension"
+                            class="rounded-l-md border border-gray-300 bg-stone-200 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="+57">🇨🇴 +57</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+52">🇲🇽 +52</option>
+                            <option value="+34">🇪🇸 +34</option>
+                            <option value="+49">🇩🇪 +49</option>
+                        </select>
+                        <!-- Campo de teléfono -->
+                        <input type="tel" id="telefono" name="telefono" pattern="[0-9]*"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
+                            class="flex-1 rounded-r-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
+                            required>
+                    </div>
                     <p id="telefonoError" class="error-message hidden">Por favor ingrese un número de teléfono</p>
                 </div>
-
                 <div class="space-y-2">
-                    <label for="telefonoAlterno" class="block text-x1 font-medium text-gray-700">
-                        Teléfono alterno
+                    <label for="telefono" class="block text-x1 font-medium text-gray-700">
+                        Teléfono Alterno
                     </label>
-                    <input type="tel" id="telefonoAlterno" name="telefonoAlterno" pattern="[0-9]*"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
-                        class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
+                    <div class="flex">
+                        <!-- Selector de extensión -->
+                        <select id="extTelAlt" name="extTelAlt"
+                            class="rounded-l-md border border-gray-300 bg-stone-200 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="+57">🇨🇴 +57</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+52">🇲🇽 +52</option>
+                            <option value="+34">🇪🇸 +34</option>
+                            <option value="+49">🇩🇪 +49</option>
+                        </select>
+                        <!-- Campo de teléfono -->
+                        <input type="tel" id="telefonoAlterno" name="telefonoAlterno" pattern="[0-9]*"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
+                            class="flex-1 rounded-r-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
+                            required>
+                    </div>
+                    <p id="telefonoError" class="error-message hidden">Por favor ingrese un número de teléfono</p>
                 </div>
             </div>
             <div class="grid grid-cols-3">
