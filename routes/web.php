@@ -45,6 +45,7 @@ Route::middleware([
     Route::get('/citas', [CitaController::class, 'index'])->name('gestioncita');
     Route::get('/citas/obtener-mascotas', [CitaController::class, 'obtenerMascotas']);
     Route::post('/citas/agendar', [CitaController::class, 'agendar'])->name('cita.agendar');
+    Route::post('/citas/update', [CitaController::class, 'update'])->name('cita.update');
     //historial citas
     Route::get('/historial-citas', function () {
         return view('cita/gestion_historial_cita');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cita;
 use App\Models\Cliente;
 use App\Models\Mascota;
+use App\Models\User;
 
 class CitaController extends Controller
 {
@@ -32,11 +33,14 @@ class CitaController extends Controller
                 'mascota' => 'required|string|max:255',
                 'fecha' => 'required',
                 'hora' => 'required',
+                'grummer'=>'required',
+                'estado'=>'required',
             ]
         );
         Cita::create([
             'id_cliente' => Cliente::where('documento', $request->dueño)->value('id'),
             'id_mascota' => $request->mascota,
+            'id_user'=>$request->grummer,
             'fecha' => $request->fecha,
             'hora' => $request->hora,
         ]);
@@ -44,7 +48,26 @@ class CitaController extends Controller
     }
     public function index()
     {
+        $usuarios = User::where('id_role',3 )->where('active',1)->get();
         $citas = Cita::with('cliente', 'mascota', 'usuario')->orderBy('created_at', 'desc')->paginate(5);
-        return view('cita/gestion_cita', compact('citas'));
+        return view('cita/gestion_cita', compact('citas','usuarios'));
+    }
+    public function update(Request $request)
+    {
+        // dd($request->all());
+        // Validar datos recibidos
+        $request->validate([
+            'estado' => 'required|string',
+            'description' => 'required|string',
+        ]);
+        // Buscar cliente por id
+        $cita = Cita::findOrFail($request->idcita);
+        // Actualizar campos
+        $cita->update([
+            'estado' => $request->estado,
+            'descripcion' => $request->descrition,
+            
+        ]);
+        return redirect()->route('gestioncita')->with('success', 'Estado de cita Actualizado');
     }
 }
