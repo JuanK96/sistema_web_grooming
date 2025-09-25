@@ -6,10 +6,13 @@
     </x-slot>
     <div class="flex flex-row py-10 px-20 justify-between items-center">
         <div>
-            <label class="text-black font-bold " for="buscar">BUSCADOR:</label>
-            <input type="text" id="buscar" class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2"
-                placeholder="Buscar...">
-            <button class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
+            <form action="{{ route('user.search') }}" method="GET">
+                @csrf
+                <label class="text-black font-bold" for="buscar">BUSCADOR:</label>
+                <input type="text" name="search" id="search" placeholder="Buscar" {{-- oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s0-9]/g, '').toUpperCase();" --}}
+                    class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2">
+                <button type="submit" class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
+            </form>
         </div>
         <div>
             @if ($errors->any())
@@ -105,6 +108,7 @@
             </div>
         </div>
     </div>
+    {{-- tabla --}}
     <div class="px-10">
         <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
             <thead class="text-white" style="background-color: #009600">
@@ -120,14 +124,14 @@
             <tbody>
                 @foreach ($usuarios as $usuario)
                     <tr class="bg-gray-100 border-b">
-                        <td class="py-4 px-4 text-center">{{$usuario->id}}</td>
-                        <td class="py-4 px-4 text-center">{{$usuario->name}}</td>
-                        <td class="py-4 px-4 text-center">{{$usuario->email}}</td>
-                        <td class="py-4 px-4 text-center">{{$usuario->role->name}}</td>
+                        <td class="py-4 px-4 text-center">{{ $usuario->id }}</td>
+                        <td class="py-4 px-4 text-center">{{ $usuario->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $usuario->email }}</td>
+                        <td class="py-4 px-4 text-center">{{ $usuario->role->name }}</td>
                         <td class="py-4 px-4 text-center">
                             @if ($usuario->active == 1)
                                 Activo
-                            @else 
+                            @else
                                 Desactivado
                             @endif
                         </td>
@@ -145,6 +149,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $usuarios->links() }}
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
