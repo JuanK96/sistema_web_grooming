@@ -90,13 +90,13 @@
             <tbody>
                 @foreach ($citas as $cita)
                     <tr class="bg-gray-100 border-b">
-                        <td class="py-4 px-4 text-center">{{$cita->id}}</td>
-                        <td class="py-4 px-4 text-center">{{$cita->cliente->documento}}</td>
-                        <td class="py-4 px-4 text-center">{{$cita->cliente->name}}</td>
-                        <td class="py-4 px-4 text-center">{{$cita->mascota->name}}</td>
-                        <td class="py-4 px-4 text-center">{{$cita->fecha}}</td>
-                        <td class="py-4 px-4 text-center">{{substr($cita->hora, 0, 5)}}</td>
-                        <td class="py-4 px-4 text-center">{{$cita->estado}}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->id }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->cliente->documento }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->cliente->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->mascota->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->fecha }}</td>
+                        <td class="py-4 px-4 text-center">{{ substr($cita->hora, 0, 5) }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->estado }}</td>
                         <td class="py-4 px-4 text-center">
 
                             <button class="bg-green-500 text-white p-2 h-8 w-8 rounded-lg">
@@ -120,6 +120,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $citas->links() }}
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
