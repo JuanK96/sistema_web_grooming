@@ -94,6 +94,7 @@
                         <!-- Selector de extensión -->
                         <select id="extension" name="extension"
                             class="rounded-l-md border border-gray-300 bg-stone-200 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="" selected disabled>EXT</option>
                             <option value="+57">🇨🇴 +57</option>
                             <option value="+1">🇺🇸 +1</option>
                             <option value="+52">🇲🇽 +52</option>
@@ -116,6 +117,7 @@
                         <!-- Selector de extensión -->
                         <select id="extTelAlt" name="extTelAlt"
                             class="rounded-l-md border border-gray-300 bg-stone-200 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="" selected disabled>EXT</option>
                             <option value="+57">🇨🇴 +57</option>
                             <option value="+1">🇺🇸 +1</option>
                             <option value="+52">🇲🇽 +52</option>
@@ -125,8 +127,7 @@
                         <!-- Campo de teléfono -->
                         <input type="tel" id="telefonoAlterno" name="telefonoAlterno" pattern="[0-9]*"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15"
-                            class="flex-1 rounded-r-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
-                            required>
+                            class="flex-1 rounded-r-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
                     </div>
                     <p id="telefonoError" class="error-message hidden">Por favor ingrese un número de teléfono</p>
                 </div>

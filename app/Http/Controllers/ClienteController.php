@@ -9,11 +9,11 @@ class ClienteController extends Controller
 {
     public function index()
     {
-        $clientes = Cliente::orderBy('created_at', 'desc')->take(5)->get();
+        $clientes = Cliente::orderBy('created_at', 'desc')->paginate(4);
         return view('cliente/gestion_cliente', compact('clientes'));
     }
     public function search(Request $request)
-    {   
+    {
         $search = $request->input('search');
         if (empty($search)) {
             return redirect()->route('gestioncliente')->with('error', 'Ingresa un término de búsqueda');
@@ -21,7 +21,8 @@ class ClienteController extends Controller
             // Buscar clientes
             $clientes = Cliente::where('documento', 'like', "%{$search}%")
                 ->orWhere('name', 'like', "%{$search}%")
-                ->get();
+                ->paginate(5)
+                ->appends(['search' => $search]);
             if ($clientes->isNotEmpty()) {
                 return view('cliente/gestion_cliente', compact('clientes'));
             } else {
@@ -35,7 +36,7 @@ class ClienteController extends Controller
         $request->validate(
             [
                 'tipoDocumento' => 'required|string|max:255',
-                'numeroDocumento' => 'required|numeric|unique:clientes,documento|digits_between:6,20',
+                'numeroDocumento' => 'required|string|unique:clientes,documento',
                 'nombreCompleto' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
                 'fechaNacimiento' => 'required|date|before:today',
                 'correoElectronico' => 'required|email',
