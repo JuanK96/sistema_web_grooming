@@ -136,14 +136,15 @@
                             @endif
                         </td>
                         <td class="py-4 px-4 text-center">
-                            <button class="bg-yellow-500 text-white p-2 h-8 w-8 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="110%"
-                                    fill="rgba(255,255,255,1)">
-                                    <path
-                                        d="M21 15.2426V21.0082C21 21.556 20.5551 22 20.0066 22H3.9934C3.44476 22 3 21.5511 3 20.9925V9H9C9.55228 9 10 8.55228 10 8V2H20.0017C20.5531 2 21 2.45531 21 2.9918V6.75736L12.0012 15.7562L11.995 19.995L16.2414 20.0012L21 15.2426ZM21.7782 8.80761L23.1924 10.2218L15.4142 18L13.9979 17.9979L14 16.5858L21.7782 8.80761ZM3 7L8 2.00318V7H3Z">
-                                    </path>
-                                </svg>
-                            </button>
+                            <form action="{{ route('usuarios.toggle', $usuario->id) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit"
+                                    class="p-2 h-10 w-auto rounded-lg text-white
+                                    {{ $usuario->active ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600' }}">
+                                    {{ $usuario->active ? 'Desactivar' : 'Activar' }}
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

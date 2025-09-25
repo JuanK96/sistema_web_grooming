@@ -11,7 +11,7 @@ class UsuarioController extends Controller
 {
     public function index()
     {
-        $usuarios = User::with('role')->orderBy('created_at', 'desc')->paginate(5);
+        $usuarios = User::with('role')->where('id', '>', 1)->orderBy('created_at', 'desc')->paginate(5);
         return view('usuarios/gestion_usuarios', compact('usuarios'));
     }
     public function search(Request $request)
@@ -21,8 +21,11 @@ class UsuarioController extends Controller
             return redirect()->route('gestionusuario')->with('error', 'Ingresa un término de búsqueda');
         } else {
             // Buscar clientes
-            $usuarios = User::where('email', 'like', "%{$search}%")
-                ->orWhere('name', 'like', "%{$search}%")
+            $usuarios = User::where('id', '!=', 1)
+                ->where(function ($query) use ($search) {
+                    $query->where('email', 'like', "%{$search}%")
+                        ->orWhere('name', 'like', "%{$search}%");
+                })
                 ->paginate(5)
                 ->appends(['search' => $search]);
             if ($usuarios->isNotEmpty()) {
@@ -57,5 +60,11 @@ class UsuarioController extends Controller
             'id_role' => $request->role,
         ]);
         return redirect()->route('gestionusuario');
+    }
+    public function toggleActive(User $usuario)
+    {
+        $usuario->active = !$usuario->active; // alterna entre 1 y 0
+        $usuario->save();
+        return redirect()->back()->with('success', 'Estado actualizado correctamente');
     }
 }

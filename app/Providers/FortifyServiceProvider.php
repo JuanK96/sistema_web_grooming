@@ -13,6 +13,10 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use App\Models\User;
+
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -34,15 +38,25 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
-
+        
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
-
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
             return Limit::perMinute(5)->by($throttleKey);
         });
-
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
+        });
+        Fortify::authenticateUsing(function ($request) {
+            $user = User::where('email', $request->email)->first();
+            if ($user && Hash::check($request->password, $user->password)) {
+                if ($user->active == 0) {
+                    throw ValidationException::withMessages([
+                        'email' => __('Tu cuenta está desactivada, contacta al administrador.'),
+                    ]);
+                }
+                return $user;
+            }
+            return null; // usuario o clave incorrecta
         });
     }
 }

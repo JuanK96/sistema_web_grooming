@@ -18,8 +18,9 @@ class CheckAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::user()->id_role != 1) {
-               return redirect('/dashboard')->with('error', 'No tienes acceso a esta sección.');
-           }
+            return redirect('/dashboard')->with('error', 'No tienes acceso a esta sección.');
+            abort(403);
+        }
         return $next($request);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\CitaController;
 use App\Http\Controllers\MascotaController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckSuper;
+use App\Http\Middleware\CheckActive;
 use Illuminate\Support\Facades\Route;
 
 
@@ -15,6 +16,7 @@ Route::get('/', function () {
 
 Route::middleware([
     'auth:sanctum',
+    CheckActive::class,
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
@@ -23,8 +25,9 @@ Route::middleware([
     })->name('dashboard');
     //usuarios
     Route::get('/usuarios', [UsuarioController::class, 'index'])->name('gestionusuario')->middleware(CheckAdmin::class);
-    Route::post('/usuarios/create', [UsuarioController::class, 'create'])->name('user.create');
-    Route::get('/usuarios/search', [UsuarioController::class, 'search'])->name('user.search');
+    Route::post('/usuarios/create', [UsuarioController::class, 'create'])->name('user.create')->middleware(CheckAdmin::class);
+    Route::get('/usuarios/search', [UsuarioController::class, 'search'])->name('user.search')->middleware(CheckAdmin::class);
+    Route::patch('/usuarios/{usuario}/toggle', [UsuarioController::class, 'toggleActive'])->name('usuarios.toggle')->middleware(CheckAdmin::class);
     //clientes
     Route::get('/clientes', [ClienteController::class, 'index'])->name('gestioncliente');
     Route::get('/clientes/register', function () {
