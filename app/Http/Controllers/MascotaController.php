@@ -11,7 +11,7 @@ class MascotaController extends Controller
 {
     public function index()
     {
-        $mascotas = Mascota::with('dueño')->orderBy('created_at', 'desc')->take(5)->get();
+        $mascotas = Mascota::with('dueño')->orderBy('created_at', 'desc')->paginate(5);
         foreach ($mascotas as $mascota) {
             $fechaNacimiento = Carbon::parse($mascota->fecha_nacimiento);
             $ahora = Carbon::now();
@@ -47,7 +47,8 @@ class MascotaController extends Controller
                     $query->where('documento', 'like', "%{$search}%");
                 })
                 ->orWhere('name', 'like', "%{$search}%")  // Búsqueda por nombre de la mascota
-                ->get();
+                ->paginate(5)
+                ->appends(['search' => $search]);
             foreach ($mascotas as $mascota) {
                 $fechaNacimiento = Carbon::parse($mascota->fecha_nacimiento);
                 $ahora = Carbon::now();
@@ -88,8 +89,8 @@ class MascotaController extends Controller
                 'fechaNacimiento' => 'required|date|before:today',
                 'weight' => 'required|numeric|max:255',
                 'sex' => 'required|string|max:255',
-                'sterilized' => 'boolean',
-                'vaccinated' => 'boolean',
+                'sterilized' => 'nullable|string',
+                'vaccinated' => 'nullable|string',
                 'diseases' => 'nullable|string|max:255',
                 'description' => 'required|string|max:255',
                 'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -99,11 +100,21 @@ class MascotaController extends Controller
                 'dueño.exists' => 'El dueño no se encuentra registrado',
             ]
         );
+        if (empty($request->sterilized)) {
+            $esterilizado = 'NO';
+        } else {
+            $esterilizado = $request->sterilized;
+        }
+        if (empty($request->vaccinated)) {
+            $vacunado = 'NO';
+        } else {
+            $vacunado = $request->vaccinated;
+        }
         if ($request->hasFile('photo')) {
-    $rutaFoto = $request->file('photo')->store('mascotas', 'public');
-} else {
-    $rutaFoto = null;
-}
+            $rutaFoto = $request->file('photo')->store('mascotas', 'public');
+        } else {
+            $rutaFoto = null;
+        }
         // Crear un nuevo registro
         Mascota::create([
             'id_cliente' => Cliente::where('documento', $request->dueño)->value('id'),
@@ -113,8 +124,8 @@ class MascotaController extends Controller
             'peso' => $request->weight,
             'fecha_nacimiento' => $request->fechaNacimiento,
             'sexo' => $request->sex,
-            'esterilizado' => $request->has('sterilized'),
-            'vacunado' => $request->has('vaccinated'),
+            'esterilizado' => $esterilizado,
+            'vacunado' => $vacunado,
             'enfermedades' => $request->diseases,
             'descripcion' => $request->description,
             'ruta_foto' => $rutaFoto,

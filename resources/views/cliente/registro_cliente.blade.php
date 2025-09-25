@@ -29,7 +29,7 @@
                         Número de documento <span class="text-red-500">*</span>
                     </label>
                     <input type="text" id="numeroDocumento" name="numeroDocumento" pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]*"
-                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s^0-9]/g, '').toUpperCase();"
+                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ^0-9]/g, '').toUpperCase();"
                         maxlength="20"
                         class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200"
                         required>

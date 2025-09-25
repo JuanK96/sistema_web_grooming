@@ -24,6 +24,7 @@ Route::middleware([
     //usuarios
     Route::get('/usuarios', [UsuarioController::class, 'index'])->name('gestionusuario')->middleware(CheckAdmin::class);
     Route::post('/usuarios/create', [UsuarioController::class, 'create'])->name('user.create');
+    Route::get('/usuarios/search', [UsuarioController::class, 'search'])->name('user.search');
     //clientes
     Route::get('/clientes', [ClienteController::class, 'index'])->name('gestioncliente');
     Route::get('/clientes/register', function () {

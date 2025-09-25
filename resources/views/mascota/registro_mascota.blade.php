@@ -5,8 +5,8 @@
         </h2>
     </x-slot>
     <div class="flex items-center justify-center p-6">
-    <form method="POST" action="{{ route('mascota.store') }}" enctype="multipart/form-data" class="px-4 w-full space-y-5" id="petForm">
-
+        <form method="POST" action="{{ route('mascota.store') }}" enctype="multipart/form-data"
+            class="px-4 w-full space-y-5" id="petForm">
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Nombre -->
@@ -22,8 +22,8 @@
                 <div>
                     <label for="dueño" class="block text-x1 font-medium text-gray-700 mb-1">Dueño Mascota <span
                             class="text-red-500">*</span></label>
-                    <input type="text" id="dueño" name="dueño" required pattern="[0-9]*"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="20"
+                    <input type="text" id="dueño" name="dueño" required 
+                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ^0-9]/g, '').toUpperCase()" maxlength="20"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Documento..">
                 </div>
@@ -56,7 +56,7 @@
                     <div>
                         <label for="weight" class="block text-x1 font-medium text-gray-700 mb-1">Peso (kg) <span
                                 class="text-red-500">*</span></label>
-                        <input type="number" id="weight" name="weight" required 
+                        <input type="number" id="weight" name="weight" required
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                             placeholder="Ej: 5.2">
                     </div>
@@ -88,7 +88,7 @@
                     <div>
                         <label class="block text-x1 font-medium text-gray-700 mb-1">Esterilizado</label>
                         <div class="flex items-center tick-animation ">
-                            <input type="checkbox" id="sterilized" name="sterilized" value="1"
+                            <input type="checkbox" id="sterilized" name="sterilized" value="SI"
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
                             <label for="sterilized" class="ml-2 text-gray-700">Sí, está esterilizado</label>
                         </div>
@@ -97,7 +97,7 @@
                     <div>
                         <label class="block text-x1 font-medium text-gray-700 mb-1">Vacunado</label>
                         <div class="flex items-center tick-animation ">
-                            <input type="checkbox" id="vaccinated" name="vaccinated" value="1"
+                            <input type="checkbox" id="vaccinated" name="vaccinated" value="SI"
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
                             <label for="vaccinated" class="ml-2 text-gray-700">Sí, está al día con sus vacunas</label>
                         </div>
@@ -116,7 +116,7 @@
                 <!-- Descripción -->
                 <div>
                     <label for="description" class="block text-x1 font-medium text-gray-700 mb-1">Descripción <span
-                                class="text-red-500">*</span></label>
+                            class="text-red-500">*</span></label>
                     <textarea id="description" name="description" rows="3" required maxlength="255"
                         class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Describe características de la mascota"></textarea>
@@ -124,8 +124,9 @@
             </div>
             <!-- Foto -->
             <div class="grid grid-cols-3">
-                <div class="">
-                    <label for="photo" class="block text-x1 font-medium text-gray-700 mb-1">Foto de la mascota</label>
+                <div>
+                    <label for="photo" class="block text-x1 font-medium text-gray-700 mb-1">Foto de la
+                        mascota</label>
                     <div class="mt-1 flex space-x-4 items-center ">
                         <div class="relative">
                             <label for="photo" class="cursor-pointer">

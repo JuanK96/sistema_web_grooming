@@ -5,11 +5,11 @@
         </h2>
     </x-slot>
     <div class="flex flex-row py-10 px-20 justify-between items-center">
-         <div>
+        <div>
             <form action="{{ route('mascota.search') }}" method="GET">
                 @csrf
                 <label class="text-black font-bold" for="buscar">BUSCADOR:</label>
-                <input type="text"  name="search" id="search" placeholder="Buscar" pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]+"
+                <input type="text" name="search" id="search" placeholder="Buscar" pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]+"
                     oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s0-9]/g, '').toUpperCase();"
                     class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2">
                 <button type="submit" class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
@@ -46,7 +46,6 @@
                         <td class="py-4 px-4 text-center">{{ $mascota->sexo }}</td>
                         <td class="py-4 px-4 text-center">{{ $mascota->raza }}</td>
                         <td class="py-4 px-4 text-center">
-                            <!-- Modal Ver -->
                             <button
                                 onclick="openVerModal(
                                         {{ $mascota->id }},
@@ -59,19 +58,16 @@
                                         '{{ $mascota->peso ?? '' }}',
                                         '{{ $mascota->descripcion ?? '' }}',
                                         '{{ $mascota->enfermedades ?? '' }}',
-                                        '{{ $mascota->vacunado ? 'Sí' : 'No' }}',
-                                        '{{ $mascota->esterilizado ? 'Sí' : 'No' }}',
-                                        '{{ $mascota->foto  }}'
+                                        '{{ $mascota->vacunado ?? ''}}',
+                                        '{{ $mascota->esterilizado ?? '' }}',
+                                        '{{ $mascota->foto_url ?? '' }}'
                                     )"
-
                                 class="bg-green-500 text-white p-2 h-8 w-8 rounded-lg">
-
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M1.18164 12C2.12215 6.87976 6.60812 3 12.0003 3C17.3924 3 21.8784 6.87976 22.8189 12C21.8784 17.1202 17.3924 21 12.0003 21C6.60812 21 2.12215 17.1202 1.18164 12ZM12.0003 17C14.7617 17 17.0003 14.7614 17.0003 12C17.0003 9.23858 14.7617 7 12.0003 7C9.23884 7 7.00026 9.23858 7.00026 12C7.00026 14.7614 9.23884 17 12.0003 17ZM12.0003 15C10.3434 15 9.00026 13.6569 9.00026 12C9.00026 10.3431 10.3434 9 12.0003 9C13.6571 9 15.0003 10.3431 15.0003 12C15.0003 13.6569 13.6571 15 12.0003 15Z">
                                     </path>
                                 </svg>
-
                             </button>
                             <button
                                 onclick="openEditModal(
@@ -95,8 +91,11 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $mascotas->links() }}
+        </div>
     </div>
-    {{-- modal --}}
+    {{-- modal editar --}}
     <div id="editModal"
         class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
         <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
@@ -194,70 +193,45 @@
             </form>
         </div>
     </div>
-    <script>
-        function openEditModal(id, peso, estarilizado, vacunado, enfermedades, descripcion, ) {
-            // Rellenar campos
-            document.getElementById('idmascota').value = id;
-            document.getElementById('weight').value = peso;
-            // document.getElementById('sterilized').value = esterilizado;
-            // document.getElementById('vaccinated').value = vacunado;
-            document.getElementById('diseases').value = enfermedades;
-            document.getElementById('description').value = descripcion;
-            // document.getElementById('photo').value = tel_dos;
-            // Mostrar modal
-            document.getElementById('editModal').classList.remove('hidden');
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').classList.add('hidden');
-        }
-    </script>
     <!-- Modal Ver Mascota -->
-    <div x-data="{ open: false, mascota: {} }" @open-modal.window="open = true; mascota = $event.detail">
-        
-
-        <!-- Fondo -->
-        <div x-show="open" x-transition
-            class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0">
-
-            <!-- Contenedor -->
-            <div class="bg-white border border-gray-400 rounded-lg shadow-lg w-[700px] p-6 relative">
-
-                <!-- Header -->
-                <div class="absolute -top-6 left-1/2 transform -translate-x-1/2">
-                    <div class="bg-[#00405C] text-white px-6 py-2 rounded-t-md font-bold">
-                        VER MASCOTA
-                    </div>
-                </div>
-
+    <div id="verModal"
+        class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
+        <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
+            <h2 class="text-xl font-semibold mb-4">Datos de la Mascota</h2>
+            <div x-data="{ mascota: {} }" @open-modal.window="mascota = $event.detail">
                 <!-- Contenido -->
                 <div class="flex gap-6 mt-6">
-                    <!-- Imagen -->
-                    <div class="w-1/2">
-                        <img :src="mascota.foto" alt="Foto mascota"
-                            class="rounded-md object-cover w-full h-64 border">
+                    <div x-show="mascota.foto_url" class="flex flex-col items-center w-1/2" id="fotoContainer">
+                        <strong class="mb-2">Foto:</strong>
+                        <img x-bind:src="mascota.foto_url || 'https://placehold.co/200x200/ffffff/cccccc?text=Sin+foto'"
+                            x-bind:alt="'Foto de ' + mascota.name"
+                            class="rounded-lg border border-gray-200 w-full max-w-xs h-60 object-cover"
+                            onerror="this.src='https://placehold.co/200x200/ffffff/cccccc?text=Error+cargando'; 
+                                    this.alt='Error al cargar foto';">
                     </div>
-
-                    <!-- Datos -->
+                    <!-- Si no hay foto -->
+                    <div x-show="!mascota.foto_url" class="w-1/2 flex items-center justify-center">
+                        <div class="text-center text-gray-500">
+                            <img src="https://placehold.co/200x200/ffffff/cccccc?text=Sin+foto"
+                                alt="Sin foto disponible"
+                                class="rounded-lg border border-gray-200 w-32 h-32 object-cover mx-auto mb-2">
+                            <p>Sin foto disponible</p>
+                        </div>
+                    </div>
                     <div class="w-1/2 space-y-2 text-gray-800">
-                        <p><span class="font-bold">NOMBRE</span><br><span x-text="mascota.name"></span></p>
+                        <p><span class="font-bold">Nombre</span><br><span x-text="mascota.name"></span></p>
                         <p><span class="font-bold">Dueño</span><br><span x-text="mascota.dueno"></span></p>
-                        <p><span class="font-bold">Fecha Nacimiento</span><br><span
-                                x-text="mascota.fecha_nacimiento"></span></p>
-
+                        <p><span class="font-bold">Edad</span><br><span x-text="mascota.edad"></span></p>
                         <div class="grid grid-cols-2 gap-2 mt-2">
-                            <p><span class="font-bold">Especie</span><br><span x-text="mascota.especie"></span></p>
+                            <p><span class="font-bold">Especie</span><br><span x-text="mascota.especie"></span>
+                            </p>
                             <p><span class="font-bold">Raza</span><br><span x-text="mascota.raza"></span></p>
                             <p><span class="font-bold">Sexo</span><br><span x-text="mascota.sexo"></span></p>
                             <p><span class="font-bold">Peso</span><br><span x-text="mascota.peso"></span></p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Línea separadora -->
                 <hr class="my-4 border-t-2 border-gray-300">
-
-                <!-- Info adicional -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <p class="font-bold">Descripcion</p>
@@ -268,31 +242,46 @@
                         <p x-text="mascota.enfermedades"></p>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-2 gap-4 mt-4">
                     <p><span class="font-bold">Vacunado</span><br><span x-text="mascota.vacunado"></span></p>
-                    <p><span class="font-bold">Esterilizado</span><br><span x-text="mascota.esterilizado"></span></p>
+                    <p><span class="font-bold">Esterilizado</span><br><span x-text="mascota.esterilizado"></span>
+                    </p>
                 </div>
-
-                <!-- Botón salir -->
                 <div class="mt-6 flex justify-center">
-                    <button @click="open = false"
-                        class="bg-[#00405C] hover:bg-[#006080] text-white px-8 py-2 rounded-md font-bold">
-                        SALIR
+                    <button type="button" onclick="closeVerModal()"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        Cerrar
                     </button>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        function openVerModal(id, dueno, name, fecha_nacimiento, especie, raza, sexo, peso, descripcion, enfermedades,
-            vacunado, esterilizado, foto) {
+        function openEditModal(id, peso, estarilizado, vacunado, enfermedades, descripcion, ) {
+            // Rellenar campos
+            document.getElementById('idmascota').value = id;
+            document.getElementById('weight').value = peso;
+            // document.getElementById('sterilized').value = esterilizado;
+            // document.getElementById('vaccinated').value = vacunado;
+            document.getElementById('diseases').value = enfermedades;
+            document.getElementById('description').value = descripcion;
+            // Mostrar modal
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+    </script>
+    <script>
+        function openVerModal(id, dueno, name, edad, especie, raza, sexo, peso, descripcion, enfermedades,
+            vacunado, esterilizado, foto_url) {
             window.dispatchEvent(new CustomEvent('open-modal', {
                 detail: {
                     id,
                     dueno,
                     name,
-                    fecha_nacimiento,
+                    edad,
                     especie,
                     raza,
                     sexo,
@@ -301,9 +290,14 @@
                     enfermedades,
                     vacunado,
                     esterilizado,
-                    foto
+                    foto_url
                 }
             }));
+            document.getElementById('verModal').classList.remove('hidden');
+        }
+
+        function closeVerModal() {
+            document.getElementById('verModal').classList.add('hidden');
         }
     </script>
 </x-app-layout>

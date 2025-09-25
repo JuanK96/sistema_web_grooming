@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('peso');
             $table->date('fecha_nacimiento');
             $table->string('sexo');
-            $table->boolean('esterilizado');
-            $table->boolean('vacunado');
+            $table->string('esterilizado')->nullable();
+            $table->string('vacunado')->nullable();
             $table->string('enfermedades')->nullable();
             $table->string('descripcion');
             $table->string('ruta_foto')->nullable();
