@@ -57,6 +57,18 @@
                                     required>
                             </div>
                         </div>
+                        <div>
+                            <label for="grummer" class="block text-sm font-medium text-gray-700">Asignar
+                                Groomer</label>
+                            <select type="text" id="grummer" name="grummer"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
+                                required disabled>
+                                <option value="" selected disabled>Seleccione un groomer...</option>
+                                @foreach ($usuarios as $usuario)
+                                    <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="flex justify-end space-x-3 pt-4">
                             <button type="reset" id="closeModal"
                                 class="px-4 py-2 bg-red-200 hover:bg-red-300 text-gray-800 rounded-lg transition duration-200">
@@ -90,24 +102,17 @@
             <tbody>
                 @foreach ($citas as $cita)
                     <tr class="bg-gray-100 border-b">
-                        <td class="py-4 px-4 text-center">{{$cita->id}}</td>
-                        <td class="py-4 px-4 text-center">{{$cita->cliente->documento}}</td>
-                        <td class="py-4 px-4 text-center">{{$cita->cliente->name}}</td>
-                        <td class="py-4 px-4 text-center">{{$cita->mascota->name}}</td>
-                        <td class="py-4 px-4 text-center">{{$cita->fecha}}</td>
-                        <td class="py-4 px-4 text-center">{{substr($cita->hora, 0, 5)}}</td>
-                        <td class="py-4 px-4 text-center">{{$cita->estado}}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->id }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->cliente->documento }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->cliente->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->mascota->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->fecha }}</td>
+                        <td class="py-4 px-4 text-center">{{ substr($cita->hora, 0, 5) }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->estado }}</td>
                         <td class="py-4 px-4 text-center">
-
-                            <button class="bg-green-500 text-white p-2 h-8 w-8 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="110%"
-                                    fill="rgba(255,255,255,1)">
-                                    <path
-                                        d="M14 14.252V22H4C4 17.5817 7.58172 14 12 14C12.6906 14 13.3608 14.0875 14 14.252ZM12 13C8.685 13 6 10.315 6 7C6 3.685 8.685 1 12 1C15.315 1 18 3.685 18 7C18 10.315 15.315 13 12 13ZM18 17V14H20V17H23V19H20V22H18V19H15V17H18Z">
-                                    </path>
-                                </svg>
-                            </button>
-                            <button class="bg-yellow-500 text-white p-2 h-8 w-8 rounded-lg">
+                        <button
+                                onclick="openEditModal('{{$cita->id}}')"
+                                class="bg-yellow-500 text-white p-2 h-8 w-8 rounded-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="110%"
                                     fill="rgba(255,255,255,1)">
                                     <path
@@ -121,16 +126,56 @@
             </tbody>
         </table>
     </div>
+    <div id="editModal"
+        class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
+        <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
+            <h2 class="text-xl font-semibold mb-4">Actualizar Estado</h2>
+            <form id="editForm" method="POST" action="{{ route('cita.update') }}">
+                @csrf
+                <input class="hidden" name="idcita" id="idcita" type="text">
+                <div>
+                    <label for="estado" class="block text-sm font-medium text-gray-700">Estado</label>
+                    <select id="estado" name="estado"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
+                        required>
+                        <option value="" selected disabled>Seleccione...</option>
+                        <option value="ACTIVA">Activa</option>
+                        <option value="REPROGRAMADA">Reprogramada</option>
+                        <option value="CANCELADA">Cancelada</option>
+                    </select>
+                </div>
+                <div class="mt-4">
+                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                    <textarea id="description" name="description" rows="3" maxlength="255"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
+                        placeholder="Agregue una nota o detalle de la cita..."></textarea>
+                </div>
+                <div class="flex items-center justify-end gap-4 pt-4">
+                    <button type="button" onclick="closeEditModal()"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 text-white font-medium rounded-lg shadow-md"
+                        style="background-color:#00405C">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const openModalBtn = document.getElementById('openModal');
             const closeModalBtn = document.getElementById('closeModal');
             const modal = document.getElementById('modal');
             const mascotaSelect = document.getElementById('mascota');
+            const grummerSelect = document.getElementById('grummer');
             openModalBtn.addEventListener('click', () => {
                 modal.classList.remove('hidden');
+                grummerSelect.disabled = false;
                 mascotaSelect.innerHTML = '<option value="" selected disabled>Seleccione...</option>';
             });
+
             closeModalBtn.addEventListener('click', () => {
                 modal.classList.add('hidden');
             });
@@ -195,4 +240,20 @@
             }
         }
     </script>
+    <script>
+    // Abrir modal de edición
+    function openEditModal(id) {
+        const editModal = document.getElementById('editModal');
+        const estadoSelect = document.getElementById('estado');
+        document.getElementById('idcita').value = id;
+        // Mostrar el modal
+        editModal.classList.remove('hidden');
+    }
+    // Cerrar modal de edición
+    function closeEditModal() {
+        const editModal = document.getElementById('editModal');
+        editModal.classList.add('hidden');
+    }
+</script>
+
 </x-app-layout>
