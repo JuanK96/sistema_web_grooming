@@ -125,6 +125,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $citas->links() }}
+        </div>
     </div>
     <div id="editModal"
         class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
