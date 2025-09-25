@@ -40,7 +40,7 @@ Route::middleware([
     })->name('registromascota');
     Route::post('/mascotas/register', [MascotaController::class, 'store'])->name('mascota.store');
     Route::get('/mascotas/search', [MascotaController::class, 'search'])->name('mascota.search');
-
+    Route::post('/mascotas/update', [MascotaController::class, 'update'])->name('mascota.update');
     //citas
     Route::get('/citas', [CitaController::class, 'index'])->name('gestioncita');
     Route::get('/citas/obtener-mascotas', [CitaController::class, 'obtenerMascotas']);

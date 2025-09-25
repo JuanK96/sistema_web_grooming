@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Mascota;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class MascotaController extends Controller
 {
@@ -126,6 +127,42 @@ class MascotaController extends Controller
             'sexo' => $request->sex,
             'esterilizado' => $esterilizado,
             'vacunado' => $vacunado,
+            'enfermedades' => $request->diseases,
+            'descripcion' => $request->description,
+            'ruta_foto' => $rutaFoto,
+        ]);
+        return redirect()->route('gestionmascota');
+    }
+    public function update(Request $request)
+    {
+        // dd($request->all());
+        // Validar datos recibidos
+        $request->validate([
+            'weight' => 'numeric|max:255',
+            'sterilized' => 'nullable|string',
+            'vaccinated' => 'nullable|string',
+            'diseases' => 'nullable|string|max:255',
+            'description' => 'string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+        $mascota = Mascota::findOrFail($request->idmascota);
+        // Verificar si subieron nueva foto
+    if ($request->hasFile('photo')) {
+        // Si ya tiene una foto guardada, la borramos del storage
+        if ($mascota->ruta_foto && Storage::disk('public')->exists($mascota->ruta_foto)) {
+            Storage::disk('public')->delete($mascota->ruta_foto);
+        }
+        // Guardar la nueva
+        $rutaFoto = $request->file('photo')->store('mascotas', 'public');
+    } else {
+        // Mantener la foto actual
+        $rutaFoto = $mascota->ruta_foto;
+    }
+        // Actualizar campos
+        $mascota->update([
+            'peso' => $request->weight,
+            'esterilizado' => $request->sterilized,
+            'vacunado' => $request->vaccinated,
             'enfermedades' => $request->diseases,
             'descripcion' => $request->description,
             'ruta_foto' => $rutaFoto,

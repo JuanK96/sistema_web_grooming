@@ -142,11 +142,6 @@
                             <input type="file" id="photo" name="photo" accept="image/*"
                                 class="absolute inset-0 w-full h-full opacity-0">
                         </div>
-                        <div id="photoPreview" class="flex-1">
-                            <img id="previewImage" src="https://placehold.co/200x200/ffffff/cccccc?text=Subir+foto"
-                                alt="Previsualización de imagen de mascota donde aparecerá la foto subida por el usuario"
-                                class="w-24 h-24 rounded-lg object-cover border border-gray-200">
-                        </div>
                     </div>
                     <p class="mt-1 text-x1 text-black">Sube una foto clara de la mascota (JPEG, PNG)</p>
                 </div>

@@ -58,7 +58,7 @@
                                         '{{ $mascota->peso ?? '' }}',
                                         '{{ $mascota->descripcion ?? '' }}',
                                         '{{ $mascota->enfermedades ?? '' }}',
-                                        '{{ $mascota->vacunado ?? ''}}',
+                                        '{{ $mascota->vacunado ?? '' }}',
                                         '{{ $mascota->esterilizado ?? '' }}',
                                         '{{ $mascota->foto_url ?? '' }}'
                                     )"
@@ -100,14 +100,14 @@
         class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
         <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
             <h2 class="text-xl font-semibold mb-4">Editar Mascota</h2>
-            <form method="POST" action="{{ route('mascota.store') }}" class=" px-4 w-full space-y-5" id="petForm">
+            <form method="POST" action="{{ route('mascota.update') }}" class=" px-4 w-full space-y-5" 
+                id="editForm" enctype="multipart/form-data">
                 @csrf
                 <input class="hidden" name="idmascota" id="idmascota" type="text">
                 <div class="grid grid-cols-3 space-x-4">
                     <!-- Peso -->
                     <div>
-                        <label for="weight" class="block text-x1 font-medium text-gray-700 mb-1">Peso (kg) <span
-                                class="text-red-500">*</span></label>
+                        <label for="weight" class="block text-x1 font-medium text-gray-700 mb-1">Peso (kg)</label>
                         <input type="number" id="weight" name="weight"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                             placeholder="Ej: 5.2">
@@ -115,21 +115,20 @@
                     <!-- Esterilizado -->
                     <div>
                         <label class="block text-x1 font-medium text-gray-700 mb-1">Esterilizado</label>
-                        <div class="flex items-center tick-animation ">
-                            <input type="checkbox" id="sterilized" name="sterilized" value="1"
-                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
-                            <label for="sterilized" class="ml-2 text-gray-700">Sí, está esterilizado</label>
-                        </div>
+                        <select id="sterilized" name="sterilized"
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
+                            <option value="SI">SI</option>
+                            <option value="NO">NO</option>
+                        </select>
                     </div>
                     <!-- Vacunado -->
                     <div>
                         <label class="block text-x1 font-medium text-gray-700 mb-1">Vacunado</label>
-                        <div class="flex items-center tick-animation ">
-                            <input type="checkbox" id="vaccinated" name="vaccinated" value="1"
-                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded border-gray-300">
-                            <label for="vaccinated" class="ml-2 text-gray-700">Sí, está al día con sus
-                                vacunas</label>
-                        </div>
+                        <select id="vaccinated" name="vaccinated"
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-stone-200">
+                            <option value="SI">SI</option>
+                            <option value="NO">NO</option>
+                        </select>
                     </div>
                 </div>
                 <!-- Enfermedades o condiciones especiales -->
@@ -142,8 +141,7 @@
                 </div>
                 <!-- Descripción -->
                 <div>
-                    <label for="description" class="block text-x1 font-medium text-gray-700 mb-1">Descripción <span
-                            class="text-red-500">*</span></label>
+                    <label for="description" class="block text-x1 font-medium text-gray-700 mb-1">Descripción</label>
                     <textarea id="description" name="description" rows="3" maxlength="255"
                         class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Describe características de la mascota"></textarea>
@@ -167,12 +165,6 @@
                                 </label>
                                 <input type="file" id="photo" name="photo" accept="image/*"
                                     class="absolute inset-0 w-full h-full opacity-0">
-                            </div>
-                            <div id="photoPreview" class="flex-1">
-                                <img id="previewImage"
-                                    src="https://placehold.co/200x200/ffffff/cccccc?text=Subir+foto"
-                                    alt="Previsualización de imagen de mascota donde aparecerá la foto subida por el usuario"
-                                    class="w-24 h-24 rounded-lg object-cover border border-gray-200">
                             </div>
                         </div>
                         <p class="mt-1 text-x1 text-black">Sube una foto clara de la mascota (JPEG, PNG)</p>
@@ -256,13 +248,14 @@
             </div>
         </div>
     </div>
+    {{-- edit modal --}}
     <script>
-        function openEditModal(id, peso, estarilizado, vacunado, enfermedades, descripcion, ) {
+        function openEditModal(id, peso, esterilizado, vacunado, enfermedades, descripcion, ) {
             // Rellenar campos
             document.getElementById('idmascota').value = id;
             document.getElementById('weight').value = peso;
-            // document.getElementById('sterilized').value = esterilizado;
-            // document.getElementById('vaccinated').value = vacunado;
+            document.getElementById('sterilized').value = esterilizado;
+            document.getElementById('vaccinated').value = vacunado;
             document.getElementById('diseases').value = enfermedades;
             document.getElementById('description').value = descripcion;
             // Mostrar modal
@@ -273,6 +266,7 @@
             document.getElementById('editModal').classList.add('hidden');
         }
     </script>
+    {{-- modal ver --}}
     <script>
         function openVerModal(id, dueno, name, edad, especie, raza, sexo, peso, descripcion, enfermedades,
             vacunado, esterilizado, foto_url) {
