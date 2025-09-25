@@ -7,6 +7,7 @@ use App\Models\Cita;
 use App\Models\Cliente;
 use App\Models\Mascota;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class CitaController extends Controller
 {
@@ -34,7 +35,6 @@ class CitaController extends Controller
                 'fecha' => 'required',
                 'hora' => 'required',
                 'grummer'=>'required',
-                'estado'=>'required',
             ]
         );
         Cita::create([
@@ -49,6 +49,10 @@ class CitaController extends Controller
     public function index()
     {
         $usuarios = User::where('id_role',3 )->where('active',1)->get();
+        //$citas = Auth::user()->citas()
+        //->with(['cliente', 'mascota', 'usuario'])
+       // ->orderBy('created_at', 'desc')
+        //->paginate(5);
         $citas = Cita::with('cliente', 'mascota', 'usuario')->orderBy('created_at', 'desc')->paginate(5);
         return view('cita/gestion_cita', compact('citas','usuarios'));
     }
