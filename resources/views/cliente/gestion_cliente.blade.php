@@ -73,6 +73,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $clientes->links() }}
+        </div>
     </div>
     <!-- Modal -->
     <div id="editModal"
