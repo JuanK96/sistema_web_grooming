@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Mascota extends Model
 {
@@ -25,5 +26,9 @@ class Mascota extends Model
     public function dueño()
     {
         return $this->belongsTo(Cliente::class, 'id_cliente');
+    }
+    public function getFotoUrlAttribute()
+    {
+        return $this->ruta_foto ? Storage::url($this->ruta_foto) : null;
     }
 }
