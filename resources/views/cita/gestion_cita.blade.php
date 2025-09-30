@@ -7,9 +7,13 @@
     <div class="flex flex-row py-10 px-20 justify-between items-center">
         <div class="">
             <label class="text-black font-bold " for="buscar">BUSCADOR:</label>
-            <input type="text" id="buscar" class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2"
-                placeholder="Buscar...">
-            <button class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
+            <form method="GET" action="{{ route('cita.search') }}" class="flex items-center space-x-2">
+                <input type="text" name="search" id="buscar"
+                    class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2" placeholder="Buscar..."
+                    pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]+"
+                    oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s0-9]/g, '').toUpperCase();">
+                <button class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
+            </form>
         </div>
         <button id="openModal" type="submit"
             class="w-50 h-15 text-white content-center text-center font-bold rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
@@ -110,8 +114,25 @@
                         <td class="py-4 px-4 text-center">{{  substr($cita->hora, 0, 5)  }}</td>
                         <td class="py-4 px-4 text-center">{{  $cita->estado  }}</td>
                         <td class="py-4 px-4 text-center">
-                        <button
-                                onclick="openEditModal('{{$cita->id}}')"
+                            <button
+                                onclick="openVerModal(
+                                        '{{ $cita->cliente->documento }}',
+                                        '{{ $cita->cliente->name }}',
+                                        '{{ $cita->mascota->name }}',
+                                        '{{ $cita->fecha }}',
+                                        '{{ substr($cita->hora, 0, 5) }}',
+                                        '{{ $cita->estado }}',
+                                        '{{ $cita->usuario->name ?? 'SIN ASIGNAR' }}',
+                                        '{{ $cita->descripcion }}'
+                                    )"
+                                class="bg-green-500 text-white p-2 h-8 w-8 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M1.18164 12C2.12215 6.87976 6.60812 3 12.0003 3C17.3924 3 21.8784 6.87976 22.8189 12C21.8784 17.1202 17.3924 21 12.0003 21C6.60812 21 2.12215 17.1202 1.18164 12ZM12.0003 17C14.7617 17 17.0003 14.7614 17.0003 12C17.0003 9.23858 14.7617 7 12.0003 7C9.23884 7 7.00026 9.23858 7.00026 12C7.00026 14.7614 9.23884 17 12.0003 17ZM12.0003 15C10.3434 15 9.00026 13.6569 9.00026 12C9.00026 10.3431 10.3434 9 12.0003 9C13.6571 9 15.0003 10.3431 15.0003 12C15.0003 13.6569 13.6571 15 12.0003 15Z">
+                                    </path>
+                                </svg>
+                            </button>
+                            <button onclick="openEditModal('{{ $cita->id }}')"
                                 class="bg-yellow-500 text-white p-2 h-8 w-8 rounded-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="110%"
                                     fill="rgba(255,255,255,1)">
@@ -129,6 +150,7 @@
             {{ $citas->links() }}
         </div>
     </div>
+    <!-- Modal Editar -->
     <div id="editModal"
         class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
         <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
@@ -142,7 +164,7 @@
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
                         required>
                         <option value="" selected disabled>Seleccione...</option>
-                        <option value="ACTIVA">Activa</option>
+                        <option value="ATENDIDA">Atendida</option>
                         <option value="REPROGRAMADA">Reprogramada</option>
                         <option value="CANCELADA">Cancelada</option>
                     </select>
@@ -167,6 +189,63 @@
         </div>
         <div class="mt-4">
             {{ $citas->links() }}
+        </div>
+    </div>
+    <!-- Modal de ver cita -->
+    <div id="verModal"
+        class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
+        <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
+            <h2 class="text-xl font-semibold mb-4">Detalles de la Cita</h2>
+            <form>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Documento Dueño</label>
+                        <input type="text" id="ver_documento" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombre Dueño</label>
+                        <input type="text" id="ver_nombre" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Mascota</label>
+                        <input type="text" id="ver_mascota" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Fecha</label>
+                        <input type="text" id="ver_fecha" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Hora</label>
+                        <input type="text" id="ver_hora" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Estado</label>
+                        <input type="text" id="ver_estado" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Groomer</label>
+                        <input type="text" id="ver_grummer" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label for="ver_descripcion" class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                    <textarea id="ver_descripcion"  rows="3" maxlength="255"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"disabled></textarea>
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <button type="button" onclick="closeVerModal()"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
+                        Cerrar
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
     <script>
@@ -247,19 +326,37 @@
         }
     </script>
     <script>
-    // Abrir modal de edición
-    function openEditModal(id) {
-        const editModal = document.getElementById('editModal');
-        const estadoSelect = document.getElementById('estado');
-        document.getElementById('idcita').value = id;
-        // Mostrar el modal
-        editModal.classList.remove('hidden');
-    }
-    // Cerrar modal de edición
-    function closeEditModal() {
-        const editModal = document.getElementById('editModal');
-        editModal.classList.add('hidden');
-    }
-</script>
-
+        // Abrir modal de edición
+        function openEditModal(id) {
+            const editModal = document.getElementById('editModal');
+            const estadoSelect = document.getElementById('estado');
+            document.getElementById('idcita').value = id;
+            // Mostrar el modal
+            editModal.classList.remove('hidden');
+        }
+        // Cerrar modal de edición
+        function closeEditModal() {
+            const editModal = document.getElementById('editModal');
+            editModal.classList.add('hidden');
+        }
+    </script>
+    <script>
+        function openVerModal( documento, nombre, mascota, fecha, hora, estado, groomer, descripcion) {
+            document.getElementById('ver_documento').value = documento;
+            document.getElementById('ver_nombre').value = nombre;
+            document.getElementById('ver_mascota').value = mascota;
+            document.getElementById('ver_fecha').value = fecha;
+            document.getElementById('ver_hora').value = hora;
+            document.getElementById('ver_estado').value = estado;
+            document.getElementById('ver_grummer').value = groomer;
+            document.getElementById('ver_descripcion').value = descripcion;
+            const verModal = document.getElementById('verModal');
+            verModal.classList.remove('hidden');
+        }
+        // Cerrar modal de ver
+        function closeVerModal() {
+            const verModal = document.getElementById('verModal');
+            verModal.classList.add('hidden');
+        }
+    </script>
 </x-app-layout>
