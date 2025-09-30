@@ -25,6 +25,31 @@ class CitaController extends Controller
             return response()->json($mascotas);
         }
     }
+    public function search(Request $request)
+{
+    $query = $request->input('search');
+
+    $usuarios = User::where('id_role', 3)->where('active', 1)->get();
+
+    $citas = Cita::with(['cliente', 'mascota', 'usuario'])
+        ->where(function ($q) use ($query) {
+            //  Buscar por nombre de la mascota
+            $q->whereHas('mascota', function ($q2) use ($query) {
+                $q2->where('name', 'LIKE', '%' . $query . '%');
+            })
+            // Buscar por documento del cliente
+            ->orWhereHas('cliente', function ($q3) use ($query) {
+                $q3->where('documento', 'LIKE', '%' . $query . '%');
+            });
+        })
+
+        ->orderBy('created_at', 'desc')
+        ->paginate(5);
+
+    return view('cita/gestion_cita', compact('citas', 'usuarios'));
+}
+
+
     public function agendar(Request $request)
     {
         // dd($request->all());
@@ -69,7 +94,7 @@ class CitaController extends Controller
         // Actualizar campos
         $cita->update([
             'estado' => $request->estado,
-            'descripcion' => $request->descrition,
+            'descripcion' => $request->description,
             
         ]);
         return redirect()->route('gestioncita')->with('success', 'Estado de cita Actualizado');
