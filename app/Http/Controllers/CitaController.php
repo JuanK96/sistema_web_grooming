@@ -91,12 +91,17 @@ class CitaController extends Controller
         ]);
         // Buscar cliente por id
         $cita = Cita::findOrFail($request->idcita);
-        // Actualizar campos
-        $cita->update([
-            'estado' => $request->estado,
-            'descripcion' => $request->description,
-            
-        ]);
-        return redirect()->route('gestioncita')->with('success', 'Estado de cita Actualizado');
+        if(Auth::id()==$cita->id_user){
+            if($cita->created_at==$cita->updated_at){
+                $cita->update([
+                'estado' => $request->estado,
+                'descripcion' => $request->description, ]);
+                return redirect()->route('gestioncita')->with('success', 'Estado de cita Actualizado');
+            } else{
+                return redirect()->route('gestioncita')->with('error', 'Cita Ya Actualizada');
+            }
+        }else{
+            return redirect()->route('gestioncita')->with('error', 'Usuario no asiganado a la cita');
+        }
     }
 }
