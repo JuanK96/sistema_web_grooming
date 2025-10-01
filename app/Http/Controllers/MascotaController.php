@@ -12,44 +12,8 @@ class MascotaController extends Controller
 {
     public function index()
     {
-        $mascotas = Mascota::with('dueño')->orderBy('created_at', 'desc')->paginate(5);
-        foreach ($mascotas as $mascota) {
-            $fechaNacimiento = Carbon::parse($mascota->fecha_nacimiento);
-            $ahora = Carbon::now();
-            $diasTotales = $fechaNacimiento->diffInDays($ahora);
-            if ($diasTotales < 7) {
-                // Menos de una semana: mostrar días
-                $mascota->edad = "{$diasTotales} días";
-            } elseif ($diasTotales < 365) {
-                // Menos de un año: mostrar semanas redondeadas
-                $semanas = round($diasTotales / 7);
-                $mascota->edad = "{$semanas} semanas";
-            } else {
-                // Un año o más: mostrar años enteros y semanas restantes
-                $añosEnteros = floor($diasTotales / 365.25);
-                $diasRestantes = $diasTotales - ($añosEnteros * 365.25);
-                $semanas = round($diasRestantes / 7);
-                $mascota->edad = "{$añosEnteros} años y {$semanas} semanas";
-            }
-            // $mascota->edad = Carbon::parse($mascota->fecha_nacimiento)->age;
-        }
-        return view('mascota/gestion_mascota', compact('mascotas'));
-    }
-    public function search(Request $request)
-    {
-        $search = $request->input('search');
-        // Validación básica: evita búsquedas vacías
-        if (empty($search)) {
-            return redirect()->route('gestionmascota')->with('error', 'Ingresa un término de búsqueda');
-        } else {
-            // Buscar mascotas asociadas al cliente (por documento del dueño) o por nombre de la mascota
-            $mascotas = Mascota::with('dueño')
-                ->whereHas('dueño', function ($query) use ($search) {
-                    $query->where('documento', 'like', "%{$search}%");
-                })
-                ->orWhere('name', 'like', "%{$search}%")  // Búsqueda por nombre de la mascota
-                ->paginate(5)
-                ->appends(['search' => $search]);
+        try {
+            $mascotas = Mascota::with('dueño:id,documento')->orderBy('id', 'desc')->paginate(5);
             foreach ($mascotas as $mascota) {
                 $fechaNacimiento = Carbon::parse($mascota->fecha_nacimiento);
                 $ahora = Carbon::now();
@@ -70,10 +34,56 @@ class MascotaController extends Controller
                 }
                 // $mascota->edad = Carbon::parse($mascota->fecha_nacimiento)->age;
             }
-            if ($mascotas->isNotEmpty()) {
-                return view('mascota/gestion_mascota', compact('mascotas'));
-            } else {
-                return redirect()->route('gestionmascota')->with('error', 'No se encontraron resultados');
+            return view('mascota/gestion_mascota', compact('mascotas'));
+        } catch (\Exception $e) {
+            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            return redirect()->route('gestionmascota')->with('error', 'Error al cargar mascotas');
+        }
+    }
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+        // Validación básica: evita búsquedas vacías
+        if (empty($search)) {
+            return redirect()->route('gestionmascota')->with('error', 'Ingresa un término de búsqueda');
+        } else {
+            try {
+                // Buscar mascotas asociadas al cliente (por documento del dueño) o por nombre de la mascota
+                $mascotas = Mascota::with('dueño:id,documento')
+                    ->whereHas('dueño', function ($query) use ($search) {
+                        $query->where('documento', 'like', "{$search}%");
+                    })
+                    ->orWhere('name', 'like', "{$search}%")  // Búsqueda por nombre de la mascota
+                    ->paginate(5)
+                    ->appends(['search' => $search]);
+                foreach ($mascotas as $mascota) {
+                    $fechaNacimiento = Carbon::parse($mascota->fecha_nacimiento);
+                    $ahora = Carbon::now();
+                    $diasTotales = $fechaNacimiento->diffInDays($ahora);
+                    if ($diasTotales < 7) {
+                        // Menos de una semana: mostrar días
+                        $mascota->edad = "{$diasTotales} días";
+                    } elseif ($diasTotales < 365) {
+                        // Menos de un año: mostrar semanas redondeadas
+                        $semanas = round($diasTotales / 7);
+                        $mascota->edad = "{$semanas} semanas";
+                    } else {
+                        // Un año o más: mostrar años enteros y semanas restantes
+                        $añosEnteros = floor($diasTotales / 365.25);
+                        $diasRestantes = $diasTotales - ($añosEnteros * 365.25);
+                        $semanas = round($diasRestantes / 7);
+                        $mascota->edad = "{$añosEnteros} años y {$semanas} semanas";
+                    }
+                    // $mascota->edad = Carbon::parse($mascota->fecha_nacimiento)->age;
+                }
+                if ($mascotas->isNotEmpty()) {
+                    return view('mascota/gestion_mascota', compact('mascotas'));
+                } else {
+                    return redirect()->route('gestionmascota')->with('error', 'No se encontraron resultados');
+                }
+            } catch (\Exception $e) {
+                // Aquí puedes registrar el error o mostrar un mensaje personalizado
+                return redirect()->route('gestionmascota')->with('error', 'Error en la busqueda');
             }
         }
     }
@@ -98,7 +108,12 @@ class MascotaController extends Controller
             ],
             [
                 'name.required' => 'Por favor digite el nombre.',
-                'dueño.exists' => 'El dueño no se encuentra registrado',
+                'dueño.exists' => 'El dueño no se encuentra registrado.',
+                'especies.required' => 'Ingrese la especie.',
+                'raza.required' => 'Ingrese la raza.',
+                'fechaNacimiento.required' => 'Ingrese la fecha de nacimiento.',
+                'weight.required' => 'Ingrese el peso.',
+                'sex.required' => 'Ingrese el sexo.',
             ]
         );
         if (empty($request->sterilized)) {
@@ -111,27 +126,32 @@ class MascotaController extends Controller
         } else {
             $vacunado = $request->vaccinated;
         }
-        if ($request->hasFile('photo')) {
-            $rutaFoto = $request->file('photo')->store('mascotas', 'public');
-        } else {
-            $rutaFoto = null;
+        try {
+            if ($request->hasFile('photo')) {
+                $rutaFoto = $request->file('photo')->store('mascotas', 'public');
+            } else {
+                $rutaFoto = null;
+            }
+            // Crear un nuevo registro
+            Mascota::create([
+                'id_cliente' => Cliente::where('documento', $request->dueño)->value('id'),
+                'name' => $request->name,
+                'especie' => $request->especies,
+                'raza' => $request->raza,
+                'peso' => $request->weight,
+                'fecha_nacimiento' => $request->fechaNacimiento,
+                'sexo' => $request->sex,
+                'esterilizado' => $esterilizado,
+                'vacunado' => $vacunado,
+                'enfermedades' => $request->diseases,
+                'descripcion' => $request->description,
+                'ruta_foto' => $rutaFoto,
+            ]);
+            return redirect()->route('gestionmascota')->with('success', 'Mascota registrada correctamente');
+        } catch (\Exception $e) {
+            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            return redirect()->route('gestionmascota')->with('error', 'Error al registrar la mascota');
         }
-        // Crear un nuevo registro
-        Mascota::create([
-            'id_cliente' => Cliente::where('documento', $request->dueño)->value('id'),
-            'name' => $request->name,
-            'especie' => $request->especies,
-            'raza' => $request->raza,
-            'peso' => $request->weight,
-            'fecha_nacimiento' => $request->fechaNacimiento,
-            'sexo' => $request->sex,
-            'esterilizado' => $esterilizado,
-            'vacunado' => $vacunado,
-            'enfermedades' => $request->diseases,
-            'descripcion' => $request->description,
-            'ruta_foto' => $rutaFoto,
-        ]);
-        return redirect()->route('gestionmascota');
     }
     public function update(Request $request)
     {
@@ -145,28 +165,33 @@ class MascotaController extends Controller
             'description' => 'string|max:255',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-        $mascota = Mascota::findOrFail($request->idmascota);
-        // Verificar si subieron nueva foto
-    if ($request->hasFile('photo')) {
-        // Si ya tiene una foto guardada, la borramos del storage
-        if ($mascota->ruta_foto && Storage::disk('public')->exists($mascota->ruta_foto)) {
-            Storage::disk('public')->delete($mascota->ruta_foto);
+        try {
+            $mascota = Mascota::findOrFail($request->idmascota);
+            // Verificar si subieron nueva foto
+            if ($request->hasFile('photo')) {
+                // Si ya tiene una foto guardada, la borramos del storage
+                if ($mascota->ruta_foto && Storage::disk('public')->exists($mascota->ruta_foto)) {
+                    Storage::disk('public')->delete($mascota->ruta_foto);
+                }
+                // Guardar la nueva
+                $rutaFoto = $request->file('photo')->store('mascotas', 'public');
+            } else {
+                // Mantener la foto actual
+                $rutaFoto = $mascota->ruta_foto;
+            }
+            // Actualizar campos
+            $mascota->update([
+                'peso' => $request->weight,
+                'esterilizado' => $request->sterilized,
+                'vacunado' => $request->vaccinated,
+                'enfermedades' => $request->diseases,
+                'descripcion' => $request->description,
+                'ruta_foto' => $rutaFoto,
+            ]);
+            return redirect()->route('gestionmascota')->with('success', 'Mascota actualizada correctamente');
+        } catch (\Exception $e) {
+            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            return redirect()->route('gestionmascota')->with('error', 'Error al actualizar la mascota');
         }
-        // Guardar la nueva
-        $rutaFoto = $request->file('photo')->store('mascotas', 'public');
-    } else {
-        // Mantener la foto actual
-        $rutaFoto = $mascota->ruta_foto;
-    }
-        // Actualizar campos
-        $mascota->update([
-            'peso' => $request->weight,
-            'esterilizado' => $request->sterilized,
-            'vacunado' => $request->vaccinated,
-            'enfermedades' => $request->diseases,
-            'descripcion' => $request->description,
-            'ruta_foto' => $rutaFoto,
-        ]);
-        return redirect()->route('gestionmascota');
     }
 }

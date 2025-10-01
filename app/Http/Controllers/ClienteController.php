@@ -9,8 +9,13 @@ class ClienteController extends Controller
 {
     public function index()
     {
-        $clientes = Cliente::orderBy('created_at', 'desc')->paginate(4);
-        return view('cliente/gestion_cliente', compact('clientes'));
+        try {
+            $clientes = Cliente::orderBy('id', 'desc')->paginate(4);
+            return view('cliente/gestion_cliente', compact('clientes'));
+        } catch (\Exception $e) {
+            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            return redirect()->route('gestioncliente')->with('error', 'Error al cargar clientes');
+        }
     }
     public function search(Request $request)
     {
@@ -18,15 +23,20 @@ class ClienteController extends Controller
         if (empty($search)) {
             return redirect()->route('gestioncliente')->with('error', 'Ingresa un término de búsqueda');
         } else {
-            // Buscar clientes
-            $clientes = Cliente::where('documento', 'like', "%{$search}%")
-                ->orWhere('name', 'like', "%{$search}%")
-                ->paginate(5)
-                ->appends(['search' => $search]);
-            if ($clientes->isNotEmpty()) {
-                return view('cliente/gestion_cliente', compact('clientes'));
-            } else {
-                return redirect()->route('gestioncliente')->with('error', 'No se encontraron resultados');
+            try {
+                // Buscar clientes
+                $clientes = Cliente::where('documento', 'like', "{$search}%")
+                    ->orWhere('name', 'like', "{$search}%")
+                    ->paginate(5)
+                    ->appends(['search' => $search]);
+                if ($clientes->isNotEmpty()) {
+                    return view('cliente/gestion_cliente', compact('clientes'));
+                } else {
+                    return redirect()->route('gestioncliente')->with('error', 'No se encontraron resultados');
+                }
+            } catch (\Exception $e) {
+                // Aquí puedes registrar el error o mostrar un mensaje personalizado
+                return redirect()->route('gestioncliente')->with('error', 'Error en la busqueda');
             }
         }
     }
@@ -52,18 +62,23 @@ class ClienteController extends Controller
         );
         $telefonoCompleto = $request->extension . $request->telefono;
         $telAltCompleto = $request->extTelAlt . $request->telefonoAlterno;
-        // Crear un nuevo registro
-        Cliente::create([
-            'tipo_documento' => $request->tipoDocumento,
-            'documento' => $request->numeroDocumento,
-            'name' => $request->nombreCompleto,
-            'fecha_nacimiento' => $request->fechaNacimiento,
-            'email' => $request->correoElectronico,
-            'direccion' => $request->direccion,
-            'tel' => $telefonoCompleto,
-            'tel_dos' => $telAltCompleto,
-        ]);
-        return redirect()->route('gestioncliente')->with('success', 'Cliente registrado correctamente');
+        try {
+            // Crear un nuevo registro
+            Cliente::create([
+                'tipo_documento' => $request->tipoDocumento,
+                'documento' => $request->numeroDocumento,
+                'name' => $request->nombreCompleto,
+                'fecha_nacimiento' => $request->fechaNacimiento,
+                'email' => $request->correoElectronico,
+                'direccion' => $request->direccion,
+                'tel' => $telefonoCompleto,
+                'tel_dos' => $telAltCompleto,
+            ]);
+            return redirect()->route('gestioncliente')->with('success', 'Cliente registrado correctamente');
+        } catch (\Exception $e) {
+            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            return redirect()->route('gestioncliente')->with('error', 'Error al registrar el cliente');
+        }
     }
     public function update(Request $request)
     {
@@ -77,16 +92,20 @@ class ClienteController extends Controller
             'telefono' => 'required|string',
             'telefonoAlterno' => 'nullable|string',
         ]);
-        // Buscar cliente por id
-        $cliente = Cliente::findOrFail($request->idcliente);
-        // Actualizar campos
-        $cliente->update([
-            'name' => $request->nombreCompleto,
-            'email' => $request->correoElectronico,
-            'direccion' => $request->direccion,
-            'tel' => $request->telefono,
-            'tel_dos' => $request->telefonoAlterno,
-        ]);
-        return redirect()->route('gestioncliente')->with('success', 'Cliente registrado correctamente');
+        try {
+            $cliente = Cliente::findOrFail($request->idcliente);
+            // Actualizar campos
+            $cliente->update([
+                'name' => $request->nombreCompleto,
+                'email' => $request->correoElectronico,
+                'direccion' => $request->direccion,
+                'tel' => $request->telefono,
+                'tel_dos' => $request->telefonoAlterno,
+            ]);
+            return redirect()->route('gestioncliente')->with('success', 'Cliente actualizado correctamente');
+        } catch (\Exception $e) {
+            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            return redirect()->route('gestioncliente')->with('error', 'Error al actualizar el cliente');
+        }
     }
 }

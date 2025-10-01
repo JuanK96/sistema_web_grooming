@@ -22,8 +22,9 @@
                 <div>
                     <label for="dueño" class="block text-x1 font-medium text-gray-700 mb-1">Dueño Mascota <span
                             class="text-red-500">*</span></label>
-                    <input type="text" id="dueño" name="dueño" required 
-                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ^0-9]/g, '').toUpperCase()" maxlength="20"
+                    <input type="text" id="dueño" name="dueño" required
+                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ^0-9]/g, '').toUpperCase()"
+                        maxlength="20"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Documento..">
                 </div>
@@ -146,6 +147,7 @@
                     <p class="mt-1 text-x1 text-black">Sube una foto clara de la mascota (JPEG, PNG)</p>
                 </div>
                 <div>
+                    {{-- Errores de validación --}}
                     @if ($errors->any())
                         <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
                             role="alert">
@@ -155,6 +157,22 @@
                                     <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
+                        </div>
+                    @endif
+                    {{-- Mensajes flash de error --}}
+                    @if (session('error'))
+                        <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                            role="alert">
+                            <strong class="font-bold">¡Error!</strong>
+                            <span>{{ session('error') }}</span>
+                        </div>
+                    @endif
+                    {{-- Mensajes flash de éxito --}}
+                    @if (session('success'))
+                        <div class="flex flex-row p-1 gap-1 bg-green-100 border border-green-400 text-green-700 rounded relative"
+                            role="alert">
+                            <strong class="font-bold">¡Éxito!</strong>
+                            <span>{{ session('success') }}</span>
                         </div>
                     @endif
                 </div>

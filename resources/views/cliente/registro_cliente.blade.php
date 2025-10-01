@@ -48,7 +48,6 @@
                     required>
                 <p id="nombreCompletoError" class="error-message hidden">Por favor ingrese su nombre completo</p>
             </div>
-
             <!-- Fecha y correo -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
@@ -61,7 +60,6 @@
                     <p id="fechaNacimientoError" class="error-message hidden">Por favor ingrese su fecha de nacimiento
                     </p>
                 </div>
-
                 <div class="space-y-2">
                     <label for="correoElectronico" class="block text-x1 font-medium text-gray-700">
                         Correo electrónico <span class="text-red-500">*</span>
@@ -72,7 +70,6 @@
                     <p id="correoElectronicoError" class="error-message hidden">Por favor ingrese un correo válido</p>
                 </div>
             </div>
-
             <!-- Dirección -->
             <div class="space-y-2">
                 <label for="direccion" class="block text-x1 font-medium text-gray-700">
@@ -134,6 +131,7 @@
             </div>
             <div class="grid grid-cols-3">
                 <div>
+                    {{-- Errores de validación --}}
                     @if ($errors->any())
                         <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
                             role="alert">
@@ -143,6 +141,22 @@
                                     <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
+                        </div>
+                    @endif
+                    {{-- Mensajes flash de error --}}
+                    @if (session('error'))
+                        <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                            role="alert">
+                            <strong class="font-bold">¡Error!</strong>
+                            <span>{{ session('error') }}</span>
+                        </div>
+                    @endif
+                    {{-- Mensajes flash de éxito --}}
+                    @if (session('success'))
+                        <div class="flex flex-row p-1 gap-1 bg-green-100 border border-green-400 text-green-700 rounded relative"
+                            role="alert">
+                            <strong class="font-bold">¡Éxito!</strong>
+                            <span>{{ session('success') }}</span>
                         </div>
                     @endif
                 </div>

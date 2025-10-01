@@ -11,8 +11,13 @@ class UsuarioController extends Controller
 {
     public function index()
     {
-        $usuarios = User::with('role')->where('id', '>', 1)->orderBy('created_at', 'desc')->paginate(5);
-        return view('usuarios/gestion_usuarios', compact('usuarios'));
+        try {
+            $usuarios = User::with('role')->where('id', '>', 1)->orderBy('id', 'desc')->paginate(5);
+            return view('usuarios/gestion_usuarios', compact('usuarios'));
+        } catch (\Exception $e) {
+            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            return redirect()->route('gestionusuario')->with('error', 'Error al cargar usuarios');
+        }
     }
     public function search(Request $request)
     {
@@ -20,18 +25,22 @@ class UsuarioController extends Controller
         if (empty($search)) {
             return redirect()->route('gestionusuario')->with('error', 'Ingresa un término de búsqueda');
         } else {
-            // Buscar clientes
-            $usuarios = User::where('id', '!=', 1)
-                ->where(function ($query) use ($search) {
-                    $query->where('email', 'like', "%{$search}%")
-                        ->orWhere('name', 'like', "%{$search}%");
-                })
-                ->paginate(5)
-                ->appends(['search' => $search]);
-            if ($usuarios->isNotEmpty()) {
-                return view('usuarios/gestion_usuarios', compact('usuarios'));
-            } else {
-                return redirect()->route('gestionusuario')->with('error', 'No se encontraron resultados');
+            try {
+                $usuarios = User::where('id', '!=', 1)
+                    ->where(function ($query) use ($search) {
+                        $query->where('email', 'like', "{$search}%")
+                            ->orWhere('name', 'like', "{$search}%");
+                    })
+                    ->paginate(5)
+                    ->appends(['search' => $search]);
+                if ($usuarios->isNotEmpty()) {
+                    return view('usuarios/gestion_usuarios', compact('usuarios'));
+                } else {
+                    return redirect()->route('gestionusuario')->with('error', 'No se encontraron resultados');
+                }
+            } catch (\Exception $e) {
+                // Aquí puedes registrar el error o mostrar un mensaje personalizado
+                return redirect()->route('gestionusuario')->with('error', 'Error en la busqueda');
             }
         }
     }
@@ -53,18 +62,28 @@ class UsuarioController extends Controller
                 'role.required' => 'Debe asignar un rol',
             ]
         );
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'id_role' => $request->role,
-        ]);
-        return redirect()->route('gestionusuario');
+        try {
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'id_role' => $request->role,
+            ]);
+            return redirect()->route('gestionusuario')->with('success', 'Usuario creado correctamente');
+        } catch (\Exception $e) {
+            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            return redirect()->route('gestionusuario')->with('error', 'Error al registrar el usuario');
+        }
     }
     public function toggleActive(User $usuario)
     {
-        $usuario->active = !$usuario->active; // alterna entre 1 y 0
-        $usuario->save();
-        return redirect()->back()->with('success', 'Estado actualizado correctamente');
+        try {
+            $usuario->active = !$usuario->active; // alterna entre 1 y 0
+            $usuario->save();
+            return redirect()->back()->with('success', 'Estado actualizado correctamente');
+        } catch (\Exception $e) {
+            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            return redirect()->route('gestionusuario')->with('error', 'Error al actualizar estado');
+        }
     }
 }

@@ -11,6 +11,36 @@
                 placeholder="Buscar...">
             <button class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
         </div>
+        <div>
+            {{-- Errores de validación --}}
+            @if ($errors->any())
+                <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">¡Error!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            {{-- Mensajes flash de error --}}
+            @if (session('error'))
+                <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">¡Error!</strong>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+            {{-- Mensajes flash de éxito --}}
+            @if (session('success'))
+                <div class="flex flex-row p-1 gap-1 bg-green-100 border border-green-400 text-green-700 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">¡Éxito!</strong>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+        </div>
     </div>
     <div class="px-10">
         <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
