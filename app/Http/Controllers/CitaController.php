@@ -2,32 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-use App\Models\Cita;
+use Twilio\Rest\Client;
 use App\Models\Cliente;
 use App\Models\Mascota;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Cita;
 use Carbon\Carbon;
 
 class CitaController extends Controller
 {
-    public function obtenerMascotas(Request $request)
+    public function index()
     {
-        $request->validate([
-            'dueño' => 'required|string',
-        ]);
         try {
-            $cliente = Cliente::where('documento', $request->input('dueño'))->first();
-            if (!$cliente) {
-                return response()->json([], 200);
-            } else {
-                $mascotas = Mascota::where('id_cliente', $cliente->id)->get();
-                return response()->json($mascotas);
-            }
+            $hoy = Carbon::today()->toDateString();
+            $usuarios = User::where('id_role', 3)->where('active', 1)->select('id', 'name')->get();
+            $citas = Auth::user()->citas()
+                ->with(['cliente:id,documento,name', 'mascota:id,name', 'usuario:id,name'])
+                ->whereDate('fecha', $hoy)
+                ->orderBy('hora', 'asc')
+                ->paginate(5);
+            // $citas = Cita::with('cliente', 'mascota', 'usuario')->orderBy('hora', 'asc')->paginate(5);
+            return view('cita/gestion_cita', compact('citas', 'usuarios'));
         } catch (\Exception $e) {
             // Aquí puedes registrar el error o mostrar un mensaje personalizado
-            return redirect()->route('gestioncita')->with('error', 'Error al obtener la mascotas');
+            return redirect()->route('gestioncita')->with('error', 'Error al cargar las citas');
         }
     }
     public function search(Request $request)
@@ -66,6 +67,24 @@ class CitaController extends Controller
             }
         }
     }
+    public function obtenerMascotas(Request $request)
+    {
+        $request->validate([
+            'dueño' => 'required|string',
+        ]);
+        try {
+            $cliente = Cliente::where('documento', $request->input('dueño'))->first();
+            if (!$cliente) {
+                return response()->json([], 200);
+            } else {
+                $mascotas = Mascota::where('id_cliente', $cliente->id)->get();
+                return response()->json($mascotas);
+            }
+        } catch (\Exception $e) {
+            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            return redirect()->route('gestioncita')->with('error', 'Error al obtener la mascotas');
+        }
+    }
     public function agendar(Request $request)
     {
         // dd($request->all());
@@ -79,34 +98,44 @@ class CitaController extends Controller
             ]
         );
         try {
-            Cita::create([
-                'id_cliente' => Cliente::where('documento', $request->dueño)->value('id'),
+            $idCliente = Cliente::where('documento', $request->dueño)->value('id');
+            $cita = Cita::create([
+                'id_cliente' => $idCliente,
                 'id_mascota' => $request->mascota,
                 'id_user' => $request->grummer,
                 'fecha' => $request->fecha,
                 'hora' => $request->hora,
             ]);
-            return redirect()->route('gestioncita');
+            // enviar mensaje
+            $cliente = Cliente::find($idCliente)->value('id','name', 'tel');
+            $mascota = Mascota::find($request->mascota)->value('id','name');
+            $telefono = $cliente->tel;
+            $mensaje = "Hola {$cliente->name}, tu cita para {$mascota}, ha sido agendada para el {$cita->fecha} a las {$cita->hora}. ¡Gracias!";
+            $this->enviarConfirmacionWhatsApp($telefono, $mensaje);
+            return redirect()->route('gestioncita')->with('success', 'Cita agendada correctamente');
         } catch (\Exception $e) {
             // Aquí puedes registrar el error o mostrar un mensaje personalizado
             return redirect()->route('gestioncita')->with('error', 'Error al registrar la cita');
         }
     }
-    public function index()
+    public function enviarConfirmacionWhatsApp($telefono, $mensaje)
     {
+        $sid = env('TWILIO_SID');
+        $token = env('TWILIO_AUTH_TOKEN');
+        $twilioNumber = env('TWILIO_WHATSAPP_NUMBER');
+        $client = new Client($sid, $token);
         try {
-            $hoy = Carbon::today()->toDateString();
-            $usuarios = User::where('id_role', 3)->where('active', 1)->select('id', 'name')->get();
-            $citas = Auth::user()->citas()
-                ->with(['cliente:id,documento,name', 'mascota:id,name', 'usuario:id,name'])
-                ->whereDate('fecha', $hoy)
-                ->orderBy('hora', 'asc')
-                ->paginate(5);
-            // $citas = Cita::with('cliente', 'mascota', 'usuario')->orderBy('hora', 'asc')->paginate(5);
-            return view('cita/gestion_cita', compact('citas', 'usuarios'));
+            $client->messages->create(
+                "whatsapp:" . $telefono,
+                [
+                    'from' => $twilioNumber,
+                    'body' => $mensaje
+                ]
+            );
+            return true;
         } catch (\Exception $e) {
-            // Aquí puedes registrar el error o mostrar un mensaje personalizado
-            return redirect()->route('gestioncita')->with('error', 'Error al cargar las citas');
+            Log::error("Error enviando WhatsApp: " . $e->getMessage());
+            return false;
         }
     }
     public function update(Request $request)
