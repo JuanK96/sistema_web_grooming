@@ -45,6 +45,35 @@
                 </div>
             @endif
         </div>
+            {{-- Errores de validación --}}
+            @if ($errors->any())
+                <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">¡Error!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            {{-- Mensajes flash de error --}}
+            @if (session('error'))
+                <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">¡Error!</strong>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+            {{-- Mensajes flash de éxito --}}
+            @if (session('success'))
+                <div class="flex flex-row p-1 gap-1 bg-green-100 border border-green-400 text-green-700 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">¡Éxito!</strong>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+        </div>
         <button id="openModal" type="submit"
             class="w-50 h-15 text-white content-center text-center font-bold rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
             style="background-color:#00405C">
@@ -55,66 +84,67 @@
     <div id="modal"
         class="fixed inset-0  backdrop-blur-sm backdrop-opacity-100
             bg-opacity-0 hidden justify-center items-center">
-        <div class="flex justify-center items-center h-full w-full">
-            <div class="bg-white rounded-lg p-8 w-1/2 fade-in modal-contet z-50 border border-gray-300">
-                <div class="mb-4">
-                    <h2 class="text-xl font-bold">Agendar Cita</h2>
-                </div>
-                <form method="POST" action="{{ route('cita.agendar') }}">
-                    @csrf
-                    <div>
-                        <label for="dueño" class="block text-sm font-medium text-gray-700">Documento del
-                            Dueño</label>
-                        <input type="text" id="dueño" name="dueño" pattern="[0-9]*"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
-                            placeholder="Ej: 12345678" required
-                            oninput="listarMascotas(), this.value = this.value.replace(/[^0-9]/g, '');">
+            <div class="flex justify-center items-center h-full w-full">
+                <div class="bg-white rounded-lg p-8 w-1/2 fade-in modal-contet z-50 border border-gray-300">
+                    <div class="mb-4">
+                        <h2 class="text-xl font-bold">Agendar Cita</h2>
                     </div>
-                    <div>
-                        <label for="mascota" class="block text-sm font-medium text-gray-700">Nombre de la
-                            Mascota</label>
-                        <select type="text" id="mascota" name="mascota"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
-                            required disabled>
-                        </select>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="relative mb-3">
-                            <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha</label>
-                            <input type="date" id="fecha" name="fecha"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 text-gray-400 datepicker"
-                                required>
+                    <form method="POST" action="{{ route('cita.agendar') }}">
+                        @csrf
+                        <div>
+                            <label for="dueño" class="block text-sm font-medium text-gray-700">Documento del
+                                Dueño</label>
+                            <input type="text" id="dueño" name="dueño" pattern="[0-9]*"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
+                                placeholder="Ej: 12345678" required
+                                oninput="listarMascotas(), this.value = this.value.replace(/[^0-9]/g, '');">
                         </div>
                         <div>
-                            <label for="hora" class="block text-sm font-medium text-gray-700">Hora</label>
-                            <input type="time" id="hora" name="hora"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 "
-                                required>
+                            <label for="mascota" class="block text-sm font-medium text-gray-700">Nombre de la
+                                Mascota</label>
+                            <select type="text" id="mascota" name="mascota"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
+                                required disabled>
+                            </select>
                         </div>
-                    </div>
-                    <div>
-                        <label for="grummer" class="block text-sm font-medium text-gray-700">Asignar
-                            Groomer</label>
-                        <select type="text" id="grummer" name="grummer"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
-                            required disabled>
-                            <option value="" selected disabled>Seleccione un groomer...</option>
-                            @foreach ($usuarios as $usuario)
-                                <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="flex justify-end space-x-3 pt-4">
-                        <button type="reset" id="closeModal"
-                            class="px-4 py-2 bg-red-200 hover:bg-red-300 text-gray-800 rounded-lg transition duration-200">
-                            Cancelar
-                        </button>
-                        <button type="submit"
-                            class="px-4 py-2 bg-indigo-200 hover:bg-indigo-300 rounded-lg transition duration-200">
-                            Agendar
-                        </button>
-                    </div>
-                </form>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="relative mb-3">
+                                <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha</label>
+                                <input type="date" id="fecha" name="fecha"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 text-gray-400 datepicker"
+                                    required>
+                            </div>
+                            <div>
+                                <label for="hora" class="block text-sm font-medium text-gray-700">Hora</label>
+                                <input type="time" id="hora" name="hora"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 "
+                                    required>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="grummer" class="block text-sm font-medium text-gray-700">Asignar
+                                Groomer</label>
+                            <select type="text" id="grummer" name="grummer"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50"
+                                required disabled>
+                                <option value="" selected disabled>Seleccione un groomer...</option>
+                                @foreach ($usuarios as $usuario)
+                                    <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex justify-end space-x-3 pt-4">
+                            <button type="reset" id="closeModal"
+                                class="px-4 py-2 bg-red-200 hover:bg-red-300 text-gray-800 rounded-lg transition duration-200">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-indigo-200 hover:bg-indigo-300 rounded-lg transition duration-200">
+                                Agendar
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -390,4 +420,39 @@
             verModal.classList.add('hidden');
         }
     </script>
+    <script>
+    document.getElementById('fecha').addEventListener('change', function () {
+        const fecha = this.value;
+        const horainicio = document.getElementById('horainicio');
+        horainicio.innerHTML = '<option disabled selected>Cargando horas...</option>';
+        const horafinal = document.getElementById('horafinal');
+        horafinal.innerHTML = '<option disabled selected>Cargando horas...</option>';
+
+        if (fecha) {
+            fetch(`/citas/horas-disponibles?fecha=${encodeURIComponent(fecha)}`)
+                .then(response => response.json())
+                .then(data => {
+                    horainicio.innerHTML = '';
+                    horafinal.innerHTML = '';
+                    if (data.length === 0) {
+                        horainicio.innerHTML = '<option disabled selected>No hay horas disponibles</option>';
+                        horafinal.innerHTML = '<option disabled selected>No hay horas disponibles</option>';
+                    } else {
+                        data.forEach(hora => {
+                            const option = document.createElement('option');
+                            option.value = hora;
+                            option.textContent = hora; // ya viene formateada (ej. 08:00 AM)
+                            horainicio.appendChild(option);
+                            horafinal.appendChild(option);
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    horainicio.innerHTML = '<option disabled selected>Error al cargar horas</option>';
+                    horafinal.innerHTML = '<option disabled selected>Error al cargar horas</option>';
+                });
+        }
+    });
+</script>
 </x-app-layout>

@@ -13,7 +13,8 @@ class Cita extends Model
         'id_mascota',
         'id_user',
         'fecha',
-        'hora',
+        'hora_inicio',
+        'hora_final',
         'estado',
         'descripcion',
     ];
