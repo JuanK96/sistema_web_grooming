@@ -107,18 +107,30 @@
                                 required disabled>
                             </select>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div class="relative mb-3">
                                 <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha</label>
                                 <input type="date" id="fecha" name="fecha"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 text-gray-400 datepicker"
-                                    required>
+                                    min="{{ date('Y-m-d') }}" required>
                             </div>
                             <div>
-                                <label for="hora" class="block text-sm font-medium text-gray-700">Hora</label>
-                                <input type="time" id="hora" name="hora"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 "
+                                <label for="horainicio" class="block text-sm font-medium text-gray-700">Hora Inicio</label>
+                                <select id="horainicio" name="hora_inicio"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                                    focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 text-gray-700"
                                     required>
+                                    <option value="" disabled selected>Seleccione una hora</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="horafinal" class="block text-sm font-medium text-gray-700">Hora Final</label>
+                                <select id="horafinal" name="hora_final"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                                    focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 text-gray-700"
+                                    required>
+                                    <option value="" disabled selected>Seleccione una hora</option>
+                                </select>
                             </div>
                         </div>
                         <div>

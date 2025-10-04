@@ -96,7 +96,7 @@ class CitaController extends Controller
                 'fecha' => ['required', 'date', 'after_or_equal:today'],
                 'hora_inicio'  => ['required', 'date_format:H:i', 'after_or_equal:08:00', 'before_or_equal:17:00'],
                 'hora_final'  => ['required', 'date_format:H:i', 'after_or_equal:08:00', 'before_or_equal:17:00'],
-                'grummer'=>'required',
+                'grummer' => 'required',
             ]
         );
         try {
@@ -107,11 +107,11 @@ class CitaController extends Controller
                 'id_user' => $request->grummer,
                 'fecha' => $request->fecha,
                 'hora_inicio' => $request->hora_inicio,
-            'hora_final' => $request->hora_final,
+                'hora_final' => $request->hora_final,
             ]);
             // enviar mensaje
-            $cliente = Cliente::find($idCliente)->value('id','name', 'tel');
-            $mascota = Mascota::find($request->mascota)->value('id','name');
+            $cliente = Cliente::find($idCliente)->value('id', 'name', 'tel');
+            $mascota = Mascota::find($request->mascota)->value('id', 'name');
             $telefono = $cliente->tel;
             $mensaje = "Hola {$cliente->name}, tu cita para {$mascota}, ha sido agendada para el {$cita->fecha} a las {$cita->hora}. ¡Gracias!";
             $this->enviarConfirmacionWhatsApp($telefono, $mensaje);
@@ -149,16 +149,19 @@ class CitaController extends Controller
             'estado' => 'required|string',
             'description' => 'required|string',
         ]);
-        // Buscar cliente por id
-        $cita = Cita::findOrFail($request->idcita);
-        if(Auth::id()==$cita->id_user){
-            if($cita->created_at==$cita->updated_at){
-                $cita->update([
-                'estado' => $request->estado,
-                'descripcion' => $request->description, ]);
-                return redirect()->route('gestioncita')->with('success', 'Estado de cita Actualizado');
-            } else{
-                return redirect()->route('gestioncita')->with('error', 'Cita Ya Actualizada');
+        try {
+            // Buscar cliente por id
+            $cita = Cita::findOrFail($request->idcita);
+            if (Auth::id() == $cita->id_user) {
+                if ($cita->created_at == $cita->updated_at) {
+                    $cita->update([
+                        'estado' => $request->estado,
+                        'descripcion' => $request->description,
+                    ]);
+                    return redirect()->route('gestioncita')->with('success', 'Estado de cita Actualizado');
+                } else {
+                    return redirect()->route('gestioncita')->with('error', 'Cita Ya Actualizada');
+                }
             }
         } catch (\Exception $e) {
             // Aquí puedes registrar el error o mostrar un mensaje personalizado
@@ -166,30 +169,30 @@ class CitaController extends Controller
         }
     }
     public function horasDisponibles(Request $request)
-{
-    $fecha = $request->input('fecha');
+    {
+        $fecha = $request->input('fecha');
 
-    $horas = [];
-    // Hora de inicio 8:30 am
-    $inicio = \Carbon\Carbon::createFromTime(8, 30);
-    // Hora final 6:00 pm
-    $fin = \Carbon\Carbon::createFromTime(18, 0);
+        $horas = [];
+        // Hora de inicio 8:30 am
+        $inicio = \Carbon\Carbon::createFromTime(8, 30);
+        // Hora final 6:00 pm
+        $fin = \Carbon\Carbon::createFromTime(18, 0);
 
-    // Generar intervalo cada 30 minutos
-    while ($inicio <= $fin) {
-        $horas[] = $inicio->format('h:i A');
-        $inicio->addMinutes(30);
+        // Generar intervalo cada 30 minutos
+        while ($inicio <= $fin) {
+            $horas[] = $inicio->format('h:i A');
+            $inicio->addMinutes(30);
+        }
+
+        // Consultar horas ya ocupadas
+        // $ocupadas = Cita::where('fecha', $fecha)->pluck('hora')->toArray();
+
+        // // Filtrar quitando las horas ocupadas
+        // $disponibles = array_filter($horas, function ($hora) use ($ocupadas) {
+        //     $hora24 = \Carbon\Carbon::parse($hora)->format('H:i:s');
+        //     return !in_array($hora24, $ocupadas);
+        // });
+
+        return response()->json(array_values($horas));
     }
-
-    // Consultar horas ya ocupadas
-    // $ocupadas = Cita::where('fecha', $fecha)->pluck('hora')->toArray();
-
-    // // Filtrar quitando las horas ocupadas
-    // $disponibles = array_filter($horas, function ($hora) use ($ocupadas) {
-    //     $hora24 = \Carbon\Carbon::parse($hora)->format('H:i:s');
-    //     return !in_array($hora24, $ocupadas);
-    // });
-
-    return response()->json(array_values($horas));
-}
 }
