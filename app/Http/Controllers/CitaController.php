@@ -51,14 +51,16 @@ class CitaController extends Controller
 
 
     public function agendar(Request $request)
+
     {
         // dd($request->all());
         $request->validate(
             [
                 'dueño' => 'required|string|max:255',
                 'mascota' => 'required|string|max:255',
-                'fecha' => 'required',
-                'hora' => 'required',
+                'fecha' => ['required', 'date', 'after_or_equal:today'],
+                'hora_inicio'  => ['required', 'date_format:H:i', 'after_or_equal:08:00', 'before_or_equal:17:00'],
+                'hora_final'  => ['required', 'date_format:H:i', 'after_or_equal:08:00', 'before_or_equal:17:00'],
                 'grummer'=>'required',
             ]
         );
@@ -67,7 +69,8 @@ class CitaController extends Controller
             'id_mascota' => $request->mascota,
             'id_user'=>$request->grummer,
             'fecha' => $request->fecha,
-            'hora' => $request->hora,
+            'hora_inicio' => $request->hora_inicio,
+            'hora_final' => $request->hora_final,
         ]);
         return redirect()->route('gestioncita');
     }
@@ -104,4 +107,31 @@ class CitaController extends Controller
             return redirect()->route('gestioncita')->with('error', 'Usuario no asiganado a la cita');
         }
     }
+    public function horasDisponibles(Request $request)
+{
+    $fecha = $request->input('fecha');
+
+    $horas = [];
+    // Hora de inicio 8:30 am
+    $inicio = \Carbon\Carbon::createFromTime(8, 30);
+    // Hora final 6:00 pm
+    $fin = \Carbon\Carbon::createFromTime(18, 0);
+
+    // Generar intervalo cada 30 minutos
+    while ($inicio <= $fin) {
+        $horas[] = $inicio->format('h:i A');
+        $inicio->addMinutes(30);
+    }
+
+    // Consultar horas ya ocupadas
+    // $ocupadas = Cita::where('fecha', $fecha)->pluck('hora')->toArray();
+
+    // // Filtrar quitando las horas ocupadas
+    // $disponibles = array_filter($horas, function ($hora) use ($ocupadas) {
+    //     $hora24 = \Carbon\Carbon::parse($hora)->format('H:i:s');
+    //     return !in_array($hora24, $ocupadas);
+    // });
+
+    return response()->json(array_values($horas));
+}
 }

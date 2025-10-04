@@ -50,6 +50,8 @@ Route::middleware([
     Route::post('/citas/agendar', [CitaController::class, 'agendar'])->name('cita.agendar');
     Route::post('/citas/update', [CitaController::class, 'update'])->name('cita.update');
     Route::get('/citas/search',[CitaController::class,'search'])->name('cita.search');
+    Route::get('/citas/horas-disponibles', [CitaController::class, 'horasDisponibles']);
+
     //historial citas
     Route::get('/historial-citas', function () {
         return view('cita/gestion_historial_cita');

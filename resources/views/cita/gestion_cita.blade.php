@@ -16,32 +16,35 @@
             </form>
         </div>
         <div>
-    {{-- Errores de validación --}}
-    @if ($errors->any())
-        <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert">
-            <strong class="font-bold">¡Error!</strong>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+            {{-- Errores de validación --}}
+            @if ($errors->any())
+                <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">¡Error!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            {{-- Mensajes flash de error --}}
+            @if (session('error'))
+                <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">¡Error!</strong>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+            {{-- Mensajes flash de éxito --}}
+            @if (session('success'))
+                <div class="flex flex-row p-1 gap-1 bg-green-100 border border-green-400 text-green-700 rounded relative"
+                    role="alert">
+                    <strong class="font-bold">¡Éxito!</strong>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
         </div>
-    @endif
-    {{-- Mensajes flash de error --}}
-    @if(session('error'))
-        <div class="flex flex-row p-1 gap-1 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert">
-            <strong class="font-bold">¡Error!</strong>
-            <span>{{ session('error') }}</span>
-        </div>
-    @endif
-    {{-- Mensajes flash de éxito --}}
-    @if(session('success'))
-        <div class="flex flex-row p-1 gap-1 bg-green-100 border border-green-400 text-green-700 rounded relative" role="alert">
-            <strong class="font-bold">¡Éxito!</strong>
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-</div>
         <button id="openModal" type="submit"
             class="w-50 h-15 text-white content-center text-center font-bold rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
             style="background-color:#00405C">
@@ -74,18 +77,30 @@
                                 required disabled>
                             </select>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div class="relative mb-3">
                                 <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha</label>
                                 <input type="date" id="fecha" name="fecha"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 text-gray-400 datepicker"
-                                    required>
+                                    min="{{ date('Y-m-d') }}" required>
                             </div>
                             <div>
-                                <label for="hora" class="block text-sm font-medium text-gray-700">Hora</label>
-                                <input type="time" id="hora" name="hora"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 "
+                                <label for="horainicio" class="block text-sm font-medium text-gray-700">Hora Inicio</label>
+                                <select id="horainicio" name="hora_inicio"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                                    focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 text-gray-700"
                                     required>
+                                    <option value="" disabled selected>Seleccione una hora</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="horafinal" class="block text-sm font-medium text-gray-700">Hora Final</label>
+                                <select id="horafinal" name="hora_final"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm 
+                                    focus:ring-blue-500 focus:border-blue-500 p-3 border bg-gray-50 text-gray-700"
+                                    required>
+                                    <option value="" disabled selected>Seleccione una hora</option>
+                                </select>
                             </div>
                         </div>
                         <div>
@@ -133,13 +148,13 @@
             <tbody>
                 @foreach ($citas as $cita)
                     <tr class="bg-gray-100 border-b">
-                        <td class="py-4 px-4 text-center">{{  $cita->id  }}</td>
-                        <td class="py-4 px-4 text-center">{{  $cita->cliente->documento  }}</td>
-                        <td class="py-4 px-4 text-center">{{  $cita->cliente->name  }}</td>
-                        <td class="py-4 px-4 text-center">{{  $cita->mascota->name  }}</td>
-                        <td class="py-4 px-4 text-center">{{  $cita->fecha  }}</td>
-                        <td class="py-4 px-4 text-center">{{  substr($cita->hora, 0, 5)  }}</td>
-                        <td class="py-4 px-4 text-center">{{  $cita->estado  }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->id }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->cliente->documento }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->cliente->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->mascota->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->fecha }}</td>
+                        <td class="py-4 px-4 text-center">{{ substr($cita->hora, 0, 5) }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->estado }}</td>
                         <td class="py-4 px-4 text-center">
                             <button
                                 onclick="openVerModal(
@@ -262,8 +277,9 @@
                     </div>
                 </div>
                 <div class="mt-4">
-                    <label for="ver_descripcion" class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-                    <textarea id="ver_descripcion"  rows="3" maxlength="255"
+                    <label for="ver_descripcion"
+                        class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                    <textarea id="ver_descripcion" rows="3" maxlength="255"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"disabled></textarea>
                 </div>
                 <div class="mt-4 flex justify-end">
@@ -368,7 +384,7 @@
         }
     </script>
     <script>
-        function openVerModal( documento, nombre, mascota, fecha, hora, estado, groomer, descripcion) {
+        function openVerModal(documento, nombre, mascota, fecha, hora, estado, groomer, descripcion) {
             document.getElementById('ver_documento').value = documento;
             document.getElementById('ver_nombre').value = nombre;
             document.getElementById('ver_mascota').value = mascota;
@@ -386,4 +402,39 @@
             verModal.classList.add('hidden');
         }
     </script>
+    <script>
+    document.getElementById('fecha').addEventListener('change', function () {
+        const fecha = this.value;
+        const horainicio = document.getElementById('horainicio');
+        horainicio.innerHTML = '<option disabled selected>Cargando horas...</option>';
+        const horafinal = document.getElementById('horafinal');
+        horafinal.innerHTML = '<option disabled selected>Cargando horas...</option>';
+
+        if (fecha) {
+            fetch(`/citas/horas-disponibles?fecha=${encodeURIComponent(fecha)}`)
+                .then(response => response.json())
+                .then(data => {
+                    horainicio.innerHTML = '';
+                    horafinal.innerHTML = '';
+                    if (data.length === 0) {
+                        horainicio.innerHTML = '<option disabled selected>No hay horas disponibles</option>';
+                        horafinal.innerHTML = '<option disabled selected>No hay horas disponibles</option>';
+                    } else {
+                        data.forEach(hora => {
+                            const option = document.createElement('option');
+                            option.value = hora;
+                            option.textContent = hora; // ya viene formateada (ej. 08:00 AM)
+                            horainicio.appendChild(option);
+                            horafinal.appendChild(option);
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    horainicio.innerHTML = '<option disabled selected>Error al cargar horas</option>';
+                    horafinal.innerHTML = '<option disabled selected>Error al cargar horas</option>';
+                });
+        }
+    });
+</script>
 </x-app-layout>

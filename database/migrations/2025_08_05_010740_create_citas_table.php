@@ -17,10 +17,13 @@ return new class extends Migration
             $table->foreignId('id_mascota')->constrained('mascotas');
             $table->string('id_user')->default('SIN ASIGNAR');
             $table->date('fecha');
-            $table->time('hora');
+            $table->time('hora_inicio');
+            $table->time('hora_final');
             $table->string('estado')->default('PENDIENTE');
             $table->string('descripcion')->nullable();
             $table->timestamps();
+        
+            
         });
     }
 
