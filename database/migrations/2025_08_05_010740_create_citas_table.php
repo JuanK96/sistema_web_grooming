@@ -15,18 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_cliente')->constrained('clientes');
             $table->foreignId('id_mascota')->constrained('mascotas');
-            $table->string('id_user')->default('SIN ASIGNAR');
+            $table->foreignId('id_user')->constrained('users');
             $table->date('fecha');
             $table->time('hora_inicio');
             $table->time('hora_final');
             $table->string('estado')->default('PENDIENTE');
             $table->string('descripcion')->nullable();
             $table->timestamps();
-        
-            
         });
     }
-
     /**
      * Reverse the migrations.
      */

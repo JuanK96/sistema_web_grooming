@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Cita extends Model
 {
@@ -29,5 +30,13 @@ class Cita extends Model
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+    public function getHoraInicioFormateadaAttribute()
+    {
+        return Carbon::createFromFormat('H:i:s', $this->hora_inicio)->format('g:i A');
+    }
+    public function getHoraFinalFormateadaAttribute()
+    {
+        return Carbon::createFromFormat('H:i:s', $this->hora_final)->format('g:i A');
     }
 }
