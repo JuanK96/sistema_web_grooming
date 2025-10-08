@@ -7,9 +7,13 @@
     <div class="flex flex-row py-10 px-20 justify-between items-center">
         <div class="">
             <label class="text-black font-bold " for="buscar">BUSCADOR:</label>
-            <input type="text" id="buscar" class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2"
-                placeholder="Buscar...">
-            <button class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
+            <form method="GET" action="{{ route('cita.search') }}" class="flex items-center space-x-2">
+                <input type="text" name="search" id="buscar"
+                    class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2" placeholder="Buscar..."
+                    pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]+"
+                    oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s0-9]/g, '').toUpperCase();">
+                <button class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
+            </form>
         </div>
         <div>
             {{-- Errores de validación --}}
@@ -42,49 +46,144 @@
             @endif
         </div>
     </div>
+    {{-- tabla --}}
     <div class="px-10">
         <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
             <thead class="text-white" style="background-color: #009600">
                 <tr>
                     <th class="py-2 px-4">ID</th>
-                    <th class="py-2 px-4">IDENTIFICACION DUEÑO</th>
-                    <th class="py-2 px-4">NOMBRE MASCOTA</th>
-                    <th class="py-2 px-4">FECHA</th>
-                    <th class="py-2 px-4">HORA</th>
-                    <th class="py-2 px-4">ESTADO</th>
+                    <th class="py-2 px-4">Documento</th>
+                    <th class="py-2 px-4">Nombre</th>
+                    <th class="py-2 px-4">Mascota</th>
+                    <th class="py-2 px-4">Fecha</th>
+                    <th class="py-2 px-4">Hora</th>
+                    <th class="py-2 px-4">Estado</th>
                     <th class="py-2 px-4">ACCIONES</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-gray-100 border-b">
-                    <td class="py-4 px-4 text-center">1</td>
-                    <td class="py-4 px-4 text-center">154345671</td>
-                    <td class="py-4 px-4 text-center">LUNA</td>
-                    <td class="py-4 px-4 text-center">18/08/25</td>
-                    <td class="py-4 px-4 text-center">3:00</td>
-                    <td class="py-4 px-4 text-center">CANCELADA</td>
-                    <td class="py-4 px-4 text-center">
-
-                        <button class="bg-green-500 text-white p-2 h-8 w-8 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="110%"
-                                fill="rgba(255,255,255,1)">
-                                <path
-                                    d="M14 14.252V22H4C4 17.5817 7.58172 14 12 14C12.6906 14 13.3608 14.0875 14 14.252ZM12 13C8.685 13 6 10.315 6 7C6 3.685 8.685 1 12 1C15.315 1 18 3.685 18 7C18 10.315 15.315 13 12 13ZM18 17V14H20V17H23V19H20V22H18V19H15V17H18Z">
-                                </path>
-                            </svg>
-                        </button>
-                        <button class="bg-yellow-500 text-white p-2 h-8 w-8 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="110%"
-                                fill="rgba(255,255,255,1)">
-                                <path
-                                    d="M21 15.2426V21.0082C21 21.556 20.5551 22 20.0066 22H3.9934C3.44476 22 3 21.5511 3 20.9925V9H9C9.55228 9 10 8.55228 10 8V2H20.0017C20.5531 2 21 2.45531 21 2.9918V6.75736L12.0012 15.7562L11.995 19.995L16.2414 20.0012L21 15.2426ZM21.7782 8.80761L23.1924 10.2218L15.4142 18L13.9979 17.9979L14 16.5858L21.7782 8.80761ZM3 7L8 2.00318V7H3Z">
-                                </path>
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-                <!-- Más filas se pueden agregar aquí -->
+                @foreach ($citas as $cita)
+                    <tr class="bg-gray-100 border-b">
+                        <td class="py-4 px-4 text-center">{{ $cita->id }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->cliente->documento }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->cliente->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->mascota->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->fecha }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->hora_inicio_formateada }} -
+                            {{ $cita->hora_final_formateada }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->estado }}</td>
+                        <td class="py-4 px-4 text-center">
+                            <button
+                                onclick="openVerModal(
+                                        '{{ $cita->cliente->documento }}',
+                                        '{{ $cita->cliente->name }}',
+                                        '{{ $cita->mascota->name }}',
+                                        '{{ $cita->fecha }}',
+                                        '{{ $cita->hora_inicio_formateada }}',
+                                        '{{ $cita->hora_final_formateada }}',
+                                        '{{ $cita->estado }}',
+                                        '{{ $cita->usuario->name }}',
+                                        '{{ $cita->descripcion }}'
+                                    )"
+                                class="bg-green-500 text-white p-2 h-8 w-8 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M1.18164 12C2.12215 6.87976 6.60812 3 12.0003 3C17.3924 3 21.8784 6.87976 22.8189 12C21.8784 17.1202 17.3924 21 12.0003 21C6.60812 21 2.12215 17.1202 1.18164 12ZM12.0003 17C14.7617 17 17.0003 14.7614 17.0003 12C17.0003 9.23858 14.7617 7 12.0003 7C9.23884 7 7.00026 9.23858 7.00026 12C7.00026 14.7614 9.23884 17 12.0003 17ZM12.0003 15C10.3434 15 9.00026 13.6569 9.00026 12C9.00026 10.3431 10.3434 9 12.0003 9C13.6571 9 15.0003 10.3431 15.0003 12C15.0003 13.6569 13.6571 15 12.0003 15Z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $citas->links() }}
+        </div>
     </div>
+    <!-- Modal de ver cita -->
+    <div id="verModal"
+        class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
+        <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
+            <h2 class="text-xl font-semibold mb-4">Detalles de la Cita</h2>
+            <form>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Documento Dueño</label>
+                        <input type="text" id="ver_documento" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombre Dueño</label>
+                        <input type="text" id="ver_nombre" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Mascota</label>
+                        <input type="text" id="ver_mascota" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Fecha</label>
+                        <input type="text" id="ver_fecha" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Hora Inicio</label>
+                        <input type="text" id="ver_hora_i" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Hora Final</label>
+                        <input type="text" id="ver_hora_f" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Groomer</label>
+                        <input type="text" id="ver_grummer" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Estado</label>
+                        <input type="text" id="ver_estado" class="mt-1 block w-full rounded-md bg-gray-100 p-3"
+                            disabled>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label for="ver_descripcion"
+                        class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                    <textarea id="ver_descripcion" rows="3" maxlength="255"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"disabled></textarea>
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <button type="button" onclick="closeVerModal()"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
+                        Cerrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {{-- ver modal --}}
+    <script>
+        function openVerModal(documento, nombre, mascota, fecha, hora_inicio_formateada, hora_final_formateada, estado,
+            groomer, descripcion) {
+            document.getElementById('ver_documento').value = documento;
+            document.getElementById('ver_nombre').value = nombre;
+            document.getElementById('ver_mascota').value = mascota;
+            document.getElementById('ver_fecha').value = fecha;
+            document.getElementById('ver_hora_i').value = hora_inicio_formateada;
+            document.getElementById('ver_hora_f').value = hora_final_formateada;
+            document.getElementById('ver_grummer').value = groomer;
+            document.getElementById('ver_estado').value = estado;
+            document.getElementById('ver_descripcion').value = descripcion;
+            const verModal = document.getElementById('verModal');
+            verModal.classList.remove('hidden');
+        }
+        // Cerrar modal de ver
+        function closeVerModal() {
+            const verModal = document.getElementById('verModal');
+            verModal.classList.add('hidden');
+        }
+    </script>
 </x-app-layout>

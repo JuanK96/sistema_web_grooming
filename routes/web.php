@@ -4,11 +4,13 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\CitaController;
 use App\Http\Controllers\MascotaController;
+use App\Http\Controllers\HistorialController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckSuper;
 use App\Http\Middleware\CheckActive;
+use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
-
+use LaravelLang\Config\Data\Shared\RoutesGroup;
 
 Route::get('/', function () {
     return view('auth/login');
@@ -24,10 +26,12 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     //usuarios
-    Route::get('/usuarios', [UsuarioController::class, 'index'])->name('gestionusuario')->middleware(CheckAdmin::class);
-    Route::post('/usuarios/create', [UsuarioController::class, 'create'])->name('user.create')->middleware(CheckAdmin::class);
-    Route::get('/usuarios/search', [UsuarioController::class, 'search'])->name('user.search')->middleware(CheckAdmin::class);
-    Route::patch('/usuarios/{usuario}/toggle', [UsuarioController::class, 'toggleActive'])->name('usuarios.toggle')->middleware(CheckAdmin::class);
+    Route::middleware([CheckAdmin::class])->group(function () {
+        Route::get('/usuarios', [UsuarioController::class, 'index'])->name('gestionusuario');
+        Route::post('/usuarios/create', [UsuarioController::class, 'create'])->name('user.create');
+        Route::get('/usuarios/search', [UsuarioController::class, 'search'])->name('user.search');
+        Route::patch('/usuarios/{usuario}/toggle', [UsuarioController::class, 'toggleActive'])->name('usuarios.toggle');
+    }); 
     //clientes
     Route::get('/clientes', [ClienteController::class, 'index'])->name('gestioncliente');
     Route::get('/clientes/register', function () {
@@ -49,11 +53,11 @@ Route::middleware([
     Route::get('/citas/obtener-mascotas', [CitaController::class, 'obtenerMascotas']);
     Route::post('/citas/agendar', [CitaController::class, 'agendar'])->name('cita.agendar');
     Route::post('/citas/update', [CitaController::class, 'update'])->name('cita.update');
-    Route::get('/citas/search',[CitaController::class,'search'])->name('cita.search');
+    Route::get('/citas/search', [CitaController::class, 'search'])->name('cita.search');
     Route::get('/citas/horas-disponibles', [CitaController::class, 'horasDisponibles']);
-
     //historial citas
-    Route::get('/historial-citas', function () {
-        return view('cita/gestion_historial_cita');
-    })->name('historialcita')->middleware(CheckSuper::class);
+    Route::middleware([CheckSuper::class])->group(function () {
+        Route::get('/historial', [HistorialController::class, 'index'])->name('gestionhistorial');
+        Route::get('/historial/search', [HistorialController::class, 'search'])->name('historial.search');
+    });
 });
