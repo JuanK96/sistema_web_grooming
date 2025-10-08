@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Cliente;
 
 class ClienteController extends Controller
@@ -64,6 +65,7 @@ class ClienteController extends Controller
         $telAltCompleto = $request->extTelAlt . $request->telefonoAlterno;
         try {
             // Crear un nuevo registro
+            DB::beginTransaction();
             Cliente::create([
                 'tipo_documento' => $request->tipoDocumento,
                 'documento' => $request->numeroDocumento,
@@ -74,9 +76,10 @@ class ClienteController extends Controller
                 'tel' => $telefonoCompleto,
                 'tel_dos' => $telAltCompleto,
             ]);
+            DB::commit();
             return redirect()->route('gestioncliente')->with('success', 'Cliente registrado correctamente');
         } catch (\Exception $e) {
-            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            DB::rollBack();
             return redirect()->route('gestioncliente')->with('error', 'Error al registrar el cliente');
         }
     }
@@ -95,6 +98,7 @@ class ClienteController extends Controller
         try {
             $cliente = Cliente::findOrFail($request->idcliente);
             // Actualizar campos
+            DB::beginTransaction();
             $cliente->update([
                 'name' => $request->nombreCompleto,
                 'email' => $request->correoElectronico,
@@ -102,9 +106,10 @@ class ClienteController extends Controller
                 'tel' => $request->telefono,
                 'tel_dos' => $request->telefonoAlterno,
             ]);
+            DB::commit();
             return redirect()->route('gestioncliente')->with('success', 'Cliente actualizado correctamente');
         } catch (\Exception $e) {
-            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            DB::rollBack();
             return redirect()->route('gestioncliente')->with('error', 'Error al actualizar el cliente');
         }
     }

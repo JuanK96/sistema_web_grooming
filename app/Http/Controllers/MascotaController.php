@@ -7,6 +7,7 @@ use App\Models\Cliente;
 use App\Models\Mascota;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class MascotaController extends Controller
 {
@@ -133,6 +134,7 @@ class MascotaController extends Controller
                 $rutaFoto = null;
             }
             // Crear un nuevo registro
+            DB::beginTransaction();
             Mascota::create([
                 'id_cliente' => Cliente::where('documento', $request->dueño)->value('id'),
                 'name' => $request->name,
@@ -147,9 +149,10 @@ class MascotaController extends Controller
                 'descripcion' => $request->description,
                 'ruta_foto' => $rutaFoto,
             ]);
+            DB::commit();
             return redirect()->route('gestionmascota')->with('success', 'Mascota registrada correctamente');
         } catch (\Exception $e) {
-            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            DB::rollBack();
             return redirect()->route('gestionmascota')->with('error', 'Error al registrar la mascota');
         }
     }
@@ -180,6 +183,7 @@ class MascotaController extends Controller
                 $rutaFoto = $mascota->ruta_foto;
             }
             // Actualizar campos
+            DB::beginTransaction();
             $mascota->update([
                 'peso' => $request->weight,
                 'esterilizado' => $request->sterilized,
@@ -188,9 +192,10 @@ class MascotaController extends Controller
                 'descripcion' => $request->description,
                 'ruta_foto' => $rutaFoto,
             ]);
+            DB::commit();
             return redirect()->route('gestionmascota')->with('success', 'Mascota actualizada correctamente');
         } catch (\Exception $e) {
-            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            DB::rollBack();
             return redirect()->route('gestionmascota')->with('error', 'Error al actualizar la mascota');
         }
     }

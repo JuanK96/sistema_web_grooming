@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\DB;
 
 class UsuarioController extends Controller
 {
@@ -63,15 +63,17 @@ class UsuarioController extends Controller
             ]
         );
         try {
+            DB::beginTransaction();
             User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'id_role' => $request->role,
             ]);
+            DB::commit();
             return redirect()->route('gestionusuario')->with('success', 'Usuario creado correctamente');
         } catch (\Exception $e) {
-            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            DB::rollBack();
             return redirect()->route('gestionusuario')->with('error', 'Error al registrar el usuario');
         }
     }
@@ -79,10 +81,12 @@ class UsuarioController extends Controller
     {
         try {
             $usuario->active = !$usuario->active; // alterna entre 1 y 0
+            DB::beginTransaction();
             $usuario->save();
+            DB::commit();
             return redirect()->back()->with('success', 'Estado actualizado correctamente');
         } catch (\Exception $e) {
-            // Aquí puedes registrar el error o mostrar un mensaje personalizado
+            DB::rollBack();
             return redirect()->route('gestionusuario')->with('error', 'Error al actualizar estado');
         }
     }

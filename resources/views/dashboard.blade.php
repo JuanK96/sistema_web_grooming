@@ -56,7 +56,7 @@
                 @if (Auth::user()->id_role != 3)
                     {{-- historial de citas --}}
                 <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
-                    <a class="w-auto" href="{{ route('historialcita') }}">
+                    <a class="w-auto" href="{{ route('gestionhistorial') }}">
                         <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #009600"">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
                                 fill="rgba(255,255,255,1)">

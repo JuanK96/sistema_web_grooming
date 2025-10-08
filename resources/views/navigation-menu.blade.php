@@ -60,7 +60,7 @@
                     </path>
                 </svg>
                 </svg>
-                <a href="{{ route('historialcita') }}" class="hover:text-gray-700">
+                <a href="{{ route('gestionhistorial') }}" class="hover:text-gray-700">
                     {{ __('Historial de Citas') }}
                 </a>
             </div>

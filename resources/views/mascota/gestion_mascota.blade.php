@@ -319,7 +319,6 @@
             }));
             document.getElementById('verModal').classList.remove('hidden');
         }
-
         function closeVerModal() {
             document.getElementById('verModal').classList.add('hidden');
         }
