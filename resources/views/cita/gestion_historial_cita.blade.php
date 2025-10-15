@@ -7,11 +7,9 @@
     <div class="flex flex-row py-10 px-20 justify-between items-center">
         <div class="">
             <label class="text-black font-bold " for="buscar">BUSCADOR:</label>
-            <form method="GET" action="{{ route('cita.search') }}" class="flex items-center space-x-2">
+            <form method="GET" action="{{ route('historial.search') }}" class="flex items-center space-x-2">
                 <input type="text" name="search" id="buscar"
-                    class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2" placeholder="Buscar..."
-                    pattern="[A-ZÁÉÍÓÚÑÜ\s0-9]+"
-                    oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s0-9]/g, '').toUpperCase();">
+                    class="border border-gray-300 bg-gray-100 rounded-lg w-50 h-10 px-2" placeholder="Buscar...">
                 <button class="w-20 h-10 bg-indigo-400 text-white rounded-lg shadow-lg">Buscar</button>
             </form>
         </div>
@@ -45,6 +43,11 @@
                 </div>
             @endif
         </div>
+        <button id="openModal" type="submit"
+            class="w-50 h-15 text-white content-center text-center font-bold rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
+            style="background-color:#00405C">
+            Generar Reporte
+        </button>
     </div>
     {{-- tabla --}}
     <div class="px-10">
@@ -53,10 +56,9 @@
                 <tr>
                     <th class="py-2 px-4">ID</th>
                     <th class="py-2 px-4">Documento</th>
-                    <th class="py-2 px-4">Nombre</th>
-                    <th class="py-2 px-4">Mascota</th>
                     <th class="py-2 px-4">Fecha</th>
                     <th class="py-2 px-4">Hora</th>
+                    <th class="py-2 px-4">Groomer</th>
                     <th class="py-2 px-4">Estado</th>
                     <th class="py-2 px-4">ACCIONES</th>
                 </tr>
@@ -66,11 +68,10 @@
                     <tr class="bg-gray-100 border-b">
                         <td class="py-4 px-4 text-center">{{ $cita->id }}</td>
                         <td class="py-4 px-4 text-center">{{ $cita->cliente->documento }}</td>
-                        <td class="py-4 px-4 text-center">{{ $cita->cliente->name }}</td>
-                        <td class="py-4 px-4 text-center">{{ $cita->mascota->name }}</td>
                         <td class="py-4 px-4 text-center">{{ $cita->fecha }}</td>
                         <td class="py-4 px-4 text-center">{{ $cita->hora_inicio_formateada }} -
                             {{ $cita->hora_final_formateada }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cita->usuario->name }}</td>
                         <td class="py-4 px-4 text-center">{{ $cita->estado }}</td>
                         <td class="py-4 px-4 text-center">
                             <button
@@ -99,6 +100,84 @@
         </table>
         <div class="mt-4">
             {{ $citas->links() }}
+        </div>
+    </div>
+    {{-- generar reporte --}}
+    <div id="modal"
+        class="fixed inset-0  backdrop-blur-sm backdrop-opacity-100
+            bg-opacity-0 hidden justify-center items-center">
+        <div class="flex justify-center items-center h-full w-full">
+            <div class="bg-white rounded-lg p-8 w-1/2 fade-in modal-contet z-50 border border-gray-300">
+                <div class="mb-4">
+                    <h2 class="text-xl font-bold">Generar Reporte</h2>
+                </div>
+                <form method="GET" action="{{ route('historial.reporte') }}">
+                    @csrf
+                    {{-- Rango de fechas --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="fecha_inicio" class="block text-sm font-medium text-gray-600 mb-1">
+                                Fecha inicio:
+                            </label>
+                            <input type="date" id="fecha_inicio" name="fecha_inicio"
+                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 bg-gray-50">
+                        </div>
+                        <div>
+                            <label for="fecha_fin" class="block text-sm font-medium text-gray-600 mb-1">
+                                Fecha fin:
+                            </label>
+                            <input type="date" id="fecha_fin" name="fecha_fin"
+                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 bg-gray-50">
+                        </div>
+                    </div>
+                    {{-- Estado de la cita --}}
+                    <div class="mb-4">
+                        <label for="estado" class="block text-sm font-medium text-gray-600 mb-1">
+                            Estado de la cita:
+                        </label>
+                        <select id="estado" name="estado"
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 bg-gray-50">
+                            <option value="">Todos</option>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="ATENDIDA">Atendida</option>
+                            <option value="CANCELADA">Cancelada</option>
+                            <option value="REPROGRAMADA">Reprogramada</option>
+                        </select>
+                    </div>
+                    {{--Profesional (usuario que atendió la cita) --}}
+                    <div class="mb-4">
+                        <label for="usuario_id" class="block text-sm font-medium text-gray-600 mb-1">
+                            Profesional:
+                        </label>
+                        <select id="usuario_id" name="usuario_id"
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 bg-gray-50">
+                            <option value="">Todos</option>
+                            @foreach ($usuarios as $usuario)
+                                <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    {{-- Cliente (por documento o nombre) --}}
+                    <div class="mb-6">
+                        <label for="cliente" class="block text-sm font-medium text-gray-600 mb-1">
+                            Cliente:
+                        </label>
+                        <input type="text" id="cliente" name="cliente"
+                            placeholder="Nombre o documento del cliente"
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 bg-gray-50">
+                    </div>
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="reset" id="closeModal"
+                            class="px-4 py-2 bg-red-200 hover:bg-red-300 text-gray-800 rounded-lg transition duration-200">
+                            Cerrar
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-indigo-200 hover:bg-indigo-300 rounded-lg transition duration-200">
+                            Generar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <!-- Modal de ver cita -->
@@ -164,6 +243,24 @@
             </form>
         </div>
     </div>
+    {{-- reporte modal --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const openModalBtn = document.getElementById('openModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const modal = document.getElementById('modal');
+            const mascotaSelect = document.getElementById('mascota');
+            const grummerSelect = document.getElementById('grummer');
+            openModalBtn.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                grummerSelect.disabled = false;
+                mascotaSelect.innerHTML = '<option value="" selected disabled>Seleccione...</option>';
+            });
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+        });
+    </script>
     {{-- ver modal --}}
     <script>
         function openVerModal(documento, nombre, mascota, fecha, hora_inicio_formateada, hora_final_formateada, estado,

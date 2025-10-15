@@ -59,5 +59,6 @@ Route::middleware([
     Route::middleware([CheckSuper::class])->group(function () {
         Route::get('/historial', [HistorialController::class, 'index'])->name('gestionhistorial');
         Route::get('/historial/search', [HistorialController::class, 'search'])->name('historial.search');
+        Route::get('/historial/reporte', [HistorialController::class, 'reporte'])->name('historial.reporte');
     });
 });
