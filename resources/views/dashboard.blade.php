@@ -7,7 +7,7 @@
     </head>
         <div class=" p-6 flex-grow">
             <div class = " rounded-full  w-full inline-block text-center p-6 mb-6" style="background-color: #009600">
-                <h1 class="text-white font-bold text-3xl ">BIENVENIDO {{ Auth::user()->name }}</h1>
+                <h1 class="text-white font-bold text-3xl ">BIENVENIDO {{ explode(' ', Auth::user()->name)[0] }}</h1>
                 <p class= "text-white italic">Gracias por tu trabajo y compromiso </p>
             </div>
             {{-- gestion de clientes --}}

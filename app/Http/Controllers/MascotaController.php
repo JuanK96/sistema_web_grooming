@@ -52,9 +52,10 @@ class MascotaController extends Controller
                 // Buscar mascotas asociadas al cliente (por documento del dueño) o por nombre de la mascota
                 $mascotas = Mascota::with('dueño:id,documento')
                     ->whereHas('dueño', function ($query) use ($search) {
-                        $query->where('documento', 'like', "{$search}%");
+                        $query->where('documento', 'like', "$search");
                     })
-                    ->orWhere('name', 'like', "{$search}%")  // Búsqueda por nombre de la mascota
+                    ->orWhere('name', 'like', "{$search}%")
+                    ->orWhere('id', 'LIKE', "$search")
                     ->paginate(5)
                     ->appends(['search' => $search]);
                 foreach ($mascotas as $mascota) {

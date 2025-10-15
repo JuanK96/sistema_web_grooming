@@ -26,8 +26,9 @@ class ClienteController extends Controller
         } else {
             try {
                 // Buscar clientes
-                $clientes = Cliente::where('documento', 'like', "{$search}%")
+                $clientes = Cliente::where('documento', 'like', "$search")
                     ->orWhere('name', 'like', "{$search}%")
+                    ->orWhere('id', 'LIKE', "$search")
                     ->paginate(5)
                     ->appends(['search' => $search]);
                 if ($clientes->isNotEmpty()) {

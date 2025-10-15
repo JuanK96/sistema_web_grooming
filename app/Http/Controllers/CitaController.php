@@ -52,7 +52,8 @@ class CitaController extends Controller
                             })
                             ->orWhereHas('usuario', function ($query) use ($search) {
                                 $query->where('name', 'LIKE', "{$search}%");
-                            });
+                            })
+                            ->orWhere('id', 'LIKE', "%{$search}%");
                     })
                     ->orderBy('id', 'desc')
                     ->paginate(5)
