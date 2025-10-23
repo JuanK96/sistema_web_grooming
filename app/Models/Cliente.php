@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     protected $table = 'clientes';
-    
+
     protected $fillable = [
         'tipo_documento',
         'documento',
@@ -18,4 +18,9 @@ class Cliente extends Model
         'direccion',
         'email',
     ];
+    
+    public function citas()
+    {
+        return $this->hasMany(Cita::class, 'id_cliente');
+    }
 }

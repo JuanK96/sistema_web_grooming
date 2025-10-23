@@ -101,11 +101,12 @@ class CitaController extends Controller
             $horaInicio = Carbon::createFromFormat('g:i A', $request->hora_inicio)->format('H:i');
             $horaFinal  = Carbon::createFromFormat('g:i A', $request->hora_final)->format('H:i');
             //Buscar cliente por documento
-            $idCliente = Cliente::where('documento', $request->dueño)->value('id');
-            if (!$idCliente) {
+            $cliente = Cliente::where('documento', $request->dueño)->first();
+            if (!$cliente) {
                 return redirect()->route('gestioncita')
                     ->with('error', 'El cliente no está registrado. Verifica la información.');
             }
+            $mascota= Mascota::where('id', $request->mascota)->value('name');
             $groomerId = $request->grummer;
             $fecha = $request->fecha;
             // Validar si existe traslape
@@ -125,14 +126,24 @@ class CitaController extends Controller
             // Usamos transacción por seguridad si en el futuro hay más operaciones
             DB::beginTransaction();
             Cita::create([
-                'id_cliente'=> $idCliente,
-                'id_mascota'=> $request->mascota,
-                'id_user'=> $groomerId,
-                'fecha'=> $fecha,
-                'hora_inicio'=> $horaInicio,
-                'hora_final'=> $horaFinal,
+                'id_cliente' => $cliente->id,
+                'id_mascota' => $request->mascota,
+                'id_user' => $groomerId,
+                'fecha' => $fecha,
+                'hora_inicio' => $horaInicio,
+                'hora_final' => $horaFinal,
             ]);
             DB::commit();
+            //Enviar confirmación por WhatsApp
+            if (!empty($cliente->tel)) {
+                $primerNombre = explode(' ', trim($cliente->name))[0];
+                $telefono = $cliente->tel;
+                $fecha = Carbon::parse($fecha)->format('d/m/Y');
+                $horaInicio = Carbon::parse($horaInicio)->format('g:i A');
+                $horaFinal = Carbon::parse($horaFinal)->format('g:i A');
+                $mensaje = "Hola {$primerNombre}, tu cita para {$mascota} ha sido agendada para el {$fecha} de {$horaInicio} a {$horaFinal}. ¡Te esperamos!";
+                $this->enviarConfirmacionWhatsApp($telefono, $mensaje);
+            }
             return redirect()->route('gestioncita')
                 ->with('success', 'Cita agendada correctamente');
         } catch (\Exception $e) {
