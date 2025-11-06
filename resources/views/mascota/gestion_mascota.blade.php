@@ -53,7 +53,7 @@
     {{-- tabla --}}
     <div class="px-10">
         <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
-            <thead class="text-white" style="background-color: #009600">
+            <thead class="text-white" style="background-color: #00aeef">
                 <tr>
                     <th class="py-2 px-4">ID</th>
                     <th class="py-2 px-4">Documento Dueño</th>
@@ -102,6 +102,7 @@
                             <button
                                 onclick="openEditModal(
                                         {{ $mascota->id }},
+                                        '{{ $mascota->fecha_nacimiento }}',
                                         '{{ $mascota->peso }}',
                                         '{{ $mascota->esterilizado }}',
                                         '{{ $mascota->vacunado }}',
@@ -134,7 +135,14 @@
                 id="editForm" enctype="multipart/form-data">
                 @csrf
                 <input class="hidden" name="idmascota" id="idmascota" type="text">
-                <div class="grid grid-cols-3 space-x-4">
+                <div class="grid grid-cols-4 space-x-4">
+                    <!-- edad -->
+                    <div>
+                        <label for="fechaNacimiento" class="block text-x1 font-medium text-gray-700 mb-1">Fecha de
+                            nacimiento</label>
+                        <input type="date" id="date" name="date" step="0.1" min="0"
+                            required class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
+                    </div>
                     <!-- Peso -->
                     <div>
                         <label for="weight" class="block text-x1 font-medium text-gray-700 mb-1">Peso (kg)</label>
@@ -249,7 +257,7 @@
                             </p>
                             <p><span class="font-bold">Raza</span><br><span x-text="mascota.raza"></span></p>
                             <p><span class="font-bold">Sexo</span><br><span x-text="mascota.sexo"></span></p>
-                            <p><span class="font-bold">Peso</span><br><span x-text="mascota.peso"></span></p>
+                            <p><span class="font-bold">Peso(kg)</span><br><span x-text="mascota.peso"></span></p>
                         </div>
                     </div>
                 </div>
@@ -280,9 +288,10 @@
     </div>
     {{-- edit modal --}}
     <script>
-        function openEditModal(id, peso, esterilizado, vacunado, enfermedades, descripcion, ) {
+        function openEditModal(id, fecha_nacimiento, peso, esterilizado, vacunado, enfermedades, descripcion, ) {
             // Rellenar campos
             document.getElementById('idmascota').value = id;
+            document.getElementById('date').value = fecha_nacimiento;
             document.getElementById('weight').value = peso;
             document.getElementById('sterilized').value = esterilizado;
             document.getElementById('vaccinated').value = vacunado;

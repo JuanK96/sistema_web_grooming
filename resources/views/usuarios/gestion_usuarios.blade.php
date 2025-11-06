@@ -128,7 +128,7 @@
     {{-- tabla --}}
     <div class="px-10">
         <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
-            <thead class="text-white" style="background-color: #009600">
+            <thead class="text-white" style="background-color: #00aeef">
                 <tr>
                     <th class="py-2 px-4">ID</th>
                     <th class="py-2 px-4">Nombre</th>

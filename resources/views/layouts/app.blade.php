@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Caprichos Pet Grooming</title>
-    <link rel="icon" type="image/png" href="{{ asset('img/LogoCaprichos.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('img/Isotipo_Caprichos_Rojo.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -27,7 +27,7 @@
             <div class="row-span-8">
                 @livewire('navigation-menu')
             </div>
-            <div class="col-span-5 flex flex-row h-20 justify-between items-center px-5"style="background-color:#00405C">
+            <div class="col-span-5 flex flex-row h-20 justify-between items-center px-5"style="background-color: #2e3192">
                 @if (isset($header))
                     <header>
                         <div class="text-white">

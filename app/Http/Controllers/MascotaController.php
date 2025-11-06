@@ -162,6 +162,7 @@ class MascotaController extends Controller
         // dd($request->all());
         // Validar datos recibidos
         $request->validate([
+            'date' => 'date|before:today',
             'weight' => 'numeric|max:255',
             'sterilized' => 'nullable|string',
             'vaccinated' => 'nullable|string',
@@ -186,6 +187,7 @@ class MascotaController extends Controller
             // Actualizar campos
             DB::beginTransaction();
             $mascota->update([
+                'fecha_nacimiento' => $request->date,
                 'peso' => $request->weight,
                 'esterilizado' => $request->sterilized,
                 'vacunado' => $request->vaccinated,

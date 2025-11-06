@@ -1,10 +1,10 @@
 <nav x-data="{ open: false }" class="h-full"
-    style="background-color:#009600">
+    style="background-color:#44b549">
     <!-- Primary Navigation Menu -->
     <div class=" text-white flex flex-col gap-4 h-full w-full aligne-center">
         <div class=" shrink-0 flex justify-center   ">
             <a href="{{ route('dashboard') }}">
-                <x-application-mark class="block h-auto w-44 " />
+                <x-application-mark class="block h-auto w-full mt-5" />
             </a>
         </div>
         <div class="flex flex-col  gap-5  px-5">

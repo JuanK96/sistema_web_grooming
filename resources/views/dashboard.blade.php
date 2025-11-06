@@ -6,7 +6,7 @@
     </x-slot>
     </head>
         <div class=" p-6 flex-grow">
-            <div class = " rounded-full  w-full inline-block text-center p-6 mb-6" style="background-color: #009600">
+            <div class = " rounded-full  w-full inline-block text-center p-6 mb-6" style="background-color: #44b549">
                 <h1 class="text-white font-bold text-3xl ">BIENVENIDO {{ explode(' ', Auth::user()->name)[0] }}</h1>
                 <p class= "text-white italic">Gracias por tu trabajo y compromiso </p>
             </div>
@@ -14,7 +14,7 @@
             <div class="flex overflow-x-auto gap-4 pb-4 justify-center">
                 <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer ">
                     <a class="w-auto" href="{{ route('gestioncliente') }}">
-                        <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center"style="background-color:#00405c"">
+                        <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center"style="background-color: #2e3192">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
                                 fill="rgba(255,255,255,1)">
                                 <path
@@ -28,7 +28,7 @@
                 {{-- gestion de mascotas --}}
                 <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
                     <a class="w-auto" href="{{ route('gestionmascota') }}">
-                        <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center " style="background-color: #009600">
+                        <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center " style="background-color: #44b549">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
                                 fill="rgba(255,255,255,1)">
                                 <path
@@ -42,7 +42,7 @@
                 {{-- gestion de citas --}}
                 <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
                     <a class="w-auto" href="{{ route('gestioncita') }}">
-                        <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #00405c">
+                        <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #2e3192">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
                                 fill="rgba(255,255,255,1)">
                                 <path
@@ -57,7 +57,7 @@
                     {{-- historial de citas --}}
                 <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
                     <a class="w-auto" href="{{ route('gestionhistorial') }}">
-                        <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #009600"">
+                        <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #44b549">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
                                 fill="rgba(255,255,255,1)">
                                 <path
@@ -74,7 +74,7 @@
                 {{-- gestion de usuarios --}}
                 <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
                     <a class="w-auto" href="{{ route('gestionusuario') }}">
-                        <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #00405c">
+                        <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #2e3192">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                 width="50%" " fill="rgba(255,255,255,1)"><path d=" M2 22C2 17.5817 5.58172 14 10
                                 14C14.4183 14 18 17.5817 18 22H16C16 18.6863 13.3137 16 10 16C6.68629 16 4 18.6863 4
