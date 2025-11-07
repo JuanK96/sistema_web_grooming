@@ -18,10 +18,9 @@
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
-        <div style="background-image: url('{{ asset('img/PET.png') }}'); background-size: cover; background-position: center;">
+        <div class="w-full h-auto" style="background-image: url('{{ asset('img/PET.png') }}'); background-size: cover; background-position: center;">
             {{ $slot }}
         </div>
-
         @livewireScripts
     </body>
 </html>

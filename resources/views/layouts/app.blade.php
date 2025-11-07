@@ -19,30 +19,47 @@
     @livewireStyles
 </head>
 
-<body class="font-sans antialiased ">
+<body class="font-sans antialiased">
     <x-banner />
     <div
         style="background-image: url('{{ asset('img/PET.png') }}'); background-size: cover; background-position: center;">
-        <div class="grid grid-cols-6 grid-rows-8 min-h-screen ">
-            <div class="row-span-8">
+        <div class="min-h-screen flex flex-col lg:grid lg:grid-cols-6 lg:grid-rows-8">
+            <!-- Botón de menú móvil -->
+            <div class="lg:hidden flex justify-between items-center p-4 bg-[#44b549] text-white">
+                <div class=" shrink-0 flex justify-center   ">
+                    <a href="{{ route('dashboard') }}">
+                        <x-application-mark class="block h-auto w-30" />
+                    </a>
+                </div>
+                <button id="mobile-menu-toggle" class="focus:outline-none">
+                    <!-- Ícono hamburguesa -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Sidebar -->
+            <div id="sidebar"
+                class="lg:row-span-8 lg:block hidden fixed lg:static top-0 left-0 w-64 lg:w-auto h-full lg:h-auto bg-white z-50 shadow-lg lg:shadow-none">
                 @livewire('navigation-menu')
             </div>
-            <div class="col-span-5 flex flex-row h-20 justify-between items-center px-5"style="background-color: #2e3192">
+            <!-- Header -->
+            <div class="lg:col-span-5 row-span-1 flex flex-row h-20 lg:text-xl text-s justify-between items-center px-5 bg-[#2e3192]">
                 @if (isset($header))
-                    <header>
-                        <div class="text-white">
-                            {{ $header }}
-                        </div>
+                    <header class="text-white">
+                        {{ $header }}
                     </header>
                 @endif
-                <div class="hidden sm:flex sm:items-center sm:ms-6">
-                    <!-- Settings Dropdown -->
+                <!-- Menú de usuario -->
+                <div class="flex items-center ms-3">
                     <div class="ms-3 relative">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 <span class="inline-flex rounded-md">
                                     <button type="button"
-                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        class="inline-flex items-center px-3 py-2 border border-transparent lg:text-sm text-xs leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
                                         {{ explode(' ', Auth::user()->name)[0] }}
                                         <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg"
                                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -53,20 +70,13 @@
                                 </span>
                             </x-slot>
                             <x-slot name="content">
-                                <!-- Account Management -->
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     {{ __('Manage Account') }}
                                 </div>
                                 <x-dropdown-link href="{{ route('profile.show') }}">
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
-                                @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                    <x-dropdown-link href="{{ route('api-tokens.index') }}">
-                                        {{ __('API Tokens') }}
-                                    </x-dropdown-link>
-                                @endif
                                 <div class="border-t border-gray-200"></div>
-                                <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}" x-data>
                                     @csrf
                                     <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
@@ -78,13 +88,24 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-5 row-span-7">
+            <!-- Contenido principal -->
+            <div class="lg:col-span-5 lg:row-span-7 p-4">
                 <main>
                     {{ $slot }}
                 </main>
             </div>
         </div>
-        @stack('modals')
-        @livewireScripts
+    </div>
+    @stack('modals')
+    @livewireScripts
+    <!-- Script para menú móvil -->
+    <script>
+        const toggleBtn = document.getElementById('mobile-menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+    </script>
 </body>
+
 </html>

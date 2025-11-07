@@ -1,13 +1,13 @@
-<nav x-data="{ open: false }" class="h-full"
+<nav x-data="{ open: false }" class="h-full pt-5"
     style="background-color:#44b549">
     <!-- Primary Navigation Menu -->
     <div class=" text-white flex flex-col gap-4 h-full w-full aligne-center">
-        <div class=" shrink-0 flex justify-center   ">
+        <div class=" shrink-0 flex justify-center">
             <a href="{{ route('dashboard') }}">
-                <x-application-mark class="block h-auto w-full mt-5" />
+                <x-application-mark class="hidden lg:block h-auto w-full" />
             </a>
         </div>
-        <div class="flex flex-col  gap-5  px-5">
+        <div class="flex flex-col gap-5 px-5">
             <!-- Navigation Links -->
             <div class="flex flex-row gap-5 items-end justify-start">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12%" fill="rgba(255,255,255,1)">
@@ -80,18 +80,6 @@
                 </a>
             </div>
             @endif
-        </div>
-        <!-- Hamburger -->
-        <div class="-me-2 flex items-center sm:hidden">
-            <button @click="open = ! open"
-                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                <svg class="size-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                    <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round"
-                        stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                        stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
         </div>
     </div>
 </nav>
