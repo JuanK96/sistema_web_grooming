@@ -4,7 +4,7 @@
             {{ __('Gestion de Mascotas') }}
         </h2>
     </x-slot>
-    <div class="flex flex-row py-10 px-20 justify-between items-center">
+    <div class="flex flex-col sm:flex-row sm:py-10 sm:px-20 p-3 gap-2 justify-between items-center">
         <div>
             <label class="text-black font-bold" for="buscar">BUSCADOR:</label>
             <form action="{{ route('mascota.search') }}" method="GET">
@@ -51,8 +51,8 @@
         </a>
     </div>
     {{-- tabla --}}
-    <div class="px-10">
-        <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
+    <div class="sm:mx-10 m-3 overflow-x-auto">
+        <table class="min-w-full  text-xs sm:text-sm whitespace-nowrap">
             <thead class="text-white" style="background-color: #00aeef">
                 <tr>
                     <th class="py-2 px-4">ID</th>
@@ -67,7 +67,7 @@
             </thead>
             <tbody>
                 @foreach ($mascotas as $mascota)
-                    <tr class="bg-gray-100 border-b">
+                    <tr class="bg-gray-100">
                         <td class="py-4 px-4 text-center">{{ $mascota->id }}</td>
                         <td class="py-4 px-4 text-center">{{ $mascota->dueño->documento }}</td>
                         <td class="py-4 px-4 text-center">{{ $mascota->name }}</td>
@@ -129,19 +129,19 @@
     {{-- modal editar --}}
     <div id="editModal"
         class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
-        <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
+        <div class="bg-white lg:rounded-2xl shadow-lg w-100 lg:w-1/2 p-6 max-h-[90vh] overflow-y-auto">
             <h2 class="text-xl font-semibold mb-4">Editar Mascota</h2>
-            <form method="POST" action="{{ route('mascota.update') }}" class=" px-4 w-full space-y-5" 
-                id="editForm" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('mascota.update') }}" class=" px-4 w-full space-y-5" id="editForm"
+                enctype="multipart/form-data">
                 @csrf
                 <input class="hidden" name="idmascota" id="idmascota" type="text">
-                <div class="grid grid-cols-4 space-x-4">
+                <div class="grid grid-cols-1 lg:grid-cols-4 sm:space-x-4">
                     <!-- edad -->
                     <div>
                         <label for="fechaNacimiento" class="block text-x1 font-medium text-gray-700 mb-1">Fecha de
                             nacimiento</label>
-                        <input type="date" id="date" name="date" step="0.1" min="0"
-                            required class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
+                        <input type="date" id="date" name="date" step="0.1" min="0" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
                     </div>
                     <!-- Peso -->
                     <div>
@@ -174,18 +174,18 @@
                     <label for="diseases" class="block text-x1 font-medium text-gray-700 mb-1">Enfermedades o
                         condiciones especiales</label>
                     <textarea id="diseases" name="diseases" rows="3" maxlength="255"
-                        class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
+                        class="w-full p-3 sm:p-6  border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Menciona cualquier enfermedad o condición médica que tenga la mascota"></textarea>
                 </div>
                 <!-- Descripción -->
                 <div>
                     <label for="description" class="block text-x1 font-medium text-gray-700 mb-1">Descripción</label>
                     <textarea id="description" name="description" rows="3" maxlength="255"
-                        class="w-full px-6 py-6 border border-gray-300 rounded-lg transition bg-stone-200"
+                        class="w-full p-3 sm:p-6 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Describe características de la mascota"></textarea>
                 </div>
                 <!-- Foto -->
-                <div class="grid grid-cols-2">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
                     <div class="">
                         <label for="photo" class="block text-x1 font-medium text-gray-700 mb-1">Foto de la
                             mascota</label>
@@ -226,12 +226,12 @@
     <!-- Modal Ver Mascota -->
     <div id="verModal"
         class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
-        <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
+        <div class="bg-white lg:rounded-2xl shadow-lg w-100 lg:w-1/2 p-6 max-h-[90vh] overflow-y-auto">
             <h2 class="text-xl font-semibold mb-4">Datos de la Mascota</h2>
             <div x-data="{ mascota: {} }" @open-modal.window="mascota = $event.detail">
                 <!-- Contenido -->
-                <div class="flex gap-6 mt-6">
-                    <div x-show="mascota.foto_url" class="flex flex-col items-center w-1/2" id="fotoContainer">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div x-show="mascota.foto_url" class="flex flex-col items-center" id="fotoContainer">
                         <strong class="mb-2">Foto:</strong>
                         <img x-bind:src="mascota.foto_url || 'https://placehold.co/200x200/ffffff/cccccc?text=Sin+foto'"
                             x-bind:alt="'Foto de ' + mascota.name"
@@ -240,7 +240,7 @@
                                     this.alt='Error al cargar foto';">
                     </div>
                     <!-- Si no hay foto -->
-                    <div x-show="!mascota.foto_url" class="w-1/2 flex items-center justify-center">
+                    <div x-show="!mascota.foto_url" class="flex items-center justify-center">
                         <div class="text-center text-gray-500">
                             <img src="https://placehold.co/200x200/ffffff/cccccc?text=Sin+foto"
                                 alt="Sin foto disponible"
@@ -248,13 +248,12 @@
                             <p>Sin foto disponible</p>
                         </div>
                     </div>
-                    <div class="w-1/2 space-y-2 text-gray-800">
-                        <p><span class="font-bold">Nombre</span><br><span x-text="mascota.name"></span></p>
-                        <p><span class="font-bold">Dueño</span><br><span x-text="mascota.dueno"></span></p>
-                        <p><span class="font-bold">Edad</span><br><span x-text="mascota.edad"></span></p>
-                        <div class="grid grid-cols-2 gap-2 mt-2">
-                            <p><span class="font-bold">Especie</span><br><span x-text="mascota.especie"></span>
-                            </p>
+                    <div class="text-gray-800 bg-gray-100 rounded-md gap-2 p-2">
+                        <div class="grid grid-cols-2 gap-2">
+                            <p><span class="font-bold">Dueño</span><br><span x-text="mascota.dueno"></span></p>
+                            <p><span class="font-bold">Nombre</span><br><span x-text="mascota.name"></span></p>
+                            <p><span class="font-bold">Edad</span><br><span x-text="mascota.edad"></span></p>
+                            <p><span class="font-bold">Especie</span><br><span x-text="mascota.especie"></span></p>
                             <p><span class="font-bold">Raza</span><br><span x-text="mascota.raza"></span></p>
                             <p><span class="font-bold">Sexo</span><br><span x-text="mascota.sexo"></span></p>
                             <p><span class="font-bold">Peso(kg)</span><br><span x-text="mascota.peso"></span></p>
@@ -262,7 +261,7 @@
                     </div>
                 </div>
                 <hr class="my-4 border-t-2 border-gray-300">
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <p class="font-bold">Descripcion</p>
                         <p x-text="mascota.descripcion"></p>
@@ -328,6 +327,7 @@
             }));
             document.getElementById('verModal').classList.remove('hidden');
         }
+
         function closeVerModal() {
             document.getElementById('verModal').classList.add('hidden');
         }

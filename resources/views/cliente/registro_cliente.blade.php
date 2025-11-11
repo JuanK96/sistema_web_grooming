@@ -4,7 +4,7 @@
             {{ __('Registro Cliente') }}
         </h2>
     </x-slot>
-    <div class="flex items-center justify-center px-20 py-6">
+    <div class="flex items-center justify-center px-3 sm:px-20 py-6">
         <form method="POST" action="{{ route('cliente.store') }}" id="registroForm" class="space-y-6 w-full">
             @csrf
             <!-- Documento -->
@@ -90,7 +90,7 @@
                     <div class="flex">
                         <!-- Selector de extensión -->
                         <select id="extension" name="extension"
-                            class="rounded-l-md border border-gray-300 bg-stone-200 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="rounded-l-md border border-gray-300 bg-stone-200 shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                             <option value="" selected disabled>EXT</option>
                             <option value="+57">🇨🇴 +57</option>
                             <option value="+1">🇺🇸 +1</option>
@@ -113,7 +113,7 @@
                     <div class="flex">
                         <!-- Selector de extensión -->
                         <select id="extTelAlt" name="extTelAlt"
-                            class="rounded-l-md border border-gray-300 bg-stone-200 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="rounded-l-md border border-gray-300 bg-stone-200 shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                             <option value="" selected disabled>EXT</option>
                             <option value="+57">🇨🇴 +57</option>
                             <option value="+1">🇺🇸 +1</option>

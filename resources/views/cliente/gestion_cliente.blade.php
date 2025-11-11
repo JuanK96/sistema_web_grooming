@@ -4,7 +4,7 @@
             {{ __('Gestion de Clientes') }}
         </h2>
     </x-slot>
-    <div class="flex flex-row py-10 px-20 justify-between items-center">
+    <div class="flex flex-col sm:flex-row sm:py-10 sm:px-20 p-3 gap-2 justify-between items-center">
         <div>
             <label class="text-black font-bold" for="buscar">BUSCADOR:</label>
             <form action="{{ route('cliente.search') }}" method="GET">
@@ -51,8 +51,8 @@
         </a>
     </div>
     {{-- tabla --}}
-    <div class="px-10">
-        <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
+    <div class="sm:mx-10 m-3 overflow-x-auto">
+        <table class="min-w-full  text-xs sm:text-sm whitespace-nowrap">
             <thead class="text-white" style="background-color: #00aeef">
                 <tr>
                     <th class="py-2 px-4">ID</th>
@@ -69,7 +69,7 @@
             </thead>
             <tbody>
                 @foreach ($clientes as $cliente)
-                    <tr class="bg-gray-100 border-b">
+                    <tr class="bg-gray-100">
                         <td class="py-4 px-4 text-center">{{ $cliente->id }}</td>
                         <td class="py-4 px-4 text-center">{{ $cliente->documento }}</td>
                         <td class="py-4 px-4 text-center">{{ $cliente->name }}</td>
@@ -110,7 +110,7 @@
     <!-- Modal -->
     <div id="editModal"
         class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
-        <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
+        <div class="bg-white lg:rounded-2xl shadow-lg w-100 sm:w-1/2 p-6 max-h-[90vh] overflow-y-auto">
             <h2 class="text-xl font-semibold mb-4">Editar Cliente</h2>
             <form id="editForm" method="POST" action="{{ route('cliente.update') }}">
                 @csrf

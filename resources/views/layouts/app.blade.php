@@ -89,7 +89,7 @@
                 </div>
             </div>
             <!-- Contenido principal -->
-            <div class="lg:col-span-5 lg:row-span-7 p-4">
+            <div class="lg:col-span-5 lg:row-span-7">
                 <main>
                     {{ $slot }}
                 </main>

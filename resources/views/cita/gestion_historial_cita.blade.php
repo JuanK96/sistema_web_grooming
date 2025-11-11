@@ -4,7 +4,7 @@
             {{ __('Historial de Citas') }}
         </h2>
     </x-slot>
-    <div class="flex flex-row py-10 px-20 justify-between items-center">
+    <div class="flex flex-col sm:flex-row sm:py-10 sm:px-20 p-3 gap-2 justify-between items-center">
         <div class="">
             <label class="text-black font-bold " for="buscar">BUSCADOR:</label>
             <form method="GET" action="{{ route('historial.search') }}" class="flex items-center space-x-2">
@@ -50,8 +50,8 @@
         </button>
     </div>
     {{-- tabla --}}
-    <div class="px-10">
-        <table class="min-w-full bg-white rounded border shadow-lg overflow-hidden">
+    <div class="sm:mx-10 m-3 overflow-x-auto">
+        <table class="min-w-full  text-xs sm:text-sm whitespace-nowrap">
             <thead class="text-white" style="background-color: #00aeef">
                 <tr>
                     <th class="py-2 px-4">ID</th>
@@ -107,14 +107,14 @@
         class="fixed inset-0  backdrop-blur-sm backdrop-opacity-100
             bg-opacity-0 hidden justify-center items-center">
         <div class="flex justify-center items-center h-full w-full">
-            <div class="bg-white rounded-lg p-8 w-1/2 fade-in modal-contet z-50 border border-gray-300">
+            <div class="bg-white lg:rounded-lg p-8 w-100 lg:w-1/2 fade-in modal-contet z-50 border border-gray-300 max-h-[90vh] overflow-y-auto">
                 <div class="mb-4">
                     <h2 class="text-xl font-bold">Generar Reporte</h2>
                 </div>
                 <form method="GET" action="{{ route('historial.reporte') }}">
                     @csrf
                     {{-- Rango de fechas --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label for="fecha_inicio" class="block text-sm font-medium text-gray-600 mb-1">
                                 Fecha inicio:
@@ -183,10 +183,10 @@
     <!-- Modal de ver cita -->
     <div id="verModal"
         class="hidden fixed inset-0 flex items-center justify-center backdrop-blur-sm backdrop-opacity-100 bg-opacity-0 z-50">
-        <div class="bg-white rounded-2xl shadow-lg w-2/3 md:w-1/2 p-6">
+        <div class="bg-white lg:rounded-2xl shadow-lg w-100 lg:w-1/2 p-6 max-h-[90vh] overflow-y-auto">
             <h2 class="text-xl font-semibold mb-4">Detalles de la Cita</h2>
             <form>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Documento Dueño</label>
                         <input type="text" id="ver_documento" class="mt-1 block w-full rounded-md bg-gray-100 p-3"

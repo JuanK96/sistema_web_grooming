@@ -1,18 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white leading-tight">
+        <h2 class="font-semibold text-white leading-tight">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
     </head>
-        <div class=" p-6 flex-grow">
+        <div class="py-3 px-2 lg:p-10 flex-grow">
             <div class = " rounded-full  w-full inline-block text-center p-6 mb-6" style="background-color: #44b549">
-                <h1 class="text-white font-bold text-3xl ">BIENVENIDO {{ explode(' ', Auth::user()->name)[0] }}</h1>
-                <p class= "text-white italic">Gracias por tu trabajo y compromiso </p>
+                <h1 class="text-white font-bold text-xl lg:text-3xl ">BIENVENIDO {{ explode(' ', Auth::user()->name)[0] }}</h1>
+                <p class= "text-white text-xs lg:text-xl italic">Gracias por tu trabajo y compromiso </p>
             </div>
-            {{-- gestion de clientes --}}
-            <div class="flex overflow-x-auto gap-4 pb-4 justify-center">
-                <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer ">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                {{-- gestion de clientes --}}
+                <div class="border border-gray-300 rounded-lg p-3 h-auto w-60 bg-white shadow-lg cursor-pointer ">
                     <a class="w-auto" href="{{ route('gestioncliente') }}">
                         <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center"style="background-color: #2e3192">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
@@ -26,7 +26,7 @@
                     </a>
                 </div>
                 {{-- gestion de mascotas --}}
-                <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
+                <div class="border border-gray-300 rounded-lg p-3 h-auto w-60 bg-white shadow-lg cursor-pointer">
                     <a class="w-auto" href="{{ route('gestionmascota') }}">
                         <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center " style="background-color: #44b549">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
@@ -40,7 +40,7 @@
                     </a>
                 </div>
                 {{-- gestion de citas --}}
-                <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
+                <div class="border border-gray-300 rounded-lg p-3 h-auto w-60 bg-white shadow-lg cursor-pointer">
                     <a class="w-auto" href="{{ route('gestioncita') }}">
                         <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #2e3192">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
@@ -55,7 +55,7 @@
                 </div>
                 @if (Auth::user()->id_role != 3)
                     {{-- historial de citas --}}
-                <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
+                <div class="border border-gray-300 rounded-lg p-3 h-auto w-60 bg-white shadow-lg cursor-pointer">
                     <a class="w-auto" href="{{ route('gestionhistorial') }}">
                         <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #44b549">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50%"
@@ -72,7 +72,7 @@
                 @endif
                 @if (Auth::user()->id_role == 1)
                 {{-- gestion de usuarios --}}
-                <div class="border border-gray-300 rounded-lg p-3 w-62 bg-white shadow-lg cursor-pointer">
+                <div class="border border-gray-300 rounded-lg p-3 h-auto w-60 bg-white shadow-lg cursor-pointer">
                     <a class="w-auto" href="{{ route('gestionusuario') }}">
                         <div class="hover:scale-105 h-32 w-auto rounded-t-lg flex items-center justify-center "style="background-color: #2e3192">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"

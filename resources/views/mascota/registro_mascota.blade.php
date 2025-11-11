@@ -4,11 +4,11 @@
             {{ __('Registro Mascota') }}
         </h2>
     </x-slot>
-    <div class="flex items-center justify-center p-6">
+    <div class="flex items-center justify-center px-3 sm:px-20 py-6">
         <form method="POST" action="{{ route('mascota.store') }}" enctype="multipart/form-data"
             class="px-4 w-full space-y-5" id="petForm">
             @csrf
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Nombre -->
                 <div>
                     <label for="name" class="block text-x1 font-medium text-gray-700 mb-1">Nombre<span
@@ -52,7 +52,7 @@
             <!-- Sección de información médica -->
             <div class="space-y-5">
                 <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Información Médica</h3>
-                <div class="grid grid-cols-5 space-x-4">
+                <div class="grid grid-cols-1 lg:grid-cols-5 space-x-4 gap-4">
                     <!-- Peso -->
                     <div>
                         <label for="weight" class="block text-x1 font-medium text-gray-700 mb-1">Peso (kg) <span
@@ -72,7 +72,7 @@
                     <div>
                         <label class="block text-x1 font-medium text-gray-700 mb-1">Sexo <span
                                 class="text-red-500">*</span></label>
-                        <div class="flex space-x-4 justify-center">
+                        <div class="flex space-x-4 lg:justify-center">
                             <label class="inline-flex items-center">
                                 <input type="radio" name="sex" value="MACHO" required
                                     class="text-indigo-600 focus:ring-indigo-500 h-4 w-4">
@@ -106,7 +106,7 @@
                 </div>
             </div>
             <!-- Enfermedades o condiciones especiales -->
-            <div class="grid grid-cols-2 gap-2 ">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 ">
                 <div>
                     <label for="diseases" class="block text-x1 font-medium text-gray-700 mb-1">Enfermedades o
                         condiciones especiales</label>
@@ -124,7 +124,7 @@
                 </div>
             </div>
             <!-- Foto -->
-            <div class="grid grid-cols-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div>
                     <label for="photo" class="block text-x1 font-medium text-gray-700 mb-1">Foto de la
                         mascota</label>
