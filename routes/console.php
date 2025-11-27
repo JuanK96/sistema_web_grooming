@@ -28,7 +28,7 @@ Schedule::call(function () {
             $mensaje
         );
     }
-})->dailyAt('19:15');
+})->dailyAt('09:00');
 // Invitaciones cada 1 y 15 del mes
 Schedule::call(function () {
     // $hoy = Carbon::today();
