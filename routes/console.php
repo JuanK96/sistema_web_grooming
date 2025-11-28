@@ -22,13 +22,20 @@ Schedule::call(function () {
         $hora = Carbon::parse($cita->hora_inicio)->format('g:i A');
         $telefono = $cita->cliente->tel;
         $primerNombre = explode(' ', trim($cita->cliente->name))[0];
-        $mensaje = "Hola {$primerNombre}, te recordamos la cita de {$cita->mascota->name} el {$fecha} a las {$hora}. ¡Te esperamos! 🐾";
+        $mensaje = "¡Hola! {$primerNombre} 🐾
+Te saludamos desde Caprichos Pet Grooming sede Querencia.
+
+Queremos recordarte que tienes programada la cita de grooming para {$cita->mascota->name}.
+Por favor, confírmanos si podrás asistir el {$fecha} a las {$hora}, así garantizamos un servicio fluido y sin retrasos para tu mascota.
+
+Gracias por tu puntualidad y por confiar en nosotros 🐶✨
+Quedamos atentos a tu confirmación.";
         app(\App\Http\Controllers\CitaController::class)->enviarConfirmacionWhatsApp(
             $telefono,
             $mensaje
         );
     }
-})->dailyAt('09:00');
+})->dailyAt('11:00');
 // Invitaciones cada 1 y 15 del mes
 Schedule::call(function () {
     // $hoy = Carbon::today();
@@ -41,12 +48,19 @@ Schedule::call(function () {
         if (!$cliente->tel) continue;
         $primerNombre = explode(' ', trim($cliente->name))[0];
         $telefono = $cliente->tel;
-        $mensaje = "Hola {$primerNombre} 👋, hace un tiempo que no traes a tu peludito 🐶🐱. 
-                    Agenda tu próxima cita para baño o peluquería, y consiente a tu mascota 💜
-                    Reserva fácil aquí, escríbenos";
+        $mensaje = "¡Hola! {$primerNombre} 🐾
+Esperamos que tú y tu peludito se encuentren muy bien.
+
+Te saludamos desde Caprichos Pet Grooming sede Querencia, con todo el cariño de siempre.
+Queríamos saber si te gustaría agendar nuevamente la cita de baño para tu mascota, ya pasó un tiempo desde su última visita con nosotros. Nos encantará volver a consentirl@ como se merece.
+
+También nos gustaría saber cómo te fue con el último servicio.
+¿Hay algo que podamos mejorar o alguna recomendación que quieras compartirnos? Tu opinión nos ayuda muchísimo a seguir brindando la mejor experiencia.
+
+Quedamos muy atentos a tu mensaje 🐶❤️🐾";
         app(\App\Http\Controllers\CitaController::class)->enviarConfirmacionWhatsApp(
             $telefono,
             $mensaje
         );
     }
-})->twiceMonthly(1, 15)->at('09:00'); // Días 1 y 15 del mes a las 9:00 a.m.
+})->twiceMonthly(1, 15)->at('11:00'); // Días 1 y 15 del mes a las 9:00 a.m.

@@ -106,7 +106,7 @@ class CitaController extends Controller
                 return redirect()->route('gestioncita')
                     ->with('error', 'El cliente no está registrado. Verifica la información.');
             }
-            $mascota= Mascota::where('id', $request->mascota)->value('name');
+            $mascota = Mascota::where('id', $request->mascota)->value('name');
             $groomerId = $request->grummer;
             $fecha = $request->fecha;
             // Validar si existe traslape
@@ -141,7 +141,18 @@ class CitaController extends Controller
                 $fecha = Carbon::parse($fecha)->format('d/m/Y');
                 $horaInicio = Carbon::parse($horaInicio)->format('g:i A');
                 $horaFinal = Carbon::parse($horaFinal)->format('g:i A');
-                $mensaje = "Hola {$primerNombre}, tu cita para {$mascota} ha sido agendada para el {$fecha} de {$horaInicio} a {$horaFinal}. ¡Te esperamos!";
+                $mensaje = "Hola {$primerNombre}, tu cita para {$mascota} está confirmada para el {$fecha} de las {$horaInicio} a las {$horaFinal}.✂️🐶
+‼️ TEN EN CUENTA ‼️
+                
+• Llegadas superiores a 15 minutos después de la hora acordada serán consideradas como no presentación y no podremos atenderte 🚫⏱️
+                
+• En caso de no presentarte, habrá restricción para reagendar de inmediato, ya que es necesario organizar los turnos 📅
+                
+• El valor del servicio puede variar según el estado del pelo y el comportamiento de tu mascota 🐾✂️😊
+                
+• Una hora después del llamado, se empieza a cobrar guardería con un valor de $10.000 por hora 🩵🐕
+                
+😊 ¡Te esperamos! ❤️🐶🐾";
                 $this->enviarConfirmacionWhatsApp($telefono, $mensaje);
             }
             return redirect()->route('gestioncita')
