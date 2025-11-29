@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Twilio\Rest\Client;
 use App\Models\Cliente;
 use App\Models\Mascota;
 use App\Models\User;
@@ -144,7 +144,7 @@ class CitaController extends Controller
                 $mensaje = "Hola {$primerNombre}, tu cita para {$mascota} está confirmada para el {$fecha} de las {$horaInicio} a las {$horaFinal}.✂️🐶
 ‼️ TEN EN CUENTA ‼️
                 
-• Llegadas superiores a 15 minutos después de la hora acordada serán consideradas como no presentación y no podremos atenderte 🚫⏱️
+• Llegadas superiores a 15 minutos después de la hora acordada, serán consideradas como no presentación y no podremos atenderte 🚫⏱️
                 
 • En caso de no presentarte, habrá restricción para reagendar de inmediato, ya que es necesario organizar los turnos 📅
                 
@@ -166,21 +166,24 @@ class CitaController extends Controller
     }
     public function enviarConfirmacionWhatsApp($telefono, $mensaje)
     {
-        $sid = env('TWILIO_SID');
-        $token = env('TWILIO_AUTH_TOKEN');
-        $twilioNumber = env('TWILIO_WHATSAPP_NUMBER');
-        $client = new Client($sid, $token);
+        $instance = env('ULTRAMSG_INSTANCE');
+        $token = env('ULTRAMSG_TOKEN');
+        $telefono = ltrim($telefono, '+');
+        $url = "https://api.ultramsg.com/$instance/messages/chat";
         try {
-            $client->messages->create(
-                "whatsapp:" . $telefono,
-                [
-                    'from' => $twilioNumber,
-                    'body' => $mensaje
-                ]
-            );
-            return true;
+            $response = Http::post($url, [
+                'token' => $token,
+                'to' => $telefono,
+                'body' => $mensaje,
+            ]);
+            if ($response->successful()) {
+                return true;
+            } else {
+                Log::error("Error Ultramsg: " . $response->body());
+                return false;
+            }
         } catch (\Exception $e) {
-            Log::error("Error enviando WhatsApp: " . $e->getMessage());
+            Log::error("Error enviando WhatsApp Ultramsg: " . $e->getMessage());
             return false;
         }
     }

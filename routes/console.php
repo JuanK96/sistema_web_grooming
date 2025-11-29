@@ -63,4 +63,4 @@ Quedamos muy atentos a tu mensaje 🐶❤️🐾";
             $mensaje
         );
     }
-})->twiceMonthly(1, 15)->at('11:00'); // Días 1 y 15 del mes a las 9:00 a.m.
+})->twiceMonthly(1, 15)->at('13:00'); // Días 1 y 15 del mes a las 9:00 a.m.
