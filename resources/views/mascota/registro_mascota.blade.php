@@ -57,7 +57,7 @@
                     <div>
                         <label for="weight" class="block text-x1 font-medium text-gray-700 mb-1">Peso (kg) <span
                                 class="text-red-500">*</span></label>
-                        <input type="number" id="weight" name="weight" required
+                        <input type="number" step="0.1" id="weight" name="weight" required
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                             placeholder="Ej: 5.2">
                     </div>

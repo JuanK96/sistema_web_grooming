@@ -242,6 +242,7 @@ class CitaController extends Controller
             }
             $citas = Cita::where('fecha', $fecha)
                 ->where('id_user', $groomer)
+                ->where('estado', 'PENDIENTE')
                 ->get(['hora_inicio', 'hora_final']);
             // Filtrar horas de inicio (descartar las que caen dentro de una cita existente)
             $horasInicioDisponibles = array_filter(array_keys($horasInicio), function ($horaTexto) use ($horasInicio, $citas) {
