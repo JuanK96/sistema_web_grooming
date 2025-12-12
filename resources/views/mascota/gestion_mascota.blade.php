@@ -76,40 +76,28 @@
                         <td class="py-4 px-4 text-center">{{ $mascota->sexo }}</td>
                         <td class="py-4 px-4 text-center">{{ $mascota->raza }}</td>
                         <td class="py-4 px-4 text-center">
-                            <button
-                                onclick="openVerModal(
-                                        {{ $mascota->id }},
-                                        '{{ $mascota->dueño->documento }}',
-                                        '{{ $mascota->name }}',
-                                        '{{ $mascota->edad ?? '' }}',
-                                        '{{ $mascota->especie ?? '' }}',
-                                        '{{ $mascota->raza ?? '' }}',
-                                        '{{ $mascota->sexo ?? '' }}',
-                                        '{{ $mascota->peso ?? '' }}',
-                                        '{{ $mascota->descripcion ?? '' }}',
-                                        '{{ $mascota->enfermedades ?? '' }}',
-                                        '{{ $mascota->vacunado ?? '' }}',
-                                        '{{ $mascota->esterilizado ?? '' }}',
-                                        '{{ $mascota->foto_url ?? '' }}'
-                                    )"
-                                class="bg-green-500 text-white p-2 h-8 w-8 rounded-lg">
+                            <button class="btnVerMascota bg-green-500 text-white p-2 h-8 w-8 rounded-lg"
+                                data-id="{{ $mascota->id }}" data-documento="{{ $mascota->dueño->documento }}"
+                                data-nombre="{{ $mascota->name }}" data-edad="{{ $mascota->edad ?? '' }}"
+                                data-especie="{{ $mascota->especie ?? '' }}" data-raza="{{ $mascota->raza ?? '' }}"
+                                data-sexo="{{ $mascota->sexo ?? '' }}" data-peso="{{ $mascota->peso ?? '' }}"
+                                data-descripcion="{{ $mascota->descripcion ?? '' }}"
+                                data-enfermedades="{{ $mascota->enfermedades ?? '' }}"
+                                data-vacunado="{{ $mascota->vacunado ?? '' }}"
+                                data-esterilizado="{{ $mascota->esterilizado ?? '' }}"
+                                data-foto="{{ $mascota->foto_url ?? '' }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M1.18164 12C2.12215 6.87976 6.60812 3 12.0003 3C17.3924 3 21.8784 6.87976 22.8189 12C21.8784 17.1202 17.3924 21 12.0003 21C6.60812 21 2.12215 17.1202 1.18164 12ZM12.0003 17C14.7617 17 17.0003 14.7614 17.0003 12C17.0003 9.23858 14.7617 7 12.0003 7C9.23884 7 7.00026 9.23858 7.00026 12C7.00026 14.7614 9.23884 17 12.0003 17ZM12.0003 15C10.3434 15 9.00026 13.6569 9.00026 12C9.00026 10.3431 10.3434 9 12.0003 9C13.6571 9 15.0003 10.3431 15.0003 12C15.0003 13.6569 13.6571 15 12.0003 15Z">
                                     </path>
                                 </svg>
                             </button>
-                            <button
-                                onclick="openEditModal(
-                                        {{ $mascota->id }},
-                                        '{{ $mascota->fecha_nacimiento }}',
-                                        '{{ $mascota->peso }}',
-                                        '{{ $mascota->esterilizado }}',
-                                        '{{ $mascota->vacunado }}',
-                                        '{{ $mascota->enfermedades }}',
-                                        '{{ $mascota->descripcion }}'
-                                    )"
-                                class="bg-yellow-500 text-white p-2 h-8 w-8 rounded-lg">
+                            <button class="btnEditMascota bg-yellow-500 text-white p-2 h-8 w-8 rounded-lg"
+                                data-id="{{ $mascota->id }}" data-fecha="{{ $mascota->fecha_nacimiento }}"
+                                data-peso="{{ $mascota->peso }}" data-esterilizado="{{ $mascota->esterilizado }}"
+                                data-vacunado="{{ $mascota->vacunado }}"
+                                data-enfermedades="{{ $mascota->enfermedades }}"
+                                data-descripcion="{{ $mascota->descripcion }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="110%"
                                     fill="rgba(255,255,255,1)">
                                     <path
@@ -331,5 +319,45 @@
         function closeVerModal() {
             document.getElementById('verModal').classList.add('hidden');
         }
+    </script>
+    {{-- listener boton ver --}}
+    <script>
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btnVerMascota');
+            if (btn) {
+                openVerModal(
+                    btn.dataset.id,
+                    btn.dataset.documento,
+                    btn.dataset.nombre,
+                    btn.dataset.edad,
+                    btn.dataset.especie,
+                    btn.dataset.raza,
+                    btn.dataset.sexo,
+                    btn.dataset.peso,
+                    btn.dataset.descripcion,
+                    btn.dataset.enfermedades,
+                    btn.dataset.vacunado,
+                    btn.dataset.esterilizado,
+                    btn.dataset.foto
+                );
+            }
+        });
+    </script>
+    {{-- listener boton edit --}}
+    <script>
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btnEditMascota');
+            if (btn) {
+                openEditModal(
+                    btn.dataset.id,
+                    btn.dataset.fecha,
+                    btn.dataset.peso,
+                    btn.dataset.esterilizado,
+                    btn.dataset.vacunado,
+                    btn.dataset.enfermedades,
+                    btn.dataset.descripcion
+                );
+            }
+        });
     </script>
 </x-app-layout>

@@ -78,19 +78,13 @@
                             {{ $cita->hora_final_formateada }}</td>
                         <td class="py-4 px-4 text-center">{{ $cita->estado }}</td>
                         <td class="py-4 px-4 text-center">
-                            <button
-                                onclick="openVerModal(
-                                        '{{ $cita->cliente->documento }}',
-                                        '{{ $cita->cliente->name }}',
-                                        '{{ $cita->mascota->name }}',
-                                        '{{ $cita->fecha }}',
-                                        '{{ $cita->hora_inicio_formateada }}',
-                                        '{{ $cita->hora_final_formateada }}',
-                                        '{{ $cita->estado }}',
-                                        '{{ $cita->usuario->name }}',
-                                        '{{ $cita->descripcion }}'
-                                    )"
-                                class="bg-green-500 text-white p-2 h-8 w-8 rounded-lg">
+                            <button class="btnVerModal bg-green-500 text-white p-2 h-8 w-8 rounded-lg"
+                                data-documento="{{ $cita->cliente->documento }}"
+                                data-nombre="{{ $cita->cliente->name }}" data-mascota="{{ $cita->mascota->name }}"
+                                data-fecha="{{ $cita->fecha }}"
+                                data-hora_inicio="{{ $cita->hora_inicio_formateada }}"
+                                data-hora_fin="{{ $cita->hora_final_formateada }}" data-estado="{{ $cita->estado }}"
+                                data-groomer="{{ $cita->usuario->name }}" data-descripcion="{{ $cita->descripcion }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                     <path
                                         d="M1.18164 12C2.12215 6.87976 6.60812 3 12.0003 3C17.3924 3 21.8784 6.87976 22.8189 12C21.8784 17.1202 17.3924 21 12.0003 21C6.60812 21 2.12215 17.1202 1.18164 12ZM12.0003 17C14.7617 17 17.0003 14.7614 17.0003 12C17.0003 9.23858 14.7617 7 12.0003 7C9.23884 7 7.00026 9.23858 7.00026 12C7.00026 14.7614 9.23884 17 12.0003 17ZM12.0003 15C10.3434 15 9.00026 13.6569 9.00026 12C9.00026 10.3431 10.3434 9 12.0003 9C13.6571 9 15.0003 10.3431 15.0003 12C15.0003 13.6569 13.6571 15 12.0003 15Z">
@@ -120,7 +114,8 @@
         class="fixed inset-0  backdrop-blur-sm backdrop-opacity-100
             bg-opacity-0 hidden justify-center items-center">
         <div class="flex justify-center items-center h-full w-full">
-            <div class="bg-white lg:rounded-lg p-8 w-100 lg:w-1/2 fade-in modal-contet z-50 border border-gray-300 max-h-[90vh] overflow-y-auto">
+            <div
+                class="bg-white lg:rounded-lg p-8 w-100 lg:w-1/2 fade-in modal-contet z-50 border border-gray-300 max-h-[90vh] overflow-y-auto">
                 <div class="mb-4">
                     <h2 class="text-xl font-bold">Agendar Cita</h2>
                 </div>
@@ -465,6 +460,7 @@
                     horafinal.innerHTML = '<option disabled selected>Error al cargar horas</option>';
                 });
         }
+
         function renderHorasFinal(horaInicioSeleccionada) {
             horafinal.innerHTML = '';
             const horaInicioDate = parseHora(horaInicioSeleccionada);
@@ -483,6 +479,7 @@
                 horafinal.appendChild(opt);
             });
         }
+
         function parseHora(horaStr) {
             // horaStr viene en formato "10:00 AM"
             const [time, meridiem] = horaStr.split(' ');
@@ -501,5 +498,24 @@
         });
         fechaInput.addEventListener('change', cargarHorasDisponibles);
         groomerSelect.addEventListener('change', cargarHorasDisponibles);
+    </script>
+    {{-- listener boton ver --}}
+    <script>
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btnVerModal');
+            if (btn) {
+                openVerModal(
+                    btn.dataset.documento,
+                    btn.dataset.nombre,
+                    btn.dataset.mascota,
+                    btn.dataset.fecha,
+                    btn.dataset.hora_inicio,
+                    btn.dataset.hora_fin,
+                    btn.dataset.estado,
+                    btn.dataset.groomer,
+                    btn.dataset.descripcion
+                );
+            }
+        });
     </script>
 </x-app-layout>
