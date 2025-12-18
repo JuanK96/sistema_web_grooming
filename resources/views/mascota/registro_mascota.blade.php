@@ -13,8 +13,8 @@
                 <div>
                     <label for="name" class="block text-x1 font-medium text-gray-700 mb-1">Nombre<span
                             class="text-red-500">*</span></label>
-                    <input type="text" id="name" name="name" required pattern="[A-ZÁÉÍÓÚÑÜ\s]+"
-                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s]/g, '').toUpperCase();"
+                    <input type="text" id="name" name="name" required pattern="[A-ZÁÉÍÓÚÑÜ\s]*"
+                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '').toUpperCase();"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Ej: MAX">
                 </div>
@@ -43,8 +43,8 @@
                 <div>
                     <label for="raza" class="block text-x1 font-medium text-gray-700 mb-1">Raza <span
                             class="text-red-500">*</span></label>
-                    <input type="text" id="raza" name="raza" required pattern="[A-ZÁÉÍÓÚÑÜ\s]+"
-                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s]/g, '').toUpperCase();"
+                    <input type="text" id="raza" name="raza" required pattern="[A-ZÁÉÍÓÚÑÜ\s]*"
+                        oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '').toUpperCase();"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200"
                         placeholder="Ej: LABRADOR">
                 </div>
