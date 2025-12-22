@@ -58,6 +58,7 @@
                     <th class="py-2 px-4">ID</th>
                     <th class="py-2 px-4">Documento</th>
                     <th class="py-2 px-4">Nombre</th>
+                    <th class="py-2 px-4">Fecha</th>
                     <th class="py-2 px-4">Direccion</th>
                     <th class="py-2 px-4">Correo</th>
                     <th class="py-2 px-4">Telefono</th>
@@ -73,6 +74,7 @@
                         <td class="py-4 px-4 text-center">{{ $cliente->id }}</td>
                         <td class="py-4 px-4 text-center">{{ $cliente->documento }}</td>
                         <td class="py-4 px-4 text-center">{{ $cliente->name }}</td>
+                        <td class="py-4 px-4 text-center">{{ $cliente->fecha_nacimiento }}</td>
                         <td class="py-4 px-4 text-center">{{ $cliente->direccion }}</td>
                         <td class="py-4 px-4 text-center">{{ $cliente->email }}</td>
                         <td class="py-4 px-4 text-center">{{ $cliente->tel }}</td>
@@ -84,6 +86,7 @@
                                     onclick="openEditModal(
                                         {{ $cliente->id }},
                                         '{{ $cliente->name }}',
+                                        '{{ $cliente->fecha_nacimiento }}',
                                         '{{ $cliente->email }}',
                                         '{{ $cliente->direccion }}',
                                         '{{ $cliente->tel }}',
@@ -124,6 +127,13 @@
                         oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúñÑüÜ\s]/g, '').toUpperCase();"
                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-stone-200">
                 </div>
+                <!-- edad -->
+                    <div>
+                        <label for="fechaNacimiento" class="block text-x1 font-medium text-gray-700 mb-1">Fecha de
+                            nacimiento</label>
+                        <input type="date" id="date" name="date" step="0.1" min="0" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg transition bg-stone-200">
+                    </div>
                 <div class="space-y-2">
                     <label for="edit_email" class="block text-x1 font-medium text-gray-700">
                         Correo electrónico
@@ -173,10 +183,11 @@
         </div>
     </div>
     <script>
-        function openEditModal(id, name, email, direccion, tel, tel_dos, ) {
+        function openEditModal(id, name,fecha_nacimiento, email, direccion, tel, tel_dos, ) {
             // Rellenar campos
             document.getElementById('idcliente').value = id;
             document.getElementById('edit_name').value = name;
+            document.getElementById('date').value = fecha_nacimiento;
             document.getElementById('edit_email').value = email;
             document.getElementById('edit_direccion').value = direccion;
             document.getElementById('edit_tel').value = tel;

@@ -91,6 +91,7 @@ class ClienteController extends Controller
         $request->validate([
             'idcliente' => 'required|exists:clientes,id',
             'nombreCompleto' => 'required|string|max:255',
+            'date' => 'date|before:today',
             'correoElectronico' => 'required|email',
             'direccion' => 'required|string|max:255',
             'telefono' => 'required|string',
@@ -102,6 +103,7 @@ class ClienteController extends Controller
             DB::beginTransaction();
             $cliente->update([
                 'name' => $request->nombreCompleto,
+                'fecha_nacimiento' => $request->date,
                 'email' => $request->correoElectronico,
                 'direccion' => $request->direccion,
                 'tel' => $request->telefono,
