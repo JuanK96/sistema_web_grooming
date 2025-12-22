@@ -141,7 +141,7 @@ class CitaController extends Controller
                 $fecha = Carbon::parse($fecha)->format('d/m/Y');
                 $horaInicio = Carbon::parse($horaInicio)->format('g:i A');
                 $horaFinal = Carbon::parse($horaFinal)->format('g:i A');
-                $mensaje = "Hola {$primerNombre}, tu cita para {$mascota} está confirmada para el {$fecha} de las {$horaInicio} a las {$horaFinal}.✂️🐶
+                $mensaje = "Hola {$primerNombre}, tu cita para {$mascota} está confirmada para el {$fecha} a las {$horaInicio}.✂️🐶
 ‼️ TEN EN CUENTA ‼️
                 
 • Llegadas superiores a 15 minutos después de la hora acordada, serán consideradas como no presentación y no podremos atenderte 🚫⏱️
