@@ -62,3 +62,7 @@ Ejecuta los siguientes comandos para asegurar que el sistema reconozca correctam
 Finalmente, pon en marcha el servidor de desarrollo de Laravel:
     php artisan serve
 El sistema estará disponible en tu navegador ingresando a: http://127.0.0.1:8000
+
+    El usuario administrador por defecto es:
+        email: admnistrador@mail.com
+        pass: 12345678
