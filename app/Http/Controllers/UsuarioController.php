@@ -4,46 +4,47 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
+use App\Services\UsuarioService;
 
 class UsuarioController extends Controller
 {
+    protected $usuarioService;
+
+    // INYECCIÓN DE DEPENDENCIAS POR CONSTRUCTOR
+    public function __construct(UsuarioService $usuarioService)
+    {
+        $this->usuarioService = $usuarioService;
+    }
+
     public function index()
     {
         try {
-            $usuarios = User::with('role')->where('id', '>', 1)->orderBy('id', 'desc')->paginate(5);
+            $usuarios = $this->usuarioService->listarUsuarios(5);
             return view('usuarios/gestion_usuarios', compact('usuarios'));
         } catch (\Exception $e) {
-            // Aquí puedes registrar el error o mostrar un mensaje personalizado
             return redirect()->route('gestionusuario')->with('error', 'Error al cargar usuarios');
         }
     }
+
     public function search(Request $request)
     {
         $search = $request->input('search');
         if (empty($search)) {
             return redirect()->route('gestionusuario')->with('error', 'Ingresa un término de búsqueda');
-        } else {
-            try {
-                $usuarios = User::where('id', '!=', 1)
-                    ->where(function ($query) use ($search) {
-                        $query->where('email', 'like', "{$search}%")
-                            ->orWhere('name', 'like', "{$search}%");
-                    })
-                    ->paginate(5)
-                    ->appends(['search' => $search]);
-                if ($usuarios->isNotEmpty()) {
-                    return view('usuarios/gestion_usuarios', compact('usuarios'));
-                } else {
-                    return redirect()->route('gestionusuario')->with('error', 'No se encontraron resultados');
-                }
-            } catch (\Exception $e) {
-                // Aquí puedes registrar el error o mostrar un mensaje personalizado
-                return redirect()->route('gestionusuario')->with('error', 'Error en la busqueda');
+        }
+
+        try {
+            $usuarios = $this->usuarioService->buscarUsuarios($search, 5);
+            if ($usuarios->isNotEmpty()) {
+                return view('usuarios/gestion_usuarios', compact('usuarios'));
+            } else {
+                return redirect()->route('gestionusuario')->with('error', 'No se encontraron resultados');
             }
+        } catch (\Exception $e) {
+            return redirect()->route('gestionusuario')->with('error', 'Error en la busqueda');
         }
     }
+
     public function create(Request $request)
     {
         $request->validate(
@@ -62,31 +63,21 @@ class UsuarioController extends Controller
                 'role.required' => 'Debe asignar un rol',
             ]
         );
+
         try {
-            DB::beginTransaction();
-            User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'id_role' => $request->role,
-            ]);
-            DB::commit();
+            $this->usuarioService->registrarUsuario($request->all());
             return redirect()->route('gestionusuario')->with('success', 'Usuario creado correctamente');
         } catch (\Exception $e) {
-            DB::rollBack();
             return redirect()->route('gestionusuario')->with('error', 'Error al registrar el usuario');
         }
     }
+
     public function toggleActive(User $usuario)
     {
         try {
-            $usuario->active = !$usuario->active; // alterna entre 1 y 0
-            DB::beginTransaction();
-            $usuario->save();
-            DB::commit();
+            $this->usuarioService->cambiarEstado($usuario);
             return redirect()->back()->with('success', 'Estado actualizado correctamente');
         } catch (\Exception $e) {
-            DB::rollBack();
             return redirect()->route('gestionusuario')->with('error', 'Error al actualizar estado');
         }
     }
